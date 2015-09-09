@@ -30,7 +30,7 @@ namespace DespicableGame
             }
         }
 
-        public void VerifierMouvement(Tile tileDestination, int vitesseX, int vitesseY)
+        public void CheckMovement(Tile tileDestination, int vitesseX, int vitesseY)
         {
             //If direction is not null
             if (tileDestination != null)

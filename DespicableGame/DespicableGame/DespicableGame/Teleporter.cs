@@ -6,7 +6,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace DespicableGame
 {
-    class Teleporter : Tile
+    public class Teleporter : Tile
     {
         Random r = new Random();
 

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using DespicableGame.Factory;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Content;
@@ -22,7 +23,7 @@ namespace DespicableGame
         public const int SCREENHEIGHT = 796;
 
         PlayerCharacter Gru;
-        NonPlayerCharacter Police;
+        List<Character> characters; //Minions and police officers
 
         Texture2D murHorizontal;
         Texture2D murVertical;
@@ -58,7 +59,7 @@ namespace DespicableGame
         /// </summary>
         protected override void Initialize()
         {
-            // TODO: Add your initialization logic here
+            characters = new List<Character>();
             InitGraphicsMode(SCREENWIDTH, SCREENHEIGHT, true);
             base.Initialize();
         }
@@ -115,10 +116,10 @@ namespace DespicableGame
             murVertical = Content.Load<Texture2D>("Sprites\\Vwall");
             bananas = Content.Load<Texture2D>("Sprites\\banana");
 
-            // TODO: use this.Content to load your game content here
-            Gru = new PlayerCharacter(Content.Load<Texture2D>("Sprites\\Gru"), new Vector2(labyrinth.GetCase(DEPART_X, DEPART_Y).GetPosition().X, labyrinth.GetCase(DEPART_X, DEPART_Y).GetPosition().Y), labyrinth.GetCase(DEPART_X, DEPART_Y));
+            Gru = (PlayerCharacter)CharacterFactory.CreateCharacter(CharacterFactory.CharacterType.GRU, Content.Load<Texture2D>("Sprites\\Gru"), new Vector2(labyrinth.GetCase(DEPART_X, DEPART_Y).GetPosition().X, labyrinth.GetCase(DEPART_X, DEPART_Y).GetPosition().Y), labyrinth.GetCase(DEPART_X, DEPART_Y));
 
-            Police = new NonPlayerCharacter(Content.Load<Texture2D>("Sprites\\Police"), new Vector2(labyrinth.GetCase(7, 9).GetPosition().X, labyrinth.GetCase(7, 9).GetPosition().Y), labyrinth.GetCase(7, 9));
+            //Add a police officer
+            characters.Add(CharacterFactory.CreateCharacter(CharacterFactory.CharacterType.POLICE_OFFICER, Content.Load<Texture2D>("Sprites\\Police"), new Vector2(labyrinth.GetCase(7, 9).GetPosition().X, labyrinth.GetCase(7, 9).GetPosition().Y), labyrinth.GetCase(7, 9)));
 
             //Teleporter entrance
             warpEntrance = Content.Load<Texture2D>("Sprites\\Warp1");
@@ -161,28 +162,30 @@ namespace DespicableGame
             {
                 if (Keyboard.GetState().IsKeyDown(Keys.Up) || padOneState.DPad.Up == ButtonState.Pressed)
                 {
-                    Gru.VerifierMouvement(Gru.CurrentTile.TileUp, 0, -VITESSE);
+                    Gru.CheckMovement(Gru.CurrentTile.TileUp, 0, -VITESSE);
                 }
 
                 else if (Keyboard.GetState().IsKeyDown(Keys.Down) || padOneState.DPad.Down == ButtonState.Pressed)
                 {
-                    Gru.VerifierMouvement(Gru.CurrentTile.TileDown, 0, VITESSE);
+                    Gru.CheckMovement(Gru.CurrentTile.TileDown, 0, VITESSE);
                 }
 
                 else if (Keyboard.GetState().IsKeyDown(Keys.Left) || padOneState.DPad.Left == ButtonState.Pressed)
                 {
-                    Gru.VerifierMouvement(Gru.CurrentTile.TileLeft, -VITESSE, 0);
+                    Gru.CheckMovement(Gru.CurrentTile.TileLeft, -VITESSE, 0);
                 }
 
                 else if (Keyboard.GetState().IsKeyDown(Keys.Right) || padOneState.DPad.Right == ButtonState.Pressed)
                 {
-                    Gru.VerifierMouvement(Gru.CurrentTile.TileRight, VITESSE, 0);
+                    Gru.CheckMovement(Gru.CurrentTile.TileRight, VITESSE, 0);
                 }
             }
 
-            // TODO: Add your update logic here
             Gru.Move();
-            Police.Move();
+            foreach (NonPlayerCharacter c in characters)
+            {
+                c.Move();
+            }
             base.Update(gameTime);
         }
 
@@ -195,7 +198,7 @@ namespace DespicableGame
             GraphicsDevice.Clear(Color.Black);
             spriteBatch.Begin();
 
-            //Draw of each tiles
+            //Draw each tile
             for (int i = 0; i < Labyrinth.WIDTH; i++)
             {
                 for (int j = 0; j < Labyrinth.HEIGHT; j++)
@@ -217,8 +220,11 @@ namespace DespicableGame
                 spriteBatch.Draw(warpExits[i], warpExitsPos[i], Color.White);
             }
 
-            //Draw the police officer
-            Police.Draw(spriteBatch);
+            //Draw the police officers and the minions
+            foreach(NonPlayerCharacter c in characters)
+            {
+                c.Draw(spriteBatch);
+            }
 
             //Draw Gru
             Gru.Draw(spriteBatch);

@@ -4,64 +4,64 @@ using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-
 namespace DespicableGame
 {
     class PlayerCharacter : Character
     {
-        public PlayerCharacter(Texture2D dessin, Vector2 position, Tile ActualCase)
-            : base(dessin, position, ActualCase)
+        public PlayerCharacter(Texture2D drawing, Vector2 position, Tile CurrentTile)
+            : base(drawing, position, CurrentTile)
         {
             Destination = null;
         }
 
-        //Algo assez ordinaire.  Pour que ça fonctionne, la vitesse doit être un diviseur entier de 64, pourrait être à revoir.
-        public override void Mouvement()
+        //Algo assez ordinaire. Pour que ça fonctionne, la vitesse doit être un diviseur entier de 64, pourrait être à revoir.
+        public override void Move()
         {
             if (Destination != null)
             {
-                position.X += VitesseX;
-                position.Y += VitesseY;
+                position.X += SpeedX;
+                position.Y += SpeedY;
 
                 if (position.X == Destination.GetPosition().X && position.Y == Destination.GetPosition().Y)
                 {
-                    ActualCase = Destination;
+                    CurrentTile = Destination;
                     Destination = null;
                 }
             }
         }
 
-        public void VerifierMouvement(Tile caseDestionation, int vitesseX, int vitesseY)
+        public void VerifierMouvement(Tile tileDestination, int vitesseX, int vitesseY)
         {
-            //Si la direction choisie n'est pas nulle
-            if (caseDestionation != null)
+            //If direction is not null
+            if (tileDestination != null)
             {
-                //On vérifie si la case est un téléporteur
-                Tile testTeleportation = TestTeleporter(caseDestionation);
+                //Check if the tile is a teleporter
+                Tile testTeleportation = TestTeleporter(tileDestination);
 
-                //Si non, on bouge
+                //Is not, we move
                 if (testTeleportation == null)
                 {
-                    Destination = caseDestionation;
-                    VitesseX = vitesseX;
-                    VitesseY = vitesseY;
+                    Destination = tileDestination;
+                    SpeedX = vitesseX;
+                    SpeedY = vitesseY;
                 }
-                //Si oui, on se téléporte.
+                //If so, we teleport ourselves
                 else
                 {
-                    ActualCase = testTeleportation;
-                    position = new Vector2(ActualCase.GetPosition().X, ActualCase.GetPosition().Y);
+                    CurrentTile = testTeleportation;
+                    position = new Vector2(CurrentTile.GetPosition().X, CurrentTile.GetPosition().Y);
                 }
             }
         }
 
-        private Tile TestTeleporter(Tile laCase)
+        private Tile TestTeleporter(Tile theTile)
         {
-            if (laCase is Teleporter)
+            if (theTile is Teleporter)
             {
-                return ((Teleporter)laCase).Teleport();
+                return ((Teleporter)theTile).Teleport();
             }
             return null;
         }
+
     }
 }

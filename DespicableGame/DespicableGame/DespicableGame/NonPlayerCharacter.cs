@@ -14,17 +14,17 @@ namespace DespicableGame
             Destination = MouvementIA(ActualCase);
         }
 
-        public override void Mouvement()
+        public override void Move()
         {
             if (Destination != null)
             {
-                position.X += VitesseX;
-                position.Y += VitesseY;
+                position.X += SpeedX;
+                position.Y += SpeedY;
 
                 if (position.X == Destination.GetPosition().X && position.Y == Destination.GetPosition().Y)
                 {
-                    ActualCase = Destination;
-                    Destination = MouvementIA(ActualCase);
+                    CurrentTile = Destination;
+                    Destination = MouvementIA(CurrentTile);
                 }
             }
         }
@@ -43,8 +43,8 @@ namespace DespicableGame
                     //Plus efficace qu'un &&, dès que la première condition courante est remplie, on arrête le test
                     if (!(AI_Case.TileUp == null || AI_Case.TileUp is Teleporter))
                     {
-                        VitesseX = 0;
-                        VitesseY = -DespicableGame.VITESSE;
+                        SpeedX = 0;
+                        SpeedY = -DespicableGame.VITESSE;
                         return AI_Case.TileUp;
                     }
                 }
@@ -53,8 +53,8 @@ namespace DespicableGame
                 {
                     if (!(AI_Case.TileDown == null || AI_Case.TileDown is Teleporter))
                     {
-                        VitesseX = 0;
-                        VitesseY = DespicableGame.VITESSE;
+                        SpeedX = 0;
+                        SpeedY = DespicableGame.VITESSE;
                         return AI_Case.TileDown;
                     }
                 }
@@ -63,8 +63,8 @@ namespace DespicableGame
                 {
                     if (!(AI_Case.TileLeft == null || AI_Case.TileLeft is Teleporter))
                     {
-                        VitesseX = -DespicableGame.VITESSE;
-                        VitesseY = 0;
+                        SpeedX = -DespicableGame.VITESSE;
+                        SpeedY = 0;
                         return AI_Case.TileLeft;
                     }
                 }
@@ -73,8 +73,8 @@ namespace DespicableGame
                 {
                     if (!(AI_Case.TileRight == null || AI_Case.TileRight is Teleporter))
                     {
-                        VitesseX = DespicableGame.VITESSE;
-                        VitesseY = 0;
+                        SpeedX = DespicableGame.VITESSE;
+                        SpeedY = 0;
                         return AI_Case.TileRight;
                     }
                 }

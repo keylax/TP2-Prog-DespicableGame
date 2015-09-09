@@ -11,26 +11,27 @@ namespace DespicableGame
         protected Texture2D dessin;
         protected Vector2 position;
 
-        public Tile ActualCase { get; set; }
+        public Tile CurrentTile { get; set; }
         public Tile Destination { get; set; }
-        public int VitesseX { get; set; }
-        public int VitesseY { get; set; }
+        public int SpeedX { get; set; }
+        public int SpeedY { get; set; }
 
         public Character(Texture2D sprite, Vector2 position, Tile actualCase)
         {
-            VitesseX = 0;
-            VitesseY = 0;
+            SpeedX = 0;
+            SpeedY = 0;
 
             dessin = sprite;
             this.position = position;
-            ActualCase = actualCase;
+            CurrentTile = actualCase;
         }
 
-        public abstract void Mouvement();
+        public abstract void Move();
 
         public void Draw(SpriteBatch spritebatch)
         {
             spritebatch.Draw(dessin, position, Color.White);
         }
+
     }
 }

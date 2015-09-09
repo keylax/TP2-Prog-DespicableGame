@@ -4,19 +4,18 @@ using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-
 namespace DespicableGame
 {
     public enum Limits { haut = 1, bas = 2, gauche = 4, droite = 8 };
 
     class Tile
     {
-        private int contour;
+        private int surroundings;
         private Vector2 position;
         private int ordreX;
         private int ordreY;
 
-        //chaque case a des références sur toutes les cases qui l'entoure
+        //a reference to each tile surrounding it
         private Tile tileUp = null;
         private Tile tileDown = null;
         private Tile tileLeft = null;
@@ -57,16 +56,16 @@ namespace DespicableGame
 
         public const int LIGN_SIZE = 8;
 
-        //Pour le téléporteur, qui est un type de case spéciale
+        //For the teleporter, which is a special tile
         protected Tile()
         {
 
         }
 
-        public Tile(int contour, int ordreX, int ordreY)
+        public Tile(int surroundings, int ordreX, int ordreY)
         {
             //Contour: ce qu'on vérifie c'est les présences bit à bit: premier bit = mur haut, second = mur bas, troisième = gauche, quatrière droite
-            this.contour = contour;
+            this.surroundings = surroundings;
             this.ordreX = ordreX;
             this.ordreY = ordreY;
             this.position.X = ordreX * SIZE_TILE + GAP_X;
@@ -75,7 +74,7 @@ namespace DespicableGame
 
         public int Contour
         {
-            get { return contour; }
+            get { return surroundings; }
         }
 
         public Vector2 GetPosition()
@@ -86,7 +85,7 @@ namespace DespicableGame
         public bool IsWallTop()
         {
             //Binary comparaison on the 1st bit
-            if ((contour & (int)Limits.haut) != 0)
+            if ((surroundings & (int)Limits.haut) != 0)
             {
                 return true;
             }
@@ -96,7 +95,7 @@ namespace DespicableGame
         public bool IsWallDown()
         {
             //Binary comparaison on the 2nd bit
-            if ((contour & (int)Limits.bas) != 0)
+            if ((surroundings & (int)Limits.bas) != 0)
             {
                 return true;
             }
@@ -106,7 +105,7 @@ namespace DespicableGame
         public bool IsWallLeft()
         {
             //Binary comparaison on the 3rd bit
-            if ((contour & (int)Limits.gauche) != 0)
+            if ((surroundings & (int)Limits.gauche) != 0)
             {
                 return true;
             }
@@ -116,7 +115,7 @@ namespace DespicableGame
         public bool IsWallRight()
         {
             //Binary comparaison on the 4th bit
-            if ((contour & (int)Limits.droite) != 0)
+            if ((surroundings & (int)Limits.droite) != 0)
             {
                 return true;
             }

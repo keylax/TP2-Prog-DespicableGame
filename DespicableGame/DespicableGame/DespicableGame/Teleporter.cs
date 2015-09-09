@@ -20,9 +20,9 @@ namespace DespicableGame
 
         public Tile Teleport()
         {
-            int choixRandom = r.Next(4);
+            int randomNumber = r.Next(4);
 
-            switch (choixRandom)
+            switch (randomNumber)
             {
                 case 0:
                     return TileUp;
@@ -36,5 +36,6 @@ namespace DespicableGame
                     return null;
             }
         }
+
     }
 }

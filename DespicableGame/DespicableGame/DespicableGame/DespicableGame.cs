@@ -22,17 +22,17 @@ namespace DespicableGame
         public const int SCREENHEIGHT = 796;
 
         PlayerCharacter Gru;
-
         NonPlayerCharacter Police;
 
         Texture2D murHorizontal;
         Texture2D murVertical;
-
         Texture2D warpEntree;
+        Texture2D bananas;
+
         Vector2 warpEntreePos;
 
-        Texture2D[] warpSorties = new Texture2D[4];
-        Vector2[] warpSortiesPos = new Vector2[4];
+        Texture2D[] warpExits = new Texture2D[4];
+        Vector2[] warpExitsPos = new Vector2[4];
 
         //VITESSE doit être un diviseur entier de 64
         public const int VITESSE = 4;
@@ -113,6 +113,7 @@ namespace DespicableGame
 
             murHorizontal = Content.Load<Texture2D>("Sprites\\Hwall");
             murVertical = Content.Load<Texture2D>("Sprites\\Vwall");
+            bananas = Content.Load<Texture2D>("Sprites\\bananas");
 
             // TODO: use this.Content to load your game content here
             Gru = new PlayerCharacter
@@ -135,15 +136,15 @@ namespace DespicableGame
             warpEntreePos = new Vector2(labyrinthe.GetCase(7, 4).GetPosition().X - Tile.LIGN_SIZE, labyrinthe.GetCase(7, 4).GetPosition().Y + Tile.LIGN_SIZE);
 
             //Les sorties du téléporteur
-            for (int i = 0; i < warpSorties.Length; i++)
+            for (int i = 0; i < warpExits.Length; i++)
             {
-                warpSorties[i] = Content.Load<Texture2D>("Sprites\\Warp2");
+                warpExits[i] = Content.Load<Texture2D>("Sprites\\Warp2");
             }
 
-            warpSortiesPos[0] = new Vector2(labyrinthe.GetCase(0, 0).GetPosition().X, labyrinthe.GetCase(0, 0).GetPosition().Y);
-            warpSortiesPos[1] = new Vector2(labyrinthe.GetCase(Labyrinth.LARGEUR - 1, 0).GetPosition().X, labyrinthe.GetCase(Labyrinth.LARGEUR - 1, 0).GetPosition().Y);
-            warpSortiesPos[2] = new Vector2(labyrinthe.GetCase(0, Labyrinth.HAUTEUR - 1).GetPosition().X, labyrinthe.GetCase(0, Labyrinth.HAUTEUR - 1).GetPosition().Y);
-            warpSortiesPos[3] = new Vector2(labyrinthe.GetCase(Labyrinth.LARGEUR - 1, Labyrinth.HAUTEUR - 1).GetPosition().X, labyrinthe.GetCase(Labyrinth.LARGEUR - 1, Labyrinth.HAUTEUR - 1).GetPosition().Y);
+            warpExitsPos[0] = new Vector2(labyrinthe.GetCase(0, 0).GetPosition().X, labyrinthe.GetCase(0, 0).GetPosition().Y);
+            warpExitsPos[1] = new Vector2(labyrinthe.GetCase(Labyrinth.WIDTH - 1, 0).GetPosition().X, labyrinthe.GetCase(Labyrinth.WIDTH - 1, 0).GetPosition().Y);
+            warpExitsPos[2] = new Vector2(labyrinthe.GetCase(0, Labyrinth.HEIGHT - 1).GetPosition().X, labyrinthe.GetCase(0, Labyrinth.HEIGHT - 1).GetPosition().Y);
+            warpExitsPos[3] = new Vector2(labyrinthe.GetCase(Labyrinth.WIDTH - 1, Labyrinth.HEIGHT - 1).GetPosition().X, labyrinthe.GetCase(Labyrinth.WIDTH - 1, Labyrinth.HEIGHT - 1).GetPosition().Y);
         }
 
         /// <summary>
@@ -171,28 +172,28 @@ namespace DespicableGame
             {
                 if (Keyboard.GetState().IsKeyDown(Keys.Up) || padOneState.DPad.Up == ButtonState.Pressed)
                 {
-                    Gru.VerifierMouvement(Gru.ActualCase.TileUp, 0, -VITESSE);
+                    Gru.VerifierMouvement(Gru.CurrentTile.TileUp, 0, -VITESSE);
                 }
 
                 else if (Keyboard.GetState().IsKeyDown(Keys.Down) || padOneState.DPad.Down == ButtonState.Pressed)
                 {
-                    Gru.VerifierMouvement(Gru.ActualCase.TileDown, 0, VITESSE);
+                    Gru.VerifierMouvement(Gru.CurrentTile.TileDown, 0, VITESSE);
                 }
 
                 else if (Keyboard.GetState().IsKeyDown(Keys.Left) || padOneState.DPad.Left == ButtonState.Pressed)
                 {
-                    Gru.VerifierMouvement(Gru.ActualCase.TileLeft, -VITESSE, 0);
+                    Gru.VerifierMouvement(Gru.CurrentTile.TileLeft, -VITESSE, 0);
                 }
 
                 else if (Keyboard.GetState().IsKeyDown(Keys.Right) || padOneState.DPad.Right == ButtonState.Pressed)
                 {
-                    Gru.VerifierMouvement(Gru.ActualCase.TileRight, VITESSE, 0);
+                    Gru.VerifierMouvement(Gru.CurrentTile.TileRight, VITESSE, 0);
                 }
             }
 
             // TODO: Add your update logic here
-            Gru.Mouvement();
-            Police.Mouvement();
+            Gru.Move();
+            Police.Move();
             base.Update(gameTime);
         }
 
@@ -206,32 +207,34 @@ namespace DespicableGame
             spriteBatch.Begin();
 
             //Draw de chacune des cases
-            for (int i = 0; i < Labyrinth.LARGEUR; i++)
+            for (int i = 0; i < Labyrinth.WIDTH; i++)
             {
-                for (int j = 0; j < Labyrinth.HAUTEUR; j++)
+                for (int j = 0; j < Labyrinth.HEIGHT; j++)
                 {
                     labyrinthe.GetCase(i, j).DrawWalls(spriteBatch, murHorizontal, murVertical);
                 }
             }
 
             //Draw du cadre extérieur
-            labyrinthe.DessinerHorizontal(spriteBatch, murHorizontal);
-            labyrinthe.DessinerVertical(spriteBatch, murVertical);
+            labyrinthe.DrawHorizontal(spriteBatch, murHorizontal);
+            labyrinthe.DrawVertical(spriteBatch, murVertical);
 
             //Draw de l'entrée du téléporteur
             spriteBatch.Draw(warpEntree, warpEntreePos, Color.White);
 
-            //Draw des sorties du téléporteur
+            //Draw the teleporter exits
             for (int i = 0; i < 4; i++)
             {
-                spriteBatch.Draw(warpSorties[i], warpSortiesPos[i], Color.White);
+                spriteBatch.Draw(warpExits[i], warpExitsPos[i], Color.White);
             }
 
-            //Draw de la Police
+            //Draw the police officer
             Police.Draw(spriteBatch);
 
-            //Draw de Gru
+            //Draw Gru
             Gru.Draw(spriteBatch);
+
+            spriteBatch.Draw(bananas, Vector2.Zero, Color.White);
 
             spriteBatch.End();
             base.Draw(gameTime);

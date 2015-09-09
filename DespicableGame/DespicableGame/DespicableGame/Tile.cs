@@ -8,7 +8,7 @@ namespace DespicableGame
 {
     public enum Limits { haut = 1, bas = 2, gauche = 4, droite = 8 };
 
-    class Tile
+    public class Tile
     {
         private int surroundings;
         private Vector2 position;

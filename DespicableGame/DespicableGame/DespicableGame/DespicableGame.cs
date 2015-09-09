@@ -20,10 +20,10 @@ namespace DespicableGame
         SpriteBatch spriteBatch;
         public const int SCREENWIDTH = 1280;
         public const int SCREENHEIGHT = 796;
-        
-        PersonnageJoueur Gru;
 
-        PersonnageNonJoueur Police;
+        PlayerCharacter Gru;
+
+        NonPlayerCharacter Police;
 
         Texture2D murHorizontal;
         Texture2D murVertical;
@@ -41,14 +41,13 @@ namespace DespicableGame
         public const int DEPART_X = 6;
         public const int DEPART_Y = 7;
 
-        private Labyrinthe labyrinthe;
-
+        private Labyrinth labyrinthe;
 
         public DespicableGame()
         {
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
-            labyrinthe = new Labyrinthe();
+            labyrinthe = new Labyrinth();
         }
 
         /// <summary>
@@ -60,7 +59,7 @@ namespace DespicableGame
         protected override void Initialize()
         {
             // TODO: Add your initialization logic here
-            InitGraphicsMode(SCREENWIDTH, SCREENHEIGHT, false);
+            InitGraphicsMode(SCREENWIDTH, SCREENHEIGHT, true);
             base.Initialize();
         }
 
@@ -116,7 +115,7 @@ namespace DespicableGame
             murVertical = Content.Load<Texture2D>("Sprites\\Vwall");
 
             // TODO: use this.Content to load your game content here
-            Gru = new PersonnageJoueur
+            Gru = new PlayerCharacter
                 (
                 Content.Load<Texture2D>("Sprites\\Gru"),
                 new Vector2(labyrinthe.GetCase(DEPART_X, DEPART_Y).GetPosition().X, labyrinthe.GetCase(DEPART_X, DEPART_Y).GetPosition().Y),
@@ -124,7 +123,7 @@ namespace DespicableGame
                 );
 
 
-            Police = new PersonnageNonJoueur
+            Police = new NonPlayerCharacter
                 (
                 Content.Load<Texture2D>("Sprites\\Police"),
                 new Vector2(labyrinthe.GetCase(7, 9).GetPosition().X, labyrinthe.GetCase(7, 9).GetPosition().Y),
@@ -133,7 +132,7 @@ namespace DespicableGame
 
             //L'entrée du téléporteur
             warpEntree = Content.Load<Texture2D>("Sprites\\Warp1");
-            warpEntreePos = new Vector2(labyrinthe.GetCase(7, 4).GetPosition().X - Case.TAILLE_LIGNE, labyrinthe.GetCase(7, 4).GetPosition().Y + Case.TAILLE_LIGNE);
+            warpEntreePos = new Vector2(labyrinthe.GetCase(7, 4).GetPosition().X - Tile.LIGN_SIZE, labyrinthe.GetCase(7, 4).GetPosition().Y + Tile.LIGN_SIZE);
 
             //Les sorties du téléporteur
             for (int i = 0; i < warpSorties.Length; i++)
@@ -142,9 +141,9 @@ namespace DespicableGame
             }
 
             warpSortiesPos[0] = new Vector2(labyrinthe.GetCase(0, 0).GetPosition().X, labyrinthe.GetCase(0, 0).GetPosition().Y);
-            warpSortiesPos[1] = new Vector2(labyrinthe.GetCase(Labyrinthe.LARGEUR - 1, 0).GetPosition().X, labyrinthe.GetCase(Labyrinthe.LARGEUR - 1, 0).GetPosition().Y);
-            warpSortiesPos[2] = new Vector2(labyrinthe.GetCase(0, Labyrinthe.HAUTEUR - 1).GetPosition().X, labyrinthe.GetCase(0, Labyrinthe.HAUTEUR - 1).GetPosition().Y);
-            warpSortiesPos[3] = new Vector2(labyrinthe.GetCase(Labyrinthe.LARGEUR - 1, Labyrinthe.HAUTEUR - 1).GetPosition().X, labyrinthe.GetCase(Labyrinthe.LARGEUR - 1, Labyrinthe.HAUTEUR - 1).GetPosition().Y);
+            warpSortiesPos[1] = new Vector2(labyrinthe.GetCase(Labyrinth.LARGEUR - 1, 0).GetPosition().X, labyrinthe.GetCase(Labyrinth.LARGEUR - 1, 0).GetPosition().Y);
+            warpSortiesPos[2] = new Vector2(labyrinthe.GetCase(0, Labyrinth.HAUTEUR - 1).GetPosition().X, labyrinthe.GetCase(0, Labyrinth.HAUTEUR - 1).GetPosition().Y);
+            warpSortiesPos[3] = new Vector2(labyrinthe.GetCase(Labyrinth.LARGEUR - 1, Labyrinth.HAUTEUR - 1).GetPosition().X, labyrinthe.GetCase(Labyrinth.LARGEUR - 1, Labyrinth.HAUTEUR - 1).GetPosition().Y);
         }
 
         /// <summary>
@@ -172,24 +171,24 @@ namespace DespicableGame
             {
                 if (Keyboard.GetState().IsKeyDown(Keys.Up) || padOneState.DPad.Up == ButtonState.Pressed)
                 {
-                    Gru.VerifierMouvement(Gru.ActualCase.CaseHaut, 0, -VITESSE);
+                    Gru.VerifierMouvement(Gru.ActualCase.TileUp, 0, -VITESSE);
                 }
 
                 else if (Keyboard.GetState().IsKeyDown(Keys.Down) || padOneState.DPad.Down == ButtonState.Pressed)
                 {
-                    Gru.VerifierMouvement(Gru.ActualCase.CaseBas, 0, VITESSE);
+                    Gru.VerifierMouvement(Gru.ActualCase.TileDown, 0, VITESSE);
                 }
 
                 else if (Keyboard.GetState().IsKeyDown(Keys.Left) || padOneState.DPad.Left == ButtonState.Pressed)
                 {
-                    Gru.VerifierMouvement(Gru.ActualCase.CaseGauche, -VITESSE, 0);
+                    Gru.VerifierMouvement(Gru.ActualCase.TileLeft, -VITESSE, 0);
                 }
 
                 else if (Keyboard.GetState().IsKeyDown(Keys.Right) || padOneState.DPad.Right == ButtonState.Pressed)
                 {
-                    Gru.VerifierMouvement(Gru.ActualCase.CaseDroite, VITESSE, 0);
+                    Gru.VerifierMouvement(Gru.ActualCase.TileRight, VITESSE, 0);
                 }
-            }  
+            }
 
             // TODO: Add your update logic here
             Gru.Mouvement();
@@ -207,11 +206,11 @@ namespace DespicableGame
             spriteBatch.Begin();
 
             //Draw de chacune des cases
-            for (int i = 0; i < Labyrinthe.LARGEUR; i++)
+            for (int i = 0; i < Labyrinth.LARGEUR; i++)
             {
-                for (int j = 0; j < Labyrinthe.HAUTEUR; j++)
+                for (int j = 0; j < Labyrinth.HAUTEUR; j++)
                 {
-                    labyrinthe.GetCase(i, j).DessinerMurs(spriteBatch, murHorizontal, murVertical);
+                    labyrinthe.GetCase(i, j).DrawWalls(spriteBatch, murHorizontal, murVertical);
                 }
             }
 

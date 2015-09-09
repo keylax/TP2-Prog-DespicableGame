@@ -6,16 +6,17 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace DespicableGame
 {
-    abstract class Personnage
+    abstract class Character
     {
         protected Texture2D dessin;
         protected Vector2 position;
-        public Case ActualCase { get; set; }
-        public Case Destination { get; set; }
+
+        public Tile ActualCase { get; set; }
+        public Tile Destination { get; set; }
         public int VitesseX { get; set; }
         public int VitesseY { get; set; }
 
-        public Personnage(Texture2D sprite, Vector2 position, Case actualCase)
+        public Character(Texture2D sprite, Vector2 position, Tile actualCase)
         {
             VitesseX = 0;
             VitesseY = 0;

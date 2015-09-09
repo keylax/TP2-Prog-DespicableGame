@@ -6,9 +6,9 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace DespicableGame
 {
-    class PersonnageNonJoueur : Personnage
+    class NonPlayerCharacter : Character
     {
-        public PersonnageNonJoueur(Texture2D dessin, Vector2 position, Case ActualCase)
+        public NonPlayerCharacter(Texture2D dessin, Vector2 position, Tile ActualCase)
             : base(dessin, position, ActualCase)
         {
             Destination = MouvementIA(ActualCase);
@@ -30,7 +30,7 @@ namespace DespicableGame
         }
 
         //AI totalement random et qui ne peut pas entrer dans les téléporteurs.  À revoir absolument.
-        private Case MouvementIA(Case AI_Case)
+        private Tile MouvementIA(Tile AI_Case)
         {
             Random r = new Random();
 
@@ -41,41 +41,41 @@ namespace DespicableGame
                 if (choixRandom == 0)
                 {
                     //Plus efficace qu'un &&, dès que la première condition courante est remplie, on arrête le test
-                    if (!(AI_Case.CaseHaut == null || AI_Case.CaseHaut is Teleporteur))
+                    if (!(AI_Case.TileUp == null || AI_Case.TileUp is Teleporter))
                     {
                         VitesseX = 0;
                         VitesseY = -DespicableGame.VITESSE;
-                        return AI_Case.CaseHaut;
+                        return AI_Case.TileUp;
                     }
                 }
 
                 if (choixRandom == 1)
                 {
-                    if (!(AI_Case.CaseBas == null || AI_Case.CaseBas is Teleporteur))
+                    if (!(AI_Case.TileDown == null || AI_Case.TileDown is Teleporter))
                     {
                         VitesseX = 0;
                         VitesseY = DespicableGame.VITESSE;
-                        return AI_Case.CaseBas;
+                        return AI_Case.TileDown;
                     }
                 }
 
                 if (choixRandom == 2)
                 {
-                    if (!(AI_Case.CaseGauche == null || AI_Case.CaseGauche is Teleporteur))
+                    if (!(AI_Case.TileLeft == null || AI_Case.TileLeft is Teleporter))
                     {
                         VitesseX = -DespicableGame.VITESSE;
                         VitesseY = 0;
-                        return AI_Case.CaseGauche;
+                        return AI_Case.TileLeft;
                     }
                 }
 
                 if (choixRandom == 3)
                 {
-                    if (!(AI_Case.CaseDroite == null || AI_Case.CaseDroite is Teleporteur))
+                    if (!(AI_Case.TileRight == null || AI_Case.TileRight is Teleporter))
                     {
                         VitesseX = DespicableGame.VITESSE;
                         VitesseY = 0;
-                        return AI_Case.CaseDroite;
+                        return AI_Case.TileRight;
                     }
                 }
             }

@@ -6,32 +6,32 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace DespicableGame
 {
-    class Teleporteur : Case
+    class Teleporter : Tile
     {
         Random r = new Random();
 
-        public Teleporteur(Case caseHaut, Case caseBas, Case caseGauche, Case caseDroite)
+        public Teleporter(Tile caseHaut, Tile caseBas, Tile caseGauche, Tile caseDroite)
         {
-            this.CaseHaut = caseHaut;
-            this.CaseBas = caseBas;
-            this.CaseGauche = caseGauche;
-            this.CaseDroite = caseDroite;
+            this.TileUp = caseHaut;
+            this.TileDown = caseBas;
+            this.TileLeft = caseGauche;
+            this.TileRight = caseDroite;
         }
 
-        public Case Teleport()
+        public Tile Teleport()
         {
             int choixRandom = r.Next(4);
 
             switch (choixRandom)
             {
                 case 0:
-                    return CaseHaut;
+                    return TileUp;
                 case 1:
-                    return CaseBas;
+                    return TileDown;
                 case 2:
-                    return CaseGauche;
+                    return TileLeft;
                 case 3:
-                    return CaseDroite;
+                    return TileRight;
                 default:
                     return null;
             }

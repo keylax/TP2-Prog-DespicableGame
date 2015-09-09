@@ -7,9 +7,9 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace DespicableGame
 {
-    class PersonnageJoueur : Personnage
+    class PlayerCharacter : Character
     {
-        public PersonnageJoueur(Texture2D dessin, Vector2 position, Case ActualCase)
+        public PlayerCharacter(Texture2D dessin, Vector2 position, Tile ActualCase)
             : base(dessin, position, ActualCase)
         {
             Destination = null;
@@ -31,13 +31,13 @@ namespace DespicableGame
             }
         }
 
-        public void VerifierMouvement(Case caseDestionation, int vitesseX, int vitesseY)
+        public void VerifierMouvement(Tile caseDestionation, int vitesseX, int vitesseY)
         {
             //Si la direction choisie n'est pas nulle
             if (caseDestionation != null)
             {
                 //On vérifie si la case est un téléporteur
-                Case testTeleportation = TestTeleporter(caseDestionation);
+                Tile testTeleportation = TestTeleporter(caseDestionation);
 
                 //Si non, on bouge
                 if (testTeleportation == null)
@@ -55,11 +55,11 @@ namespace DespicableGame
             }
         }
 
-        private Case TestTeleporter(Case laCase)
+        private Tile TestTeleporter(Tile laCase)
         {
-            if (laCase is Teleporteur)
+            if (laCase is Teleporter)
             {
-                return ((Teleporteur)laCase).Teleport();
+                return ((Teleporter)laCase).Teleport();
             }
             return null;
         }

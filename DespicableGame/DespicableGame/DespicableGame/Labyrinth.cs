@@ -213,7 +213,7 @@ namespace DespicableGame
 
         }
 
-        public Tile GetCase(int x, int y)
+        public Tile GetTile(int x, int y)
         {
             return Tiles[x][y];
         }

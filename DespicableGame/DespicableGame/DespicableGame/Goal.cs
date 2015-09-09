@@ -12,5 +12,14 @@ namespace DespicableGame
         {
 
         }
+
+        public override void Effect(Character character)
+        {
+            if (character is PlayerCharacter)
+            {
+                ((PlayerCharacter)character).GoalCollected++;
+                this.Active = false;
+            }
+        }
     }
 }

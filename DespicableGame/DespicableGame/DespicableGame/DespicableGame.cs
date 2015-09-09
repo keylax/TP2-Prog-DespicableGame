@@ -21,14 +21,14 @@ namespace DespicableGame
         SpriteBatch spriteBatch;
         public const int SCREENWIDTH = 1280;
         public const int SCREENHEIGHT = 796;
-
         PlayerCharacter Gru;
         List<Character> characters; //Minions and police officers
-
+        List<Collectible> collectibles;
+        List<Collectible> collectiblesToDelete;
         Texture2D murHorizontal;
         Texture2D murVertical;
         Texture2D warpEntrance;
-        Texture2D bananas;
+
 
         Vector2 warpEntreePos;
 
@@ -60,6 +60,8 @@ namespace DespicableGame
         protected override void Initialize()
         {
             characters = new List<Character>();
+            collectibles = new List<Collectible>();
+            collectiblesToDelete = new List<Collectible>();
             InitGraphicsMode(SCREENWIDTH, SCREENHEIGHT, true);
             base.Initialize();
         }
@@ -114,16 +116,18 @@ namespace DespicableGame
 
             murHorizontal = Content.Load<Texture2D>("Sprites\\Hwall");
             murVertical = Content.Load<Texture2D>("Sprites\\Vwall");
-            bananas = Content.Load<Texture2D>("Sprites\\banana");
 
-            Gru = (PlayerCharacter)CharacterFactory.CreateCharacter(CharacterFactory.CharacterType.GRU, Content.Load<Texture2D>("Sprites\\Gru"), new Vector2(labyrinth.GetCase(DEPART_X, DEPART_Y).GetPosition().X, labyrinth.GetCase(DEPART_X, DEPART_Y).GetPosition().Y), labyrinth.GetCase(DEPART_X, DEPART_Y));
+
+            Gru = (PlayerCharacter)CharacterFactory.CreateCharacter(CharacterFactory.CharacterType.GRU, Content.Load<Texture2D>("Sprites\\Gru"), new Vector2(labyrinth.GetTile(DEPART_X, DEPART_Y).GetPosition().X, labyrinth.GetTile(DEPART_X, DEPART_Y).GetPosition().Y), labyrinth.GetTile(DEPART_X, DEPART_Y));
 
             //Add a police officer
-            characters.Add(CharacterFactory.CreateCharacter(CharacterFactory.CharacterType.POLICE_OFFICER, Content.Load<Texture2D>("Sprites\\Police"), new Vector2(labyrinth.GetCase(7, 9).GetPosition().X, labyrinth.GetCase(7, 9).GetPosition().Y), labyrinth.GetCase(7, 9)));
+            characters.Add(CharacterFactory.CreateCharacter(CharacterFactory.CharacterType.POLICE_OFFICER, Content.Load<Texture2D>("Sprites\\Police"), new Vector2(labyrinth.GetTile(7, 9).GetPosition().X, labyrinth.GetTile(7, 9).GetPosition().Y), labyrinth.GetTile(7, 9)));
 
+            //Add money
+            collectibles.Add(CollectibleFactory.CreateCollectible(Content.Load<Texture2D>("Sprites\\Dollar"), new Vector2(labyrinth.GetTile(7, 8).GetPosition().X, labyrinth.GetTile(7, 8).GetPosition().Y), labyrinth.GetTile(7, 8), CollectibleFactory.CollectibleType.GOAL));
             //Teleporter entrance
             warpEntrance = Content.Load<Texture2D>("Sprites\\Warp1");
-            warpEntreePos = new Vector2(labyrinth.GetCase(7, 4).GetPosition().X - Tile.LIGN_SIZE, labyrinth.GetCase(7, 4).GetPosition().Y + Tile.LIGN_SIZE);
+            warpEntreePos = new Vector2(labyrinth.GetTile(7, 4).GetPosition().X - Tile.LIGN_SIZE, labyrinth.GetTile(7, 4).GetPosition().Y + Tile.LIGN_SIZE);
 
             //Teleporter exits
             for (int i = 0; i < warpExits.Length; i++)
@@ -131,10 +135,10 @@ namespace DespicableGame
                 warpExits[i] = Content.Load<Texture2D>("Sprites\\Warp2");
             }
 
-            warpExitsPos[0] = new Vector2(labyrinth.GetCase(0, 0).GetPosition().X, labyrinth.GetCase(0, 0).GetPosition().Y);
-            warpExitsPos[1] = new Vector2(labyrinth.GetCase(Labyrinth.WIDTH - 1, 0).GetPosition().X, labyrinth.GetCase(Labyrinth.WIDTH - 1, 0).GetPosition().Y);
-            warpExitsPos[2] = new Vector2(labyrinth.GetCase(0, Labyrinth.HEIGHT - 1).GetPosition().X, labyrinth.GetCase(0, Labyrinth.HEIGHT - 1).GetPosition().Y);
-            warpExitsPos[3] = new Vector2(labyrinth.GetCase(Labyrinth.WIDTH - 1, Labyrinth.HEIGHT - 1).GetPosition().X, labyrinth.GetCase(Labyrinth.WIDTH - 1, Labyrinth.HEIGHT - 1).GetPosition().Y);
+            warpExitsPos[0] = new Vector2(labyrinth.GetTile(0, 0).GetPosition().X, labyrinth.GetTile(0, 0).GetPosition().Y);
+            warpExitsPos[1] = new Vector2(labyrinth.GetTile(Labyrinth.WIDTH - 1, 0).GetPosition().X, labyrinth.GetTile(Labyrinth.WIDTH - 1, 0).GetPosition().Y);
+            warpExitsPos[2] = new Vector2(labyrinth.GetTile(0, Labyrinth.HEIGHT - 1).GetPosition().X, labyrinth.GetTile(0, Labyrinth.HEIGHT - 1).GetPosition().Y);
+            warpExitsPos[3] = new Vector2(labyrinth.GetTile(Labyrinth.WIDTH - 1, Labyrinth.HEIGHT - 1).GetPosition().X, labyrinth.GetTile(Labyrinth.WIDTH - 1, Labyrinth.HEIGHT - 1).GetPosition().Y);
         }
 
         /// <summary>
@@ -186,6 +190,21 @@ namespace DespicableGame
             {
                 c.Move();
             }
+
+            foreach (Collectible collectible in collectibles)
+            {
+                collectible.FindCollisions(characters);
+                if (!collectible.Active)
+                {
+                    collectiblesToDelete.Add(collectible);
+                }
+            }
+
+            foreach (Collectible collectible in collectiblesToDelete)
+            {
+                collectibles.Remove(collectible);
+
+            }
             base.Update(gameTime);
         }
 
@@ -203,7 +222,7 @@ namespace DespicableGame
             {
                 for (int j = 0; j < Labyrinth.HEIGHT; j++)
                 {
-                    labyrinth.GetCase(i, j).DrawWalls(spriteBatch, murHorizontal, murVertical);
+                    labyrinth.GetTile(i, j).DrawWalls(spriteBatch, murHorizontal, murVertical);
                 }
             }
 
@@ -228,8 +247,11 @@ namespace DespicableGame
 
             //Draw Gru
             Gru.Draw(spriteBatch);
+            foreach (Collectible collectible in collectibles)
+            {
+                collectible.Draw(spriteBatch);
+            }
 
-            spriteBatch.Draw(bananas, Vector2.Zero, Color.White);
 
             spriteBatch.End();
             base.Draw(gameTime);

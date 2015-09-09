@@ -12,20 +12,20 @@ namespace DespicableGame.Factory
 
         public static Collectible CreateCollectible(Texture2D drawing, Vector2 position, Tile currentTile, CollectibleType collectibleType)
         {
-
-            if (CollectibleType.POWERUP == collectibleType)
+            Collectible newCollectible = null;
+            //if (CollectibleType.POWERUP == collectibleType)
+            //{
+            //    newCollectible = new Powerups(drawing, position, currentTile);
+            //}
+            if (CollectibleType.GOAL == collectibleType)
             {
-                return new Powerups(drawing, position, currentTile);
+                newCollectible = new Goal(drawing, position, currentTile);
             }
-            else if (CollectibleType.GOAL == collectibleType)
-            {
-                return new Goal(drawing, position, currentTile);
-            }
-            else if (CollectibleType.TRAP == collectibleType)
-            {
-                return new Trap(drawing, position, currentTile);
-            }
-            return null;
+            //else if (CollectibleType.TRAP == collectibleType)
+            //{
+            //    newCollectible =  new Trap(drawing, position, currentTile);
+            //}
+            return newCollectible;
         }
     }
 }

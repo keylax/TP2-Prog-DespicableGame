@@ -91,8 +91,8 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Sprites\bananas.jpg">
-      <Name>bananas</Name>
+    <Compile Include="Sprites\banana.jpg">
+      <Name>banana</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>

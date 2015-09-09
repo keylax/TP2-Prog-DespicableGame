@@ -26,7 +26,7 @@ namespace DespicableGame
 
         Texture2D murHorizontal;
         Texture2D murVertical;
-        Texture2D warpEntree;
+        Texture2D warpEntrance;
         Texture2D bananas;
 
         Vector2 warpEntreePos;
@@ -34,20 +34,20 @@ namespace DespicableGame
         Texture2D[] warpExits = new Texture2D[4];
         Vector2[] warpExitsPos = new Vector2[4];
 
-        //VITESSE doit être un diviseur entier de 64
+        //64 must be dividable by SPEED
         public const int VITESSE = 4;
 
-        //Position de départ de Gru
+        //Gru's statring position
         public const int DEPART_X = 6;
         public const int DEPART_Y = 7;
 
-        private Labyrinth labyrinthe;
+        private Labyrinth labyrinth;
 
         public DespicableGame()
         {
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
-            labyrinthe = new Labyrinth();
+            labyrinth = new Labyrinth();
         }
 
         /// <summary>
@@ -113,38 +113,27 @@ namespace DespicableGame
 
             murHorizontal = Content.Load<Texture2D>("Sprites\\Hwall");
             murVertical = Content.Load<Texture2D>("Sprites\\Vwall");
-            bananas = Content.Load<Texture2D>("Sprites\\bananas");
+            bananas = Content.Load<Texture2D>("Sprites\\banana");
 
             // TODO: use this.Content to load your game content here
-            Gru = new PlayerCharacter
-                (
-                Content.Load<Texture2D>("Sprites\\Gru"),
-                new Vector2(labyrinthe.GetCase(DEPART_X, DEPART_Y).GetPosition().X, labyrinthe.GetCase(DEPART_X, DEPART_Y).GetPosition().Y),
-                labyrinthe.GetCase(DEPART_X, DEPART_Y)
-                );
+            Gru = new PlayerCharacter(Content.Load<Texture2D>("Sprites\\Gru"), new Vector2(labyrinth.GetCase(DEPART_X, DEPART_Y).GetPosition().X, labyrinth.GetCase(DEPART_X, DEPART_Y).GetPosition().Y), labyrinth.GetCase(DEPART_X, DEPART_Y));
 
+            Police = new NonPlayerCharacter(Content.Load<Texture2D>("Sprites\\Police"), new Vector2(labyrinth.GetCase(7, 9).GetPosition().X, labyrinth.GetCase(7, 9).GetPosition().Y), labyrinth.GetCase(7, 9));
 
-            Police = new NonPlayerCharacter
-                (
-                Content.Load<Texture2D>("Sprites\\Police"),
-                new Vector2(labyrinthe.GetCase(7, 9).GetPosition().X, labyrinthe.GetCase(7, 9).GetPosition().Y),
-                labyrinthe.GetCase(7, 9)
-                );
+            //Teleporter entrance
+            warpEntrance = Content.Load<Texture2D>("Sprites\\Warp1");
+            warpEntreePos = new Vector2(labyrinth.GetCase(7, 4).GetPosition().X - Tile.LIGN_SIZE, labyrinth.GetCase(7, 4).GetPosition().Y + Tile.LIGN_SIZE);
 
-            //L'entrée du téléporteur
-            warpEntree = Content.Load<Texture2D>("Sprites\\Warp1");
-            warpEntreePos = new Vector2(labyrinthe.GetCase(7, 4).GetPosition().X - Tile.LIGN_SIZE, labyrinthe.GetCase(7, 4).GetPosition().Y + Tile.LIGN_SIZE);
-
-            //Les sorties du téléporteur
+            //Teleporter exits
             for (int i = 0; i < warpExits.Length; i++)
             {
                 warpExits[i] = Content.Load<Texture2D>("Sprites\\Warp2");
             }
 
-            warpExitsPos[0] = new Vector2(labyrinthe.GetCase(0, 0).GetPosition().X, labyrinthe.GetCase(0, 0).GetPosition().Y);
-            warpExitsPos[1] = new Vector2(labyrinthe.GetCase(Labyrinth.WIDTH - 1, 0).GetPosition().X, labyrinthe.GetCase(Labyrinth.WIDTH - 1, 0).GetPosition().Y);
-            warpExitsPos[2] = new Vector2(labyrinthe.GetCase(0, Labyrinth.HEIGHT - 1).GetPosition().X, labyrinthe.GetCase(0, Labyrinth.HEIGHT - 1).GetPosition().Y);
-            warpExitsPos[3] = new Vector2(labyrinthe.GetCase(Labyrinth.WIDTH - 1, Labyrinth.HEIGHT - 1).GetPosition().X, labyrinthe.GetCase(Labyrinth.WIDTH - 1, Labyrinth.HEIGHT - 1).GetPosition().Y);
+            warpExitsPos[0] = new Vector2(labyrinth.GetCase(0, 0).GetPosition().X, labyrinth.GetCase(0, 0).GetPosition().Y);
+            warpExitsPos[1] = new Vector2(labyrinth.GetCase(Labyrinth.WIDTH - 1, 0).GetPosition().X, labyrinth.GetCase(Labyrinth.WIDTH - 1, 0).GetPosition().Y);
+            warpExitsPos[2] = new Vector2(labyrinth.GetCase(0, Labyrinth.HEIGHT - 1).GetPosition().X, labyrinth.GetCase(0, Labyrinth.HEIGHT - 1).GetPosition().Y);
+            warpExitsPos[3] = new Vector2(labyrinth.GetCase(Labyrinth.WIDTH - 1, Labyrinth.HEIGHT - 1).GetPosition().X, labyrinth.GetCase(Labyrinth.WIDTH - 1, Labyrinth.HEIGHT - 1).GetPosition().Y);
         }
 
         /// <summary>
@@ -206,21 +195,21 @@ namespace DespicableGame
             GraphicsDevice.Clear(Color.Black);
             spriteBatch.Begin();
 
-            //Draw de chacune des cases
+            //Draw of each tiles
             for (int i = 0; i < Labyrinth.WIDTH; i++)
             {
                 for (int j = 0; j < Labyrinth.HEIGHT; j++)
                 {
-                    labyrinthe.GetCase(i, j).DrawWalls(spriteBatch, murHorizontal, murVertical);
+                    labyrinth.GetCase(i, j).DrawWalls(spriteBatch, murHorizontal, murVertical);
                 }
             }
 
-            //Draw du cadre extérieur
-            labyrinthe.DrawHorizontal(spriteBatch, murHorizontal);
-            labyrinthe.DrawVertical(spriteBatch, murVertical);
+            //Draw of the outside border
+            labyrinth.DrawHorizontal(spriteBatch, murHorizontal);
+            labyrinth.DrawVertical(spriteBatch, murVertical);
 
-            //Draw de l'entrée du téléporteur
-            spriteBatch.Draw(warpEntree, warpEntreePos, Color.White);
+            //Draw of the teleporter entrance
+            spriteBatch.Draw(warpEntrance, warpEntreePos, Color.White);
 
             //Draw the teleporter exits
             for (int i = 0; i < 4; i++)

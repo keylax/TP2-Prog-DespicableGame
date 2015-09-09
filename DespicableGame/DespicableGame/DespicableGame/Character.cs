@@ -6,7 +6,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace DespicableGame
 {
-    abstract class Character
+    public abstract class Character
     {
         protected Texture2D dessin;
         protected Vector2 position;

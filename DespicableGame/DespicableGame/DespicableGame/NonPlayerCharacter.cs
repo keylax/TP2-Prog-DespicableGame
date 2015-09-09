@@ -6,7 +6,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace DespicableGame
 {
-    class NonPlayerCharacter : Character
+    public class NonPlayerCharacter : Character
     {
         public NonPlayerCharacter(Texture2D dessin, Vector2 position, Tile ActualCase)
             : base(dessin, position, ActualCase)

@@ -6,7 +6,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace DespicableGame
 {
-    class Labyrinth
+    public class Labyrinth
     {
         private Tile[][] Tiles;
         public const int WIDTH = 14;

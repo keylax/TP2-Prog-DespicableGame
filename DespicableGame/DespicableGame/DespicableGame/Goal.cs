@@ -18,8 +18,9 @@ namespace DespicableGame
             if (character is PlayerCharacter)
             {
                 ((PlayerCharacter)character).GoalCollected++;
-                this.Active = false;
             }
+            this.Active = false;
         }
+
     }
 }

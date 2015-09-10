@@ -42,10 +42,6 @@ namespace DespicableGame
         List<Collectible> collectibles; //Goals and powerups
         List<Collectible> collectiblesToDelete; //Goals and powerups that should be deleted
 
-        //En attendant le RandomManager
-        Random r = new Random();
-        int goalTileX;
-        int goalTileY;
         Vector2 warpEntreePos;
 
         Vector2[] warpExitsPos = new Vector2[4];
@@ -146,8 +142,8 @@ namespace DespicableGame
             gameTextures[(int)GameTextures.WARP_ENTRANCE] = Content.Load<Texture2D>("Sprites\\Warp1");
             gameTextures[(int)GameTextures.WARP_EXIT] = Content.Load<Texture2D>("Sprites\\Warp2");
 
-            goalTileX = r.Next(14);
-            goalTileY = r.Next(10);
+            int goalTileX = RandomManager.GetRandomInt(0, 13);
+            int goalTileY = RandomManager.GetRandomInt(0, 9);
             goal = CollectibleFactory.CreateCollectible(GetTexture(GameTextures.GOAL), new Vector2(labyrinth.GetTile(goalTileX, goalTileY).GetPosition().X, labyrinth.GetTile(goalTileX, goalTileY).GetPosition().Y), labyrinth.GetTile(goalTileX, goalTileY), CollectibleFactory.CollectibleType.GOAL);
 
             //Add Gru to character list
@@ -202,8 +198,6 @@ namespace DespicableGame
                     UpdateGameLogic();
                     break;
             }
-
-
 
             base.Update(gameTime);
         }
@@ -301,8 +295,8 @@ namespace DespicableGame
             }
             else
             {
-                goalTileX = r.Next(14);
-                goalTileY = r.Next(10);
+                int goalTileX = RandomManager.GetRandomInt(0, 13);
+                int goalTileY = RandomManager.GetRandomInt(0, 9);
                 goal.Position = new Vector2(labyrinth.GetTile(goalTileX, goalTileY).GetPosition().X, labyrinth.GetTile(goalTileX, goalTileY).GetPosition().Y);
                 goal.CurrentTile = labyrinth.GetTile(goalTileX, goalTileY);
                 goal.Active = true;

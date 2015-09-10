@@ -34,6 +34,8 @@ namespace DespicableGame
         PlayerCharacter Gru;
         Collectible goal;
 
+        int level;
+
         List<Character> characters; //Minions and police officers
         List<Character> charactersToDelete; //Minions and police officers that should be deleted
 
@@ -82,6 +84,7 @@ namespace DespicableGame
             collectiblesToDelete = new List<Collectible>();
 
             currentState = GameStates.PLAYING;
+            level = 1;
 
             InitGraphicsMode(SCREENWIDTH, SCREENHEIGHT, true);
             base.Initialize();
@@ -200,7 +203,7 @@ namespace DespicableGame
                     break;
             }
 
-            
+
 
             base.Update(gameTime);
         }
@@ -215,16 +218,13 @@ namespace DespicableGame
             foreach (Collectible collectible in collectibles)
             {
                 collectible.FindCollisions(characters);
-                if (collectible is Goal)
+                if (!collectible.Active)
                 {
-                    if (!collectible.Active)
+                    if (collectible is Goal)
                     {
                         RespawnGoalAfterPickup();
                     }
-                }
-                else
-                {
-                    if (!collectible.Active)
+                    else
                     {
                         collectiblesToDelete.Add(collectible);
                     }
@@ -294,11 +294,21 @@ namespace DespicableGame
 
         private void RespawnGoalAfterPickup()
         {
-            goalTileX = r.Next(14);
-            goalTileY = r.Next(10);
-            goal.Position = new Vector2(labyrinth.GetTile(goalTileX, goalTileY).GetPosition().X, labyrinth.GetTile(goalTileX, goalTileY).GetPosition().Y);
-            goal.CurrentTile = labyrinth.GetTile(goalTileX, goalTileY);
-            goal.Active = true;
+            if (Gru.GoalCollected == (level * 2 + 3))
+            {
+                collectiblesToDelete.Add(goal);
+                //TODO: Spawn ship to end level
+            }
+            else
+            {
+                goalTileX = r.Next(14);
+                goalTileY = r.Next(10);
+                goal.Position = new Vector2(labyrinth.GetTile(goalTileX, goalTileY).GetPosition().X, labyrinth.GetTile(goalTileX, goalTileY).GetPosition().Y);
+                goal.CurrentTile = labyrinth.GetTile(goalTileX, goalTileY);
+                goal.Active = true;
+            }
+
+
         }
 
         /// <summary>

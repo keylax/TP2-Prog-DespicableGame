@@ -28,8 +28,12 @@ namespace DespicableGame
         Texture2D murHorizontal;
         Texture2D murVertical;
         Texture2D warpEntrance;
+        Collectible goal;
 
-
+        //En attendant le RandomManager
+        Random r = new Random();
+        int goalTileX;
+        int goalTileY;
         Vector2 warpEntreePos;
 
         Texture2D[] warpExits = new Texture2D[4];
@@ -51,6 +55,7 @@ namespace DespicableGame
             labyrinth = new Labyrinth();
         }
 
+
         /// <summary>
         /// Allows the game to perform any initialization it needs to before starting to run.
         /// This is where it can query for any required services and load any non-graphic
@@ -62,7 +67,7 @@ namespace DespicableGame
             characters = new List<Character>();
             collectibles = new List<Collectible>();
             collectiblesToDelete = new List<Collectible>();
-            InitGraphicsMode(SCREENWIDTH, SCREENHEIGHT, true);
+            InitGraphicsMode(SCREENWIDTH, SCREENHEIGHT, false);
             base.Initialize();
         }
 
@@ -116,15 +121,18 @@ namespace DespicableGame
 
             murHorizontal = Content.Load<Texture2D>("Sprites\\Hwall");
             murVertical = Content.Load<Texture2D>("Sprites\\Vwall");
-
+            goalTileX = r.Next(14);
+            goalTileY = r.Next(10);
+            goal = CollectibleFactory.CreateCollectible(Content.Load<Texture2D>("Sprites\\Dollar"), new Vector2(labyrinth.GetTile(goalTileX, goalTileY).GetPosition().X, labyrinth.GetTile(goalTileX, goalTileY).GetPosition().Y), labyrinth.GetTile(goalTileX, goalTileY), CollectibleFactory.CollectibleType.GOAL);
 
             Gru = (PlayerCharacter)CharacterFactory.CreateCharacter(CharacterFactory.CharacterType.GRU, Content.Load<Texture2D>("Sprites\\Gru"), new Vector2(labyrinth.GetTile(DEPART_X, DEPART_Y).GetPosition().X, labyrinth.GetTile(DEPART_X, DEPART_Y).GetPosition().Y), labyrinth.GetTile(DEPART_X, DEPART_Y));
-
+            //Add Gru to character list
+            characters.Add(Gru);
             //Add a police officer
             characters.Add(CharacterFactory.CreateCharacter(CharacterFactory.CharacterType.POLICE_OFFICER, Content.Load<Texture2D>("Sprites\\Police"), new Vector2(labyrinth.GetTile(7, 9).GetPosition().X, labyrinth.GetTile(7, 9).GetPosition().Y), labyrinth.GetTile(7, 9)));
-
+            
             //Add money
-            collectibles.Add(CollectibleFactory.CreateCollectible(Content.Load<Texture2D>("Sprites\\Dollar"), new Vector2(labyrinth.GetTile(7, 8).GetPosition().X, labyrinth.GetTile(7, 8).GetPosition().Y), labyrinth.GetTile(7, 8), CollectibleFactory.CollectibleType.GOAL));
+            collectibles.Add(goal);
             //Teleporter entrance
             warpEntrance = Content.Load<Texture2D>("Sprites\\Warp1");
             warpEntreePos = new Vector2(labyrinth.GetTile(7, 4).GetPosition().X - Tile.LIGN_SIZE, labyrinth.GetTile(7, 4).GetPosition().Y + Tile.LIGN_SIZE);
@@ -185,19 +193,29 @@ namespace DespicableGame
                 }
             }
 
-            Gru.Move();
-            foreach (NonPlayerCharacter c in characters)
+            foreach (Character c in characters)
             {
-                c.Move();
+                    c.Move();
             }
 
             foreach (Collectible collectible in collectibles)
             {
                 collectible.FindCollisions(characters);
-                if (!collectible.Active)
+                if (collectible is Goal)
                 {
-                    collectiblesToDelete.Add(collectible);
+                    if (!collectible.Active)
+                    {
+                        RespawnGoalAfterPickup();
+                    }
                 }
+                else
+                {
+                    if (!collectible.Active)
+                    {
+                        collectiblesToDelete.Add(collectible);
+                    }
+                }
+                
             }
 
             foreach (Collectible collectible in collectiblesToDelete)
@@ -206,6 +224,15 @@ namespace DespicableGame
 
             }
             base.Update(gameTime);
+        }
+
+        protected void RespawnGoalAfterPickup()
+        {
+            goalTileX = r.Next(14);
+            goalTileY = r.Next(10);
+            goal.Position = new Vector2(labyrinth.GetTile(goalTileX, goalTileY).GetPosition().X, labyrinth.GetTile(goalTileX, goalTileY).GetPosition().Y);
+            goal.CurrentTile = labyrinth.GetTile(goalTileX, goalTileY);
+            goal.Active = true;
         }
 
         /// <summary>
@@ -240,13 +267,13 @@ namespace DespicableGame
             }
 
             //Draw the police officers and the minions
-            foreach(NonPlayerCharacter c in characters)
+            foreach(Character c in characters)
             {
                 c.Draw(spriteBatch);
             }
 
             //Draw Gru
-            Gru.Draw(spriteBatch);
+
             foreach (Collectible collectible in collectibles)
             {
                 collectible.Draw(spriteBatch);

@@ -13,6 +13,17 @@ namespace DespicableGame
         protected Vector2 position;
         public Tile CurrentTile { get; set; }
 
+        public Vector2 Position
+        {
+            get
+            {
+                return position;
+            }
+            set
+            {
+                position = value;
+            }
+        }
 
         public Collectible(Texture2D sprite, Vector2 position, Tile currentTile)
         {
@@ -33,9 +44,12 @@ namespace DespicableGame
         {
             foreach (Character character in characters)
             {
-                if (this.CurrentTile == character.Destination)
+                if (character is PlayerCharacter)
                 {
-                    Effect(character);
+                    if (this.CurrentTile == character.Destination)
+                    {
+                        Effect(character);
+                    }
                 }
             }
         }

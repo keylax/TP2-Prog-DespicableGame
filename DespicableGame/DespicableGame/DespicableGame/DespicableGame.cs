@@ -12,6 +12,7 @@ using Microsoft.Xna.Framework.Media;
 
 namespace DespicableGame
 {
+
     /// <summary>
     /// This is the main type for your game
     /// </summary>
@@ -32,15 +33,17 @@ namespace DespicableGame
         TimeSpan lastPauseButtonPress = new TimeSpan(0, 0, 0);
 
         PlayerCharacter Gru;
-        Collectible goal;
+        //Collectible goal;
 
         int level;
 
         List<Character> characters; //Minions and police officers
         List<Character> charactersToDelete; //Minions and police officers that should be deleted
+        List<Character> charactersToCreate; //Minions and police officers that will be created at end of frame
 
         List<Collectible> collectibles; //Goals and powerups
         List<Collectible> collectiblesToDelete; //Goals and powerups that should be deleted
+        List<Collectible> collectiblesToCreate; //Goals and powerups that will be created at end of frame
 
         Vector2 warpEntreePos;
 
@@ -75,9 +78,11 @@ namespace DespicableGame
 
             characters = new List<Character>();
             charactersToDelete = new List<Character>();
+            charactersToCreate = new List<Character>();
 
             collectibles = new List<Collectible>();
             collectiblesToDelete = new List<Collectible>();
+            collectiblesToCreate = new List<Collectible>();
 
             currentState = GameStates.PLAYING;
             level = 1;
@@ -141,11 +146,8 @@ namespace DespicableGame
             gameTextures[(int)GameTextures.GOAL] = Content.Load<Texture2D>("Sprites\\Dollar");
             gameTextures[(int)GameTextures.WARP_ENTRANCE] = Content.Load<Texture2D>("Sprites\\Warp1");
             gameTextures[(int)GameTextures.WARP_EXIT] = Content.Load<Texture2D>("Sprites\\Warp2");
+            gameTextures[(int)GameTextures.LEVEL_EXIT] = Content.Load<Texture2D>("Sprites\\SpaceShip");
             
-            Vector2 randomTile = RandomManager.GetRandomVector(Labyrinth.WIDTH, Labyrinth.HEIGHT);
-            Vector2 visualPosition = new Vector2(labyrinth.GetTile((int)randomTile.X, (int)randomTile.Y).GetPosition().X, labyrinth.GetTile((int)randomTile.X, (int)randomTile.Y).GetPosition().Y);
-            goal = CollectibleFactory.CreateCollectible(GetTexture(GameTextures.GOAL), visualPosition, labyrinth.GetTile((int)randomTile.X, (int)randomTile.Y), CollectibleFactory.CollectibleType.GOAL);
-
             //Add Gru to character list
             Gru = (PlayerCharacter)CharacterFactory.CreateCharacter(CharacterFactory.CharacterType.GRU, GetTexture(GameTextures.GRU), new Vector2(labyrinth.GetTile(DEPART_X, DEPART_Y).GetPosition().X, labyrinth.GetTile(DEPART_X, DEPART_Y).GetPosition().Y), labyrinth.GetTile(DEPART_X, DEPART_Y));
             characters.Add(Gru);
@@ -154,7 +156,7 @@ namespace DespicableGame
             characters.Add(CharacterFactory.CreateCharacter(CharacterFactory.CharacterType.POLICE_OFFICER, GetTexture(GameTextures.POLICE_OFFICER), new Vector2(labyrinth.GetTile(7, 9).GetPosition().X, labyrinth.GetTile(7, 9).GetPosition().Y), labyrinth.GetTile(7, 9)));
 
             //Add some money
-            collectibles.Add(goal);
+            SpawnGoal();
 
             //Teleporter entrance
             warpEntreePos = new Vector2(labyrinth.GetTile(7, 4).GetPosition().X - Tile.LIGN_SIZE, labyrinth.GetTile(7, 4).GetPosition().Y + Tile.LIGN_SIZE);
@@ -200,6 +202,8 @@ namespace DespicableGame
                         c.Move();
                     }
                     DetectAndProcessCollisions();
+                    RemoveDeadObjects();
+                    CreateNewObjects();
                     break;
             }
 
@@ -212,11 +216,28 @@ namespace DespicableGame
             {
                 characters.Remove(character);
             }
+            charactersToDelete.Clear();
 
             foreach (Collectible collectible in collectiblesToDelete)
             {
                 collectibles.Remove(collectible);
             }
+            collectiblesToDelete.Clear();
+        }
+
+        private void CreateNewObjects()
+        {
+            foreach (Character character in charactersToCreate)
+            {
+                characters.Add(character);
+            }
+            charactersToCreate.Clear();
+
+            foreach (Collectible collectible in collectiblesToCreate)
+            {
+                collectibles.Add(collectible);
+            }
+            collectiblesToCreate.Clear();
         }
 
         private void DetectAndProcessCollisions()
@@ -230,10 +251,7 @@ namespace DespicableGame
                     {
                         RespawnGoalAfterPickup();
                     }
-                    else
-                    {
-                        collectiblesToDelete.Add(collectible);
-                    }
+                    collectiblesToDelete.Add(collectible);
                 }
             }
         }
@@ -296,23 +314,26 @@ namespace DespicableGame
         {
             Vector2 randomTile = RandomManager.GetRandomVector(Labyrinth.WIDTH, Labyrinth.HEIGHT);
             Vector2 visualPosition = new Vector2(labyrinth.GetTile((int)randomTile.X, (int)randomTile.Y).GetPosition().X, labyrinth.GetTile((int)randomTile.X, (int)randomTile.Y).GetPosition().Y);
-            collectibles.Add(CollectibleFactory.CreateCollectible(GetTexture(GameTextures.LEVEL_EXIT), visualPosition, labyrinth.GetTile((int)randomTile.X, (int)randomTile.Y), CollectibleFactory.CollectibleType.SHIP));
+            collectiblesToCreate.Add(CollectibleFactory.CreateCollectible(GetTexture(GameTextures.LEVEL_EXIT), visualPosition, labyrinth.GetTile((int)randomTile.X, (int)randomTile.Y), CollectibleFactory.CollectibleType.SHIP));
         }
 
         private void RespawnGoalAfterPickup()
         {
-            if (Gru.GoalCollected == (level * 2 + 3))
+            if (Gru.GoalCollected >= level * 2 + 3)
             {
-                collectiblesToDelete.Add(goal);
-                //TODO: Spawn ship to end level
+                SpawnShip();
             }
             else
             {
-                Vector2 randomTile = RandomManager.GetRandomVector(Labyrinth.WIDTH, Labyrinth.HEIGHT);
-                goal.Position = randomTile;
-                goal.CurrentTile = labyrinth.GetTile((int)randomTile.X, (int)randomTile.Y);
-                goal.Active = true;
+                SpawnGoal();
             }
+        }
+
+        private void SpawnGoal()
+        {
+            Vector2 randomTile = RandomManager.GetRandomVector(Labyrinth.WIDTH, Labyrinth.HEIGHT);
+            Vector2 visualPosition = new Vector2(labyrinth.GetTile((int)randomTile.X, (int)randomTile.Y).GetPosition().X, labyrinth.GetTile((int)randomTile.X, (int)randomTile.Y).GetPosition().Y);
+            collectiblesToCreate.Add(CollectibleFactory.CreateCollectible(GetTexture(GameTextures.GOAL), visualPosition, labyrinth.GetTile((int)randomTile.X, (int)randomTile.Y), CollectibleFactory.CollectibleType.GOAL));
         }
 
         /// <summary>

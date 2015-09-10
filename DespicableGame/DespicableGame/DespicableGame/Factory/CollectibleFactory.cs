@@ -29,14 +29,13 @@ namespace DespicableGame.Factory
                     break;
 
                 case CollectibleType.SHIP:
-
+                    newCollectible = new Ship(drawing, position, currentTile);
                     break;
 
             }
 
             return newCollectible;
         }
-
 
     }
 }

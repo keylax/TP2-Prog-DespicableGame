@@ -6,11 +6,13 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 namespace DespicableGame
 {
-    class Powerups: Collectible
+    abstract class Powerups: Collectible
     {
         public Powerups(Texture2D drawing, Vector2 position, Tile CurrentTile): base(drawing, position, CurrentTile)
         {
 
         }
+
+
     }
 }

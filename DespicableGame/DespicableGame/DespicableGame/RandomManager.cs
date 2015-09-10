@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace DespicableGame
 {
@@ -11,10 +13,13 @@ namespace DespicableGame
 
         public static int GetRandomInt(int minimum, int maximum)
         {
-            return randomizer.Next(minimum, maximum + 1);
+            return randomizer.Next(minimum, maximum);
         }
 
-
+        public static Vector2 GetRandomVector(int maximumX, int maximumY)
+        {
+            return new Vector2(GetRandomInt(0, maximumX), GetRandomInt(0, maximumY));
+        }
 
     }
 }

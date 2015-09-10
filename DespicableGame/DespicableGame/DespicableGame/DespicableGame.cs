@@ -17,18 +17,28 @@ namespace DespicableGame
     /// </summary>
     public class DespicableGame : Microsoft.Xna.Framework.Game
     {
-        GraphicsDeviceManager graphics;
-        SpriteBatch spriteBatch;
+        readonly TimeSpan PAUSE_BUTTON_DELAY = new TimeSpan(0, 0, 0, 0, 250);
         public const int SCREENWIDTH = 1280;
         public const int SCREENHEIGHT = 796;
+        enum GameStates { MAIN_MENU, PAUSED, PLAYING }
+        enum GameTextures { HORIZONTAL_WALL, VERTICAL_WALL, WARP_ENTRANCE, WARP_EXIT, GOAL, GRU, POLICE_OFFICER, NUMBER_OF_TEXTURES }
+
+        Texture2D[] gameTextures;
+
+        GraphicsDeviceManager graphics;
+        SpriteBatch spriteBatch;
+
+        GameStates currentState;
+        TimeSpan lastPauseButtonPress = new TimeSpan(0, 0, 0);
+
         PlayerCharacter Gru;
-        List<Character> characters; //Minions and police officers
-        List<Collectible> collectibles;
-        List<Collectible> collectiblesToDelete;
-        Texture2D murHorizontal;
-        Texture2D murVertical;
-        Texture2D warpEntrance;
         Collectible goal;
+
+        List<Character> characters; //Minions and police officers
+        List<Character> charactersToDelete; //Minions and police officers that should be deleted
+
+        List<Collectible> collectibles; //Goals and powerups
+        List<Collectible> collectiblesToDelete; //Goals and powerups that should be deleted
 
         //En attendant le RandomManager
         Random r = new Random();
@@ -36,7 +46,6 @@ namespace DespicableGame
         int goalTileY;
         Vector2 warpEntreePos;
 
-        Texture2D[] warpExits = new Texture2D[4];
         Vector2[] warpExitsPos = new Vector2[4];
 
         //64 must be dividable by SPEED
@@ -64,10 +73,17 @@ namespace DespicableGame
         /// </summary>
         protected override void Initialize()
         {
+            gameTextures = new Texture2D[(int)GameTextures.NUMBER_OF_TEXTURES];
+
             characters = new List<Character>();
+            charactersToDelete = new List<Character>();
+
             collectibles = new List<Collectible>();
             collectiblesToDelete = new List<Collectible>();
-            InitGraphicsMode(SCREENWIDTH, SCREENHEIGHT, false);
+
+            currentState = GameStates.PLAYING;
+
+            InitGraphicsMode(SCREENWIDTH, SCREENHEIGHT, true);
             base.Initialize();
         }
 
@@ -119,30 +135,32 @@ namespace DespicableGame
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
-            murHorizontal = Content.Load<Texture2D>("Sprites\\Hwall");
-            murVertical = Content.Load<Texture2D>("Sprites\\Vwall");
+            gameTextures[(int)GameTextures.HORIZONTAL_WALL] = Content.Load<Texture2D>("Sprites\\Hwall");
+            gameTextures[(int)GameTextures.VERTICAL_WALL] = Content.Load<Texture2D>("Sprites\\Vwall");
+            gameTextures[(int)GameTextures.POLICE_OFFICER] = Content.Load<Texture2D>("Sprites\\Police");
+            gameTextures[(int)GameTextures.GRU] = Content.Load<Texture2D>("Sprites\\Gru");
+            gameTextures[(int)GameTextures.GOAL] = Content.Load<Texture2D>("Sprites\\Dollar");
+            gameTextures[(int)GameTextures.WARP_ENTRANCE] = Content.Load<Texture2D>("Sprites\\Warp1");
+            gameTextures[(int)GameTextures.WARP_EXIT] = Content.Load<Texture2D>("Sprites\\Warp2");
+
             goalTileX = r.Next(14);
             goalTileY = r.Next(10);
-            goal = CollectibleFactory.CreateCollectible(Content.Load<Texture2D>("Sprites\\Dollar"), new Vector2(labyrinth.GetTile(goalTileX, goalTileY).GetPosition().X, labyrinth.GetTile(goalTileX, goalTileY).GetPosition().Y), labyrinth.GetTile(goalTileX, goalTileY), CollectibleFactory.CollectibleType.GOAL);
+            goal = CollectibleFactory.CreateCollectible(GetTexture(GameTextures.GOAL), new Vector2(labyrinth.GetTile(goalTileX, goalTileY).GetPosition().X, labyrinth.GetTile(goalTileX, goalTileY).GetPosition().Y), labyrinth.GetTile(goalTileX, goalTileY), CollectibleFactory.CollectibleType.GOAL);
 
-            Gru = (PlayerCharacter)CharacterFactory.CreateCharacter(CharacterFactory.CharacterType.GRU, Content.Load<Texture2D>("Sprites\\Gru"), new Vector2(labyrinth.GetTile(DEPART_X, DEPART_Y).GetPosition().X, labyrinth.GetTile(DEPART_X, DEPART_Y).GetPosition().Y), labyrinth.GetTile(DEPART_X, DEPART_Y));
             //Add Gru to character list
+            Gru = (PlayerCharacter)CharacterFactory.CreateCharacter(CharacterFactory.CharacterType.GRU, GetTexture(GameTextures.GRU), new Vector2(labyrinth.GetTile(DEPART_X, DEPART_Y).GetPosition().X, labyrinth.GetTile(DEPART_X, DEPART_Y).GetPosition().Y), labyrinth.GetTile(DEPART_X, DEPART_Y));
             characters.Add(Gru);
-            //Add a police officer
-            characters.Add(CharacterFactory.CreateCharacter(CharacterFactory.CharacterType.POLICE_OFFICER, Content.Load<Texture2D>("Sprites\\Police"), new Vector2(labyrinth.GetTile(7, 9).GetPosition().X, labyrinth.GetTile(7, 9).GetPosition().Y), labyrinth.GetTile(7, 9)));
-            
-            //Add money
+
+            //Add a test police officer
+            characters.Add(CharacterFactory.CreateCharacter(CharacterFactory.CharacterType.POLICE_OFFICER, GetTexture(GameTextures.POLICE_OFFICER), new Vector2(labyrinth.GetTile(7, 9).GetPosition().X, labyrinth.GetTile(7, 9).GetPosition().Y), labyrinth.GetTile(7, 9)));
+
+            //Add some money
             collectibles.Add(goal);
+
             //Teleporter entrance
-            warpEntrance = Content.Load<Texture2D>("Sprites\\Warp1");
             warpEntreePos = new Vector2(labyrinth.GetTile(7, 4).GetPosition().X - Tile.LIGN_SIZE, labyrinth.GetTile(7, 4).GetPosition().Y + Tile.LIGN_SIZE);
 
             //Teleporter exits
-            for (int i = 0; i < warpExits.Length; i++)
-            {
-                warpExits[i] = Content.Load<Texture2D>("Sprites\\Warp2");
-            }
-
             warpExitsPos[0] = new Vector2(labyrinth.GetTile(0, 0).GetPosition().X, labyrinth.GetTile(0, 0).GetPosition().Y);
             warpExitsPos[1] = new Vector2(labyrinth.GetTile(Labyrinth.WIDTH - 1, 0).GetPosition().X, labyrinth.GetTile(Labyrinth.WIDTH - 1, 0).GetPosition().Y);
             warpExitsPos[2] = new Vector2(labyrinth.GetTile(0, Labyrinth.HEIGHT - 1).GetPosition().X, labyrinth.GetTile(0, Labyrinth.HEIGHT - 1).GetPosition().Y);
@@ -165,10 +183,85 @@ namespace DespicableGame
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Update(GameTime gameTime)
         {
+            ProcessPlayerInputs(gameTime.TotalGameTime);
+
+            switch (currentState)
+            {
+                case GameStates.MAIN_MENU:
+                    //Nothing for now
+                    break;
+
+                case GameStates.PAUSED:
+                    //Nothing for now
+                    break;
+
+                case GameStates.PLAYING:
+                    UpdateGameLogic();
+                    break;
+            }
+
+            
+
+            base.Update(gameTime);
+        }
+
+        private void UpdateGameLogic()
+        {
+            foreach (Character c in characters)
+            {
+                c.Move();
+            }
+
+            foreach (Collectible collectible in collectibles)
+            {
+                collectible.FindCollisions(characters);
+                if (collectible is Goal)
+                {
+                    if (!collectible.Active)
+                    {
+                        RespawnGoalAfterPickup();
+                    }
+                }
+                else
+                {
+                    if (!collectible.Active)
+                    {
+                        collectiblesToDelete.Add(collectible);
+                    }
+                }
+            }
+
+            foreach (Collectible collectible in collectiblesToDelete)
+            {
+                collectibles.Remove(collectible);
+
+            }
+        }
+
+        private void PauseButtonPressAction(TimeSpan totalGameTime)
+        {
+            if (totalGameTime - lastPauseButtonPress > PAUSE_BUTTON_DELAY)
+            {
+                lastPauseButtonPress = totalGameTime;
+                if (currentState != GameStates.PLAYING)
+                {
+                    currentState = GameStates.PLAYING;
+                }
+                else
+                {
+                    currentState = GameStates.PAUSED;
+                }
+            }
+        }
+
+        private void ProcessPlayerInputs(TimeSpan totalGameTime)
+        {
             GamePadState padOneState = GamePad.GetState(PlayerIndex.One);
 
             if (Keyboard.GetState().IsKeyDown(Keys.Escape) || padOneState.Buttons.Back == ButtonState.Pressed)
                 this.Exit();
+
+            if (Keyboard.GetState().IsKeyDown(Keys.Enter) || padOneState.Buttons.Start == ButtonState.Pressed) PauseButtonPressAction(totalGameTime);
 
             if (Gru.Destination == null)
             {
@@ -192,41 +285,14 @@ namespace DespicableGame
                     Gru.CheckMovement(Gru.CurrentTile.TileRight, VITESSE, 0);
                 }
             }
-
-            foreach (Character c in characters)
-            {
-                    c.Move();
-            }
-
-            foreach (Collectible collectible in collectibles)
-            {
-                collectible.FindCollisions(characters);
-                if (collectible is Goal)
-                {
-                    if (!collectible.Active)
-                    {
-                        RespawnGoalAfterPickup();
-                    }
-                }
-                else
-                {
-                    if (!collectible.Active)
-                    {
-                        collectiblesToDelete.Add(collectible);
-                    }
-                }
-                
-            }
-
-            foreach (Collectible collectible in collectiblesToDelete)
-            {
-                collectibles.Remove(collectible);
-
-            }
-            base.Update(gameTime);
         }
 
-        protected void RespawnGoalAfterPickup()
+        private Texture2D GetTexture(GameTextures desiredTexture)
+        {
+            return gameTextures[(int)desiredTexture];
+        }
+
+        private void RespawnGoalAfterPickup()
         {
             goalTileX = r.Next(14);
             goalTileY = r.Next(10);
@@ -249,39 +315,36 @@ namespace DespicableGame
             {
                 for (int j = 0; j < Labyrinth.HEIGHT; j++)
                 {
-                    labyrinth.GetTile(i, j).DrawWalls(spriteBatch, murHorizontal, murVertical);
+                    labyrinth.GetTile(i, j).DrawWalls(spriteBatch, GetTexture(GameTextures.HORIZONTAL_WALL), GetTexture(GameTextures.VERTICAL_WALL));
                 }
             }
 
             //Draw of the outside border
-            labyrinth.DrawHorizontal(spriteBatch, murHorizontal);
-            labyrinth.DrawVertical(spriteBatch, murVertical);
+            labyrinth.DrawHorizontal(spriteBatch, GetTexture(GameTextures.HORIZONTAL_WALL));
+            labyrinth.DrawVertical(spriteBatch, GetTexture(GameTextures.VERTICAL_WALL));
 
-            //Draw of the teleporter entrance
-            spriteBatch.Draw(warpEntrance, warpEntreePos, Color.White);
-
-            //Draw the teleporter exits
+            //Draw of the teleporter entrance and exits
+            spriteBatch.Draw(GetTexture(GameTextures.WARP_ENTRANCE), warpEntreePos, Color.White);
             for (int i = 0; i < 4; i++)
             {
-                spriteBatch.Draw(warpExits[i], warpExitsPos[i], Color.White);
+                spriteBatch.Draw(GetTexture(GameTextures.WARP_EXIT), warpExitsPos[i], Color.White);
             }
 
             //Draw the police officers and the minions
-            foreach(Character c in characters)
+            foreach (Character c in characters)
             {
                 c.Draw(spriteBatch);
             }
 
-            //Draw Gru
-
+            //Draw the pickups
             foreach (Collectible collectible in collectibles)
             {
                 collectible.Draw(spriteBatch);
             }
 
-
             spriteBatch.End();
             base.Draw(gameTime);
         }
+
     }
 }

@@ -22,7 +22,7 @@ bld/
 #[Bb]in/
 [Oo]bj/
 *.xnb
-
+*.exe
 # Visual Studo 2015 cache/options directory
 .vs/
 
@@ -195,3 +195,4 @@ FakesAssemblies/
 
 # Visual Studio 6 workspace options file
 *.opt
+*.exe

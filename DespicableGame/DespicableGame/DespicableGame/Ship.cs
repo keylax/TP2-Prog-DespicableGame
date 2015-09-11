@@ -8,9 +8,9 @@ using DespicableGame.Observer;
 
 namespace DespicableGame
 {
-    class Goal : Trap
+    class Ship : Trap
     {
-        public Goal(Texture2D drawing, Vector2 position, Tile CurrentTile): base(drawing, position, CurrentTile)
+        public Ship(Texture2D drawing, Vector2 position, Tile CurrentTile) : base(drawing, position, CurrentTile)
         {
 
         }
@@ -19,11 +19,9 @@ namespace DespicableGame
         {
             if (character is PlayerCharacter)
             {
-                ((PlayerCharacter)character).GoalCollected++;
+                NotifyAllObservers(Subject.NotifyReason.EXIT_REACHED);
             }
             Active = false;
-
-            NotifyAllObservers(Subject.NotifyReason.MONEY_DESTROYED);
         }
 
     }

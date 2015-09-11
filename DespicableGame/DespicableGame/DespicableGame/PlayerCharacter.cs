@@ -3,16 +3,36 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using DespicableGame.Observer;
 
 namespace DespicableGame
 {
     class PlayerCharacter : Character
     {
-        public int GoalCollected {get; set;}
-        public PlayerCharacter(Texture2D drawing, Vector2 position, Tile CurrentTile)
-            : base(drawing, position, CurrentTile)
+        private const int STARTING_LIVES = 3;
+        private int goalCollected;
+        private int lives;
+    
+        public int GoalCollected
         {
-            GoalCollected = 0;
+            get { return goalCollected;  }
+            set
+            {
+                NotifyAllObservers(Subject.NotifyReason.MONEY_GAINED);
+                goalCollected = value;
+            }
+        }
+
+        public int Lives
+        {
+            get { return lives; }
+        }
+
+        public PlayerCharacter(Texture2D drawing, Vector2 position, Tile currentTile)
+            : base(drawing, position, currentTile)
+        {
+            goalCollected = 0;
+            lives = STARTING_LIVES;
             Destination = null;
         }
 
@@ -26,7 +46,7 @@ namespace DespicableGame
 
                 if (position.X == Destination.GetPosition().X && position.Y == Destination.GetPosition().Y)
                 {
-                    CurrentTile = Destination;
+                    currentTile = Destination;
                     Destination = null;
                 }
             }
@@ -51,7 +71,6 @@ namespace DespicableGame
                 else
                 {
                     CurrentTile = testTeleportation;
-                    position = new Vector2(CurrentTile.GetPosition().X, CurrentTile.GetPosition().Y);
                 }
             }
         }
@@ -63,6 +82,26 @@ namespace DespicableGame
                 return ((Teleporter)theTile).Teleport();
             }
             return null;
+        }
+
+        public void FindCollisions(List<Character> characters)
+        {
+            foreach (Character character in characters)
+            {
+                if (!character.IsFriendly)
+                {
+                    if (this.Destination == character.Destination)
+                    {
+                        LoseLife();
+                    }
+                }
+            }
+        }
+
+        public void LoseLife()
+        {
+            lives--;
+            NotifyAllObservers(Subject.NotifyReason.LIFE_LOST);
         }
 
     }

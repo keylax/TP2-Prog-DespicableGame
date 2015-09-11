@@ -1,0 +1,25 @@
+	Tous les characters pourraient dépendrent d'un ou de plusieurs "timers" et collectible
+Par exemple: slow, stun, killed until respawn, etc.
+
+Système: on ajoute des countdown avec une durée, à chauqe update on leur passe l'elapsed gameTime de la dernière frame
+ce qui diminue les timers. Quand ils ont finis (atteignent 0), ils "notify" leurs obsersers:
+-les policiers, minions et joueur peuvent avoir des countdowns (partagés ou non) qui dictent quand ils arrêteront
+d'être ralenti ou assomer par exemple
+
+	Le jeu lui-même devrai observer les éléments à afficher au joueur (monies/goal, pause, timers avant minion
+spawn, autre cooldown... si le joueur touche à un minion, afficher les options, etc.) ainsi que savoir quand commencer
+un autre niveau, afficher une mort, recommencer le jeu, etc.
+
+Donc:
+
+Au début, le jeu est observer du sujet money et du sujet player. Il affiche ainsi les statistiques du joueurs et se
+fait notifier quand le joueur meurt. Quand le money est ramasser et qu'il notifie le game, celui-ci le delete. S'il
+est ramasser par le joueur, le joueur notifie le game qu'il a ramasser du money. Il augmente préalablement son goal
+count. Si le game détecte que le joueur a assez de monies, fera apparaître un vaisseau (duquel il sera observateur)
+Quand le vaisseau est touché, il notifie le joueur de mettre son money à 0 et le game qui replace le joueur au
+centre, les policiers dans leur cage, fait disparaître les bonus, change le numéro du level, etc.
+
+D'ailleurs, quand le random décidera de l'apparition d'un trap, celui aura agira d'une manière similaire. Il doit
+notify le player, créer un countdown avant de disparaître qui sera subject et dans une liste du jeu et faire que le
+joueur observe ce countdown. Quand le countdown est fini, il se détruit et le joueur a l'effet inverse de celui qu'il
+avait subit à l'ajout du timer.

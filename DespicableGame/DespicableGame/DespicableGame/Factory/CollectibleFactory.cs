@@ -8,24 +8,33 @@ namespace DespicableGame.Factory
 {
     public static class CollectibleFactory
     {
-        public enum CollectibleType { POWERUP, GOAL, TRAP }
+        public enum CollectibleType { POWERUP, GOAL, TRAP, SHIP }
 
-        public static Collectible CreateCollectible(Texture2D drawing, Vector2 position, Tile currentTile, CollectibleType collectibleType)
+        public static Collectible CreateCollectible(CollectibleType collectibleType, Vector2 position, Tile currentTile)
         {
             Collectible newCollectible = null;
-            //if (CollectibleType.POWERUP == collectibleType)
-            //{
-            //    newCollectible = new Powerups(drawing, position, currentTile);
-            //}
-            if (CollectibleType.GOAL == collectibleType)
+
+            switch (collectibleType)
             {
-                newCollectible = new Goal(drawing, position, currentTile);
+                case CollectibleType.POWERUP:
+                    //    newCollectible = new Powerups(DespicableGame.GetTexture(DespicableGame.GameTextures.LEVEL_EXIT), position, currentTile);
+                    break;
+
+                case CollectibleType.GOAL:
+                    newCollectible = new Goal(DespicableGame.GetTexture(DespicableGame.GameTextures.GOAL), position, currentTile);
+                    break;
+
+                case CollectibleType.TRAP:
+                    //    newCollectible =  new Trap(DespicableGame.GetTexture(DespicableGame.GameTextures.LEVEL_EXIT), position, currentTile);
+                    break;
+
+                case CollectibleType.SHIP:
+                    newCollectible = new Ship(DespicableGame.GetTexture(DespicableGame.GameTextures.LEVEL_EXIT), position, currentTile);
+                    break;
             }
-            //else if (CollectibleType.TRAP == collectibleType)
-            //{
-            //    newCollectible =  new Trap(drawing, position, currentTile);
-            //}
+
             return newCollectible;
         }
+
     }
 }

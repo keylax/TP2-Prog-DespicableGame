@@ -55,7 +55,7 @@ namespace DespicableGame
         /// </summary>
         protected override void Initialize()
         {
-            currentState = GameStates.PAUSED;
+            currentState = GameStates.PLAYING;
 
             InitGraphicsMode(SCREENWIDTH, SCREENHEIGHT, true);
             base.Initialize();

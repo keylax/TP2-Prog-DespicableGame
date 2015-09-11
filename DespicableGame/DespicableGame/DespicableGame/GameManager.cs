@@ -34,7 +34,6 @@ namespace DespicableGame
 
         private int level;
 
-
         public GameManager()
         {
             labyrinth = new Labyrinth();

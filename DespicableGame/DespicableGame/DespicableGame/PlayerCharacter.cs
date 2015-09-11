@@ -89,9 +89,9 @@ namespace DespicableGame
         {
             foreach (Character character in characters)
             {
-                if (character.IsFriendly)
+                if (!character.IsFriendly)
                 {
-                    if (this.CurrentTile == character.Destination)
+                    if (this.Destination == character.Destination)
                     {
                         LoseLife();
                     }

@@ -8,11 +8,10 @@ namespace DespicableGame
 {
     public class NonPlayerCharacter : Character
     {
-        public NonPlayerCharacter(Texture2D dessin, Vector2 position, Tile ActualCase, bool isFriendly)
-            : base(dessin, position, ActualCase)
+        public NonPlayerCharacter(Texture2D dessin, Vector2 position, Tile currentTile, bool isFriendly)
+            : base(dessin, position, currentTile, isFriendly)
         {
-            Destination = MouvementIA(ActualCase);
-            this.isFriendly = isFriendly;
+            Destination = MouvementIA(currentTile);
         }
 
         public override void Move()
@@ -33,13 +32,13 @@ namespace DespicableGame
         //AI totalement random et qui ne peut pas entrer dans les téléporteurs.  À revoir absolument.
         private Tile MouvementIA(Tile AI_Case)
         {
-            Random r = new Random();
+            int randomChoice;
 
             while (true)
             {
-                int choixRandom = r.Next(4);
+                randomChoice = RandomManager.GetRandomInt(0, 3);
 
-                if (choixRandom == 0)
+                if (randomChoice == 0)
                 {
                     //Plus efficace qu'un &&, dès que la première condition courante est remplie, on arrête le test
                     if (!(AI_Case.TileUp == null || AI_Case.TileUp is Teleporter))
@@ -50,7 +49,7 @@ namespace DespicableGame
                     }
                 }
 
-                if (choixRandom == 1)
+                if (randomChoice == 1)
                 {
                     if (!(AI_Case.TileDown == null || AI_Case.TileDown is Teleporter))
                     {
@@ -60,7 +59,7 @@ namespace DespicableGame
                     }
                 }
 
-                if (choixRandom == 2)
+                if (randomChoice == 2)
                 {
                     if (!(AI_Case.TileLeft == null || AI_Case.TileLeft is Teleporter))
                     {
@@ -70,7 +69,7 @@ namespace DespicableGame
                     }
                 }
 
-                if (choixRandom == 3)
+                if (randomChoice == 3)
                 {
                     if (!(AI_Case.TileRight == null || AI_Case.TileRight is Teleporter))
                     {

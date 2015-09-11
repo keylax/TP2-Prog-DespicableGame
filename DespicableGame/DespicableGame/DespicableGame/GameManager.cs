@@ -201,12 +201,17 @@ namespace DespicableGame
                     break;
 
                 case Subject.NotifyReason.MONEY_GAINED:
-                    //TODO: update money!
+                    //TODO: display new money amount
                     break;
 
                 case Subject.NotifyReason.LIFE_LOST:
-                    //TODO: Check is lose, if so reset game
-                    //either way, display remaining lives
+                    if (gru.Lives < 1)
+                    {
+                        level = 1;
+                        StartLevel();
+                        //TODO: display you lsot message
+                    }
+                    //TODO: display remaining lives
                     break;
 
                 case Subject.NotifyReason.EXIT_REACHED:

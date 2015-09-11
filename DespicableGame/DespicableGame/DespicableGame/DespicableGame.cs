@@ -31,12 +31,11 @@ namespace DespicableGame
         SpriteBatch spriteBatch;
         private SpriteFont textFont;
         Gamepad gamePad;
-
         GameStates currentState;
         TimeSpan lastPauseButtonPress = new TimeSpan(0, 0, 0);
-
+        TimeSpan totalGameTime = new TimeSpan(0, 0, 0);
         GameManager manager;
-        
+
         public DespicableGame()
         {
             graphics = new GraphicsDeviceManager(this);
@@ -138,10 +137,10 @@ namespace DespicableGame
         protected override void Update(GameTime gameTime)
         {
             ProcessPlayerInputs(gameTime.TotalGameTime);
-
+            totalGameTime = gameTime.TotalGameTime;
             switch (currentState)
             {
-                 case GameStates.PAUSED:
+                case GameStates.PAUSED:
                     //Nothing for now
                     break;
 
@@ -153,7 +152,7 @@ namespace DespicableGame
             base.Update(gameTime);
         }
 
-        private void PauseButtonPressAction(TimeSpan totalGameTime)
+        public void PauseButtonPressAction()
         {
             if (totalGameTime - lastPauseButtonPress > PAUSE_BUTTON_DELAY)
             {
@@ -178,7 +177,7 @@ namespace DespicableGame
                 gamePad.GetPressedButtons(padOneState);
                 gamePad.Update();
             }
-        }      
+        }
 
         /// <summary>
         /// This is called when the game should draw itself.
@@ -188,14 +187,6 @@ namespace DespicableGame
         {
             GraphicsDevice.Clear(Color.Black);
             spriteBatch.Begin();
-
-            //Draw the player info elements
-            spriteBatch.DrawString(textFont, manager.GetCurrentLevel(), new Vector2(1, 1), Color.Yellow,
-                0, Vector2.One, 0.8f, SpriteEffects.None, 0.5f);
-            spriteBatch.DrawString(textFont, manager.GetGoalProgress(), new Vector2(240, 1), Color.Yellow,
-                0, Vector2.One, 0.8f, SpriteEffects.None, 0.5f);
-            spriteBatch.DrawString(textFont, manager.GetLivesRemaining(), new Vector2(775, 1), Color.Yellow,
-                0, Vector2.One, 0.8f, SpriteEffects.None, 0.5f);
 
             //Draw each tile
             for (int i = 0; i < Labyrinth.WIDTH; i++)
@@ -228,6 +219,20 @@ namespace DespicableGame
             {
                 collectible.Draw(spriteBatch);
             }
+
+            if (currentState == GameStates.PAUSED)
+            {
+                spriteBatch.DrawString(textFont, "Game Paused", new Vector2(SCREENWIDTH / 7, SCREENHEIGHT / 3), Color.Yellow,
+                  0, Vector2.One, 2f, SpriteEffects.None, 0.5f);
+            }
+
+            //Draw the player info elements
+            spriteBatch.DrawString(textFont, manager.GetCurrentLevel(), new Vector2(1, 1), Color.Yellow,
+                0, Vector2.One, 0.8f, SpriteEffects.None, 0.5f);
+            spriteBatch.DrawString(textFont, manager.GetGoalProgress(), new Vector2(240, 1), Color.Yellow,
+                0, Vector2.One, 0.8f, SpriteEffects.None, 0.5f);
+            spriteBatch.DrawString(textFont, manager.GetLivesRemaining(), new Vector2(775, 1), Color.Yellow,
+                0, Vector2.One, 0.8f, SpriteEffects.None, 0.5f);
 
             spriteBatch.End();
             base.Draw(gameTime);

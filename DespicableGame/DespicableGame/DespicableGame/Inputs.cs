@@ -79,6 +79,21 @@ namespace DespicableGame
         }
     }
 
+    public class PauseCommand : ICommand
+    {
+        private DespicableGame game;
+
+        public PauseCommand(DespicableGame game)
+        {
+            this.game = game;
+        }
+
+        public void Execute(Gamepad pad)
+        {
+            game.PauseButtonPressAction();
+        }
+    }
+
     public class ACommand : ICommand
     {
         private PlayerCharacter player;

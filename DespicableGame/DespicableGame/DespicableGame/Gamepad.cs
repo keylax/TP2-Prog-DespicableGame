@@ -16,6 +16,7 @@ namespace DespicableGame
         ICommand gamePadRight;
         ICommand gamePadLeft;
         ICommand gamePadExit;
+        ICommand gamePadPause;
         ICommand gamePadA;
         ICommand gamePadB;
         ICommand gamePadY;
@@ -37,6 +38,7 @@ namespace DespicableGame
             gamePadLShoulder = new LeftShoulderCommand(Gru);
             gamePadRShoulder = new RightShoulderCommand(Gru);
             gamePadExit = new ExitCommand(game);
+            gamePadPause = new PauseCommand(game);
             inputMappings = new Dictionary<Buttons, ICommand>();
 	    }
 
@@ -119,6 +121,9 @@ namespace DespicableGame
                 case "Back":
                     associatedButton = Buttons.Back;
                     break;
+                case "Start":
+                    associatedButton = Buttons.Start;
+                    break;
                 case "A":
                     associatedButton = Buttons.A;
                     break;
@@ -154,6 +159,9 @@ namespace DespicableGame
                     break;
                 case "Exit":
                     associatedCommand = gamePadExit;
+                    break;
+                case "Pause":
+                    associatedCommand = gamePadPause;
                     break;
                 case "A":
                     associatedCommand = gamePadA;

@@ -35,16 +35,13 @@ namespace DespicableGame
         GameStates currentState;
         TimeSpan lastPauseButtonPress = new TimeSpan(0, 0, 0);
 
-        
         GameManager manager;
         
-
         public DespicableGame()
         {
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
         }
-
 
         /// <summary>
         /// Allows the game to perform any initialization it needs to before starting to run.

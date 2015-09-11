@@ -47,10 +47,18 @@ namespace DespicableGame
 	    public void Update()
 	    {
 
-		    foreach (Buttons button in pressedButtons)
-		    {
-			    inputMappings[button].Execute(this);
-		    }
+            try
+            {
+                foreach (Buttons button in pressedButtons)
+                {
+                    inputMappings[button].Execute(this);
+                }
+            }
+            catch
+            {
+                //Do nothing, that button is not used...    
+            }
+
             pressedButtons.Clear();
 	    }
 

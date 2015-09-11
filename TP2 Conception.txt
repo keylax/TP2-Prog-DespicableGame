@@ -23,3 +23,7 @@ D'ailleurs, quand le random décidera de l'apparition d'un trap, celui aura agira
 notify le player, créer un countdown avant de disparaître qui sera subject et dans une liste du jeu et faire que le
 joueur observe ce countdown. Quand le countdown est fini, il se détruit et le joueur a l'effet inverse de celui qu'il
 avait subit à l'ajout du timer.
+
+Target:
+-Prevent ze monies and ships from spawning in Police houses
+-Police Officer stats

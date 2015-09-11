@@ -149,10 +149,6 @@ namespace DespicableGame
                 collectible.FindCollisions(characters);
                 if (!collectible.Active)
                 {
-                    if (collectible is Goal)
-                    {
-                        RespawnGoalAfterPickup();
-                    }
                     collectiblesToDelete.Add(collectible);
                 }
             }
@@ -162,7 +158,9 @@ namespace DespicableGame
         {
             Vector2 randomTile = RandomManager.GetRandomVector(Labyrinth.WIDTH, Labyrinth.HEIGHT);
             Vector2 visualPosition = new Vector2(labyrinth.GetTile((int)randomTile.X, (int)randomTile.Y).GetPosition().X, labyrinth.GetTile((int)randomTile.X, (int)randomTile.Y).GetPosition().Y);
-            collectiblesToCreate.Add(CollectibleFactory.CreateCollectible(CollectibleFactory.CollectibleType.SHIP, visualPosition, labyrinth.GetTile((int)randomTile.X, (int)randomTile.Y)));
+            Collectible newShip = CollectibleFactory.CreateCollectible(CollectibleFactory.CollectibleType.SHIP, visualPosition, labyrinth.GetTile((int)randomTile.X, (int)randomTile.Y));
+            collectiblesToCreate.Add(newShip);
+            newShip.AddObserver(this);
         }
 
         private void RespawnGoalAfterPickup()
@@ -181,7 +179,9 @@ namespace DespicableGame
         {
             Vector2 randomTile = RandomManager.GetRandomVector(Labyrinth.WIDTH, Labyrinth.HEIGHT);
             Vector2 visualPosition = new Vector2(labyrinth.GetTile((int)randomTile.X, (int)randomTile.Y).GetPosition().X, labyrinth.GetTile((int)randomTile.X, (int)randomTile.Y).GetPosition().Y);
-            collectiblesToCreate.Add(CollectibleFactory.CreateCollectible(CollectibleFactory.CollectibleType.GOAL, visualPosition, labyrinth.GetTile((int)randomTile.X, (int)randomTile.Y)));
+            Collectible newGoal = CollectibleFactory.CreateCollectible(CollectibleFactory.CollectibleType.GOAL, visualPosition, labyrinth.GetTile((int)randomTile.X, (int)randomTile.Y));
+            collectiblesToCreate.Add(newGoal);
+            newGoal.AddObserver(this);
         }
 
 
@@ -190,7 +190,20 @@ namespace DespicableGame
 
         public void Notify(Subject subject)
         {
-        
+            if (subject is PlayerCharacter)
+            {
+                //Change ths score to display
+            }
+            else if (subject is Goal)
+            {
+                RespawnGoalAfterPickup();
+            }
+            else if (subject is Ship)
+            {
+                level++;
+                StartLevel();
+            }
+
         }
 
     }

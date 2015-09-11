@@ -27,7 +27,7 @@ namespace DespicableGame.Observer
             }
         }
 
-        protected void NotifyAllObserver()
+        protected void NotifyAllObservers()
         {
             foreach (Observer obs in observers)
             {

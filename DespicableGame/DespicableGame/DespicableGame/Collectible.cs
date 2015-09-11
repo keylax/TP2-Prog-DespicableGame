@@ -4,9 +4,11 @@ using System.Linq;
 using System.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using DespicableGame.Observer;
+
 namespace DespicableGame
 {
-    public abstract class Collectible
+    public abstract class Collectible : Subject
     {
         public bool Active{get; set;}
         protected Texture2D drawing;

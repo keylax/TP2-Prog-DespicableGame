@@ -21,6 +21,8 @@ namespace DespicableGame
                 ((PlayerCharacter)character).GoalCollected++;
             }
             Active = false;
+
+            NotifyAllObservers();
         }
 
     }

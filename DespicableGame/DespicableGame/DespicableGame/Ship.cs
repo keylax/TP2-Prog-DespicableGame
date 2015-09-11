@@ -18,7 +18,7 @@ namespace DespicableGame
         {
             if (character is PlayerCharacter)
             {
-                //EndLevel();
+                NotifyAllObservers();
             }
             Active = false;
         }

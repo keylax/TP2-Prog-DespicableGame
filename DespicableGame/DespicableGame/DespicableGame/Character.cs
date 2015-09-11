@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using DespicableGame.Observer;
 
 namespace DespicableGame
 {
-    public abstract class Character
+    public abstract class Character : Subject
     {
         protected Texture2D drawing;
         protected Vector2 position;

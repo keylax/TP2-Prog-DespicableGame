@@ -8,12 +8,22 @@ namespace DespicableGame
 {
     class PlayerCharacter : Character
     {
-        public int GoalCollected {get; set;}
+        private int goalCollected;
+    
+        public int GoalCollected
+        {
+            get { return goalCollected;  }
+            set
+            {
+                NotifyAllObservers();
+                goalCollected = value;
+            }
+        }
 
         public PlayerCharacter(Texture2D drawing, Vector2 position, Tile CurrentTile)
             : base(drawing, position, CurrentTile)
         {
-            GoalCollected = 0;
+            goalCollected = 0;
             Destination = null;
         }
 

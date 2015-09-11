@@ -75,7 +75,10 @@
     <Compile Include="Collectible.cs" />
     <Compile Include="Factory\CharacterFactory.cs" />
     <Compile Include="Factory\CollectibleFactory.cs" />
+    <Compile Include="GameManager.cs" />
     <Compile Include="Goal.cs" />
+    <Compile Include="Observer\Observer.cs" />
+    <Compile Include="Observer\Subject.cs" />
     <Compile Include="Powerups.cs" />
     <Compile Include="RandomManager.cs" />
     <Compile Include="Ship.cs" />
@@ -124,6 +127,7 @@
       <Install>true</Install>
     </BootstrapperPackage>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\XNA Game Studio\Microsoft.Xna.GameStudio.targets" />
   <!--

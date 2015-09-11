@@ -11,14 +11,14 @@ namespace DespicableGame.Factory
     {
         public enum CharacterType { GRU, MINION_BANANA, MINON_TRAP, MINION_FREAK, POLICE_OFFICER }
 
-        public static Character CreateCharacter(CharacterType newCharacterType, Texture2D drawing, Vector2 position, Tile CurrentTile)
+        public static Character CreateCharacter(CharacterType newCharacterType, Vector2 position, Tile CurrentTile)
         {
             Character newCharacter = null;
 
             switch (newCharacterType)
             {
                 case CharacterType.GRU:
-                    newCharacter = CreateGru(drawing, position, CurrentTile);
+                    newCharacter = CreateGru(position, CurrentTile);
                     break;
 
                 //case CharacterType.MINION_BANANA:
@@ -34,21 +34,21 @@ namespace DespicableGame.Factory
                 //    break;
 
                 case CharacterType.POLICE_OFFICER:
-                    newCharacter = CreatePoliceOfficer(drawing, position, CurrentTile);
+                    newCharacter = CreatePoliceOfficer(position, CurrentTile);
                     break;
             }
 
             return newCharacter;
         }
 
-        private static Character CreateGru(Texture2D drawing, Vector2 position, Tile CurrentTile)
+        private static Character CreateGru(Vector2 position, Tile CurrentTile)
         {
-            return new PlayerCharacter(drawing, position, CurrentTile);
+            return new PlayerCharacter(DespicableGame.GetTexture(DespicableGame.GameTextures.GRU), position, CurrentTile);
         }
 
-        private static NonPlayerCharacter CreatePoliceOfficer(Texture2D drawing, Vector2 position, Tile CurrentTile)
+        private static NonPlayerCharacter CreatePoliceOfficer(Vector2 position, Tile CurrentTile)
         {
-            return new NonPlayerCharacter(drawing, position, CurrentTile);
+            return new NonPlayerCharacter(DespicableGame.GetTexture(DespicableGame.GameTextures.POLICE_OFFICER), position, CurrentTile);
         }
 
 

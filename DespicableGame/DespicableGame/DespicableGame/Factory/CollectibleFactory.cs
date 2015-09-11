@@ -10,28 +10,27 @@ namespace DespicableGame.Factory
     {
         public enum CollectibleType { POWERUP, GOAL, TRAP, SHIP }
 
-        public static Collectible CreateCollectible(Texture2D drawing, Vector2 position, Tile currentTile, CollectibleType collectibleType)
+        public static Collectible CreateCollectible(CollectibleType collectibleType, Vector2 position, Tile currentTile)
         {
             Collectible newCollectible = null;
 
             switch (collectibleType)
             {
                 case CollectibleType.POWERUP:
-                    //    newCollectible = new Powerups(drawing, position, currentTile);
+                    //    newCollectible = new Powerups(DespicableGame.GetTexture(DespicableGame.GameTextures.LEVEL_EXIT), position, currentTile);
                     break;
 
                 case CollectibleType.GOAL:
-                    newCollectible = new Goal(drawing, position, currentTile);
+                    newCollectible = new Goal(DespicableGame.GetTexture(DespicableGame.GameTextures.GOAL), position, currentTile);
                     break;
 
                 case CollectibleType.TRAP:
-                    //    newCollectible =  new Trap(drawing, position, currentTile);
+                    //    newCollectible =  new Trap(DespicableGame.GetTexture(DespicableGame.GameTextures.LEVEL_EXIT), position, currentTile);
                     break;
 
                 case CollectibleType.SHIP:
-                    newCollectible = new Ship(drawing, position, currentTile);
+                    newCollectible = new Ship(DespicableGame.GetTexture(DespicableGame.GameTextures.LEVEL_EXIT), position, currentTile);
                     break;
-
             }
 
             return newCollectible;

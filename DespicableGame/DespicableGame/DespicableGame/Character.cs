@@ -8,7 +8,7 @@ namespace DespicableGame
 {
     public abstract class Character
     {
-        protected Texture2D dessin;
+        protected Texture2D drawing;
         protected Vector2 position;
 
         public Tile CurrentTile { get; set; }
@@ -21,7 +21,7 @@ namespace DespicableGame
             SpeedX = 0;
             SpeedY = 0;
 
-            dessin = sprite;
+            drawing = sprite;
             this.position = position;
             CurrentTile = actualCase;
         }
@@ -30,7 +30,7 @@ namespace DespicableGame
 
         public void Draw(SpriteBatch spritebatch)
         {
-            spritebatch.Draw(dessin, position, Color.White);
+            spritebatch.Draw(drawing, position, Color.White);
         }
 
     }

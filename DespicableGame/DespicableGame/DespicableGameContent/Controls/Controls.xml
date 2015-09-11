@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+
+<Table>
+  <Command>
+    <Action>Up</Action>
+    <Key>DPadUp</Key>
+  </Command>
+  <Command>
+    <Action>Down</Action>
+    <Key>DPadDown</Key>
+  </Command>
+  <Command>
+    <Action>Left</Action>
+    <Key>DPadLeft</Key>
+  </Command>
+  <Command>
+    <Action>Right</Action>
+    <Key>DPadRight</Key>
+  </Command>
+  <Command>
+    <Action>Exit</Action>
+    <Key>Back</Key>
+  </Command>
+  <Command>
+    <Action>A</Action>
+    <Key>A</Key>
+  </Command>
+  <Command>
+    <Action>B</Action>
+    <Key>B</Key>
+  </Command>
+  <Command>
+    <Action>Y</Action>
+    <Key>Y</Key>
+  </Command>
+  <Command>
+    <Action>X</Action>
+    <Key>X</Key>
+  </Command>
+  
+</Table>

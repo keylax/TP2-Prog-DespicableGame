@@ -6,6 +6,7 @@ using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework;
 using System.IO;
 using System.Xml;
+using Microsoft.Xna.Framework.Content;
 namespace DespicableGame
 {
     public class Gamepad
@@ -76,7 +77,7 @@ namespace DespicableGame
 
         public void RegisterKeyMapping()
         {
-            if (File.Exists("Controls.xml"))
+            if (File.Exists("Controls\\Controls.xml"))
             {
                 XmlDocument xd = new System.Xml.XmlDocument();
                 xd.Load("Controls.xml");

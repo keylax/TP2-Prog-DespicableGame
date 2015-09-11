@@ -105,9 +105,24 @@ namespace DespicableGame
             NotifyAllObservers(Subject.NotifyReason.LIFE_LOST);
         }
 
-        //public void Down()
-        //{
-        //    CheckMovement()
-        //}
+        public void Down()
+        {
+            CheckMovement(this.CurrentTile.TileDown, 0, SPEED);
+        }
+
+        public void Up()
+        {
+            CheckMovement(this.CurrentTile.TileUp, 0, -SPEED);
+        }
+
+        public void Right()
+        {
+            CheckMovement(this.CurrentTile.TileRight, SPEED, 0);
+        }
+
+        public void Left()
+        {
+            CheckMovement(this.CurrentTile.TileLeft, -SPEED, 0);
+        }
     }
 }

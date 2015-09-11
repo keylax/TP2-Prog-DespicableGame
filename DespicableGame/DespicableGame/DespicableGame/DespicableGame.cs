@@ -56,7 +56,7 @@ namespace DespicableGame
         {
             currentState = GameStates.PLAYING;
 
-            InitGraphicsMode(SCREENWIDTH, SCREENHEIGHT, true);
+            InitGraphicsMode(SCREENWIDTH, SCREENHEIGHT, false);
             base.Initialize();
         }
 
@@ -116,11 +116,12 @@ namespace DespicableGame
             gameTextures[(int)GameTextures.WARP_ENTRANCE] = Content.Load<Texture2D>("Sprites\\Warp1");
             gameTextures[(int)GameTextures.WARP_EXIT] = Content.Load<Texture2D>("Sprites\\Warp2");
             gameTextures[(int)GameTextures.LEVEL_EXIT] = Content.Load<Texture2D>("Sprites\\SpaceShip");
-            gamePad = new Gamepad(manager.Gru, this);
-            gamePad.RegisterKeyMapping();
+
             textFont = Content.Load<SpriteFont>("Fonts/gamefont");
 
             manager = new GameManager();
+            gamePad = new Gamepad(manager.Gru, this);
+            gamePad.RegisterKeyMapping();
         }
 
         /// <summary>

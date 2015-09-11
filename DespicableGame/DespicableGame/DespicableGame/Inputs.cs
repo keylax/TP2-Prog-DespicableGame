@@ -16,7 +16,7 @@ namespace DespicableGame
 
         public void Execute(Gamepad pad)
         {
-        //    player.Down();
+            player.Down();
         }
     }
     public class UpCommand : ICommand
@@ -30,7 +30,7 @@ namespace DespicableGame
 
         public void Execute(Gamepad pad)
         {
-            //player.Up();
+            player.Up();
         }
     }
 
@@ -45,7 +45,7 @@ namespace DespicableGame
 
         public void Execute(Gamepad pad)
         {
-            //player.Left();
+            player.Left();
         }
     }
 
@@ -60,7 +60,7 @@ namespace DespicableGame
 
         public void Execute(Gamepad pad)
         {
-            //player.Right();
+            player.Right();
         }
     }
 

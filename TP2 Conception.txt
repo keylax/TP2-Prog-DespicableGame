@@ -25,5 +25,4 @@ joueur observe ce countdown. Quand le countdown est fini, il se détruit et le jo
 avait subit à l'ajout du timer.
 
 Target:
--Prevent ze monies and ships from spawning in Police houses
 -Police Officer stats

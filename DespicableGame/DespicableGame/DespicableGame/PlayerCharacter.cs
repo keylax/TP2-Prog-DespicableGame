@@ -13,7 +13,6 @@ namespace DespicableGame
         private int goalCollected;
         private int lives;
 
-    
         public int GoalCollected
         {
             get { return goalCollected;  }
@@ -31,6 +30,11 @@ namespace DespicableGame
 
         public PlayerCharacter(Texture2D drawing, Vector2 position, Tile currentTile)
             : base(drawing, position, currentTile)
+        {
+            SetPlayerToStartingValues();
+        }
+
+        public void SetPlayerToStartingValues()
         {
             goalCollected = 0;
             lives = STARTING_LIVES;
@@ -91,7 +95,7 @@ namespace DespicableGame
             {
                 if (!character.IsFriendly)
                 {
-                    if (this.Destination == character.Destination)
+                    if (this.Destination == character.Destination || this.currentTile == character.Destination)
                     {
                         LoseLife();
                     }
@@ -124,5 +128,6 @@ namespace DespicableGame
         {
             CheckMovement(this.CurrentTile.TileLeft, -SPEED, 0);
         }
+
     }
 }

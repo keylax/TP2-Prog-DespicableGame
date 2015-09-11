@@ -76,7 +76,10 @@
     <Compile Include="Factory\CharacterFactory.cs" />
     <Compile Include="Factory\CollectibleFactory.cs" />
     <Compile Include="GameManager.cs" />
+    <Compile Include="Gamepad.cs" />
     <Compile Include="Goal.cs" />
+    <Compile Include="ICommand.cs" />
+    <Compile Include="Inputs.cs" />
     <Compile Include="Observer\Observer.cs" />
     <Compile Include="Observer\Subject.cs" />
     <Compile Include="Powerups.cs" />

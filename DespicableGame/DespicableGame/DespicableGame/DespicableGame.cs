@@ -30,12 +30,11 @@ namespace DespicableGame
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
         private SpriteFont textFont;
+        Gamepad gamePad;
 
         GameStates currentState;
         TimeSpan lastPauseButtonPress = new TimeSpan(0, 0, 0);
 
-        //64 must be dividable by SPEED
-        public const int VITESSE = 4;
         
         GameManager manager;
         
@@ -117,7 +116,8 @@ namespace DespicableGame
             gameTextures[(int)GameTextures.WARP_ENTRANCE] = Content.Load<Texture2D>("Sprites\\Warp1");
             gameTextures[(int)GameTextures.WARP_EXIT] = Content.Load<Texture2D>("Sprites\\Warp2");
             gameTextures[(int)GameTextures.LEVEL_EXIT] = Content.Load<Texture2D>("Sprites\\SpaceShip");
-
+            gamePad = new Gamepad(manager.Gru, this);
+            gamePad.RegisterKeyMapping();
             textFont = Content.Load<SpriteFont>("Fonts/gamefont");
 
             manager = new GameManager();
@@ -175,32 +175,10 @@ namespace DespicableGame
         {
             GamePadState padOneState = GamePad.GetState(PlayerIndex.One);
 
-            if (Keyboard.GetState().IsKeyDown(Keys.Escape) || padOneState.Buttons.Back == ButtonState.Pressed)
-                this.Exit();
-
-            if (Keyboard.GetState().IsKeyDown(Keys.Enter) || padOneState.Buttons.Start == ButtonState.Pressed) PauseButtonPressAction(totalGameTime);
-
             if (manager.Gru.Destination == null)
             {
-                if (Keyboard.GetState().IsKeyDown(Keys.Up) || padOneState.DPad.Up == ButtonState.Pressed)
-                {
-                    manager.Gru.CheckMovement(manager.Gru.CurrentTile.TileUp, 0, -VITESSE);
-                }
-
-                else if (Keyboard.GetState().IsKeyDown(Keys.Down) || padOneState.DPad.Down == ButtonState.Pressed)
-                {
-                    manager.Gru.CheckMovement(manager.Gru.CurrentTile.TileDown, 0, VITESSE);
-                }
-
-                else if (Keyboard.GetState().IsKeyDown(Keys.Left) || padOneState.DPad.Left == ButtonState.Pressed)
-                {
-                    manager.Gru.CheckMovement(manager.Gru.CurrentTile.TileLeft, -VITESSE, 0);
-                }
-
-                else if (Keyboard.GetState().IsKeyDown(Keys.Right) || padOneState.DPad.Right == ButtonState.Pressed)
-                {
-                    manager.Gru.CheckMovement(manager.Gru.CurrentTile.TileRight, VITESSE, 0);
-                }
+                gamePad.GetPressedButtons(padOneState);
+                gamePad.Update();
             }
         }      
 

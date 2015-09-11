@@ -44,7 +44,7 @@ namespace DespicableGame
                     if (!(AI_Case.TileUp == null || AI_Case.TileUp is Teleporter))
                     {
                         SpeedX = 0;
-                        SpeedY = -DespicableGame.VITESSE;
+                        SpeedY = -SPEED;
                         return AI_Case.TileUp;
                     }
                 }
@@ -54,7 +54,7 @@ namespace DespicableGame
                     if (!(AI_Case.TileDown == null || AI_Case.TileDown is Teleporter))
                     {
                         SpeedX = 0;
-                        SpeedY = DespicableGame.VITESSE;
+                        SpeedY = SPEED;
                         return AI_Case.TileDown;
                     }
                 }
@@ -63,7 +63,7 @@ namespace DespicableGame
                 {
                     if (!(AI_Case.TileLeft == null || AI_Case.TileLeft is Teleporter))
                     {
-                        SpeedX = -DespicableGame.VITESSE;
+                        SpeedX = -SPEED;
                         SpeedY = 0;
                         return AI_Case.TileLeft;
                     }
@@ -73,7 +73,7 @@ namespace DespicableGame
                 {
                     if (!(AI_Case.TileRight == null || AI_Case.TileRight is Teleporter))
                     {
-                        SpeedX = DespicableGame.VITESSE;
+                        SpeedX = SPEED;
                         SpeedY = 0;
                         return AI_Case.TileRight;
                     }

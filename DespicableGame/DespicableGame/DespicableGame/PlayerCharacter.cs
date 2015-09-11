@@ -7,11 +7,12 @@ using DespicableGame.Observer;
 
 namespace DespicableGame
 {
-    class PlayerCharacter : Character
+    public class PlayerCharacter : Character
     {
         private const int STARTING_LIVES = 3;
         private int goalCollected;
         private int lives;
+
     
         public int GoalCollected
         {
@@ -104,5 +105,9 @@ namespace DespicableGame
             NotifyAllObservers(Subject.NotifyReason.LIFE_LOST);
         }
 
+        //public void Down()
+        //{
+        //    CheckMovement()
+        //}
     }
 }

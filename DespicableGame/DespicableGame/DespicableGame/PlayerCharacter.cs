@@ -28,8 +28,8 @@ namespace DespicableGame
             get { return lives; }
         }
 
-        public PlayerCharacter(Texture2D drawing, Vector2 position, Tile CurrentTile)
-            : base(drawing, position, CurrentTile)
+        public PlayerCharacter(Texture2D drawing, Vector2 position, Tile currentTile)
+            : base(drawing, position, currentTile)
         {
             goalCollected = 0;
             lives = STARTING_LIVES;
@@ -46,7 +46,7 @@ namespace DespicableGame
 
                 if (position.X == Destination.GetPosition().X && position.Y == Destination.GetPosition().Y)
                 {
-                    CurrentTile = Destination;
+                    currentTile = Destination;
                     Destination = null;
                 }
             }
@@ -71,7 +71,6 @@ namespace DespicableGame
                 else
                 {
                     CurrentTile = testTeleportation;
-                    position = new Vector2(CurrentTile.GetPosition().X, CurrentTile.GetPosition().Y);
                 }
             }
         }

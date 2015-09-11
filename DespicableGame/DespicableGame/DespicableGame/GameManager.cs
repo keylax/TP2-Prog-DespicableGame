@@ -27,6 +27,8 @@ namespace DespicableGame
         private Labyrinth labyrinth;
         Vector2 warpEntreePos;
         Vector2[] warpExitsPos = new Vector2[4];
+        private bool shouldStartLevel;
+        private bool shouldRestartLevel;
 
         private PlayerCharacter gru;
 
@@ -48,6 +50,7 @@ namespace DespicableGame
             level = 1;
 
             StartLevel();
+            shouldStartLevel = false;
 
             //Teleporter entrance
             warpEntreePos = new Vector2(labyrinth.GetTile(7, 4).GetPosition().X - Tile.LIGN_SIZE, labyrinth.GetTile(7, 4).GetPosition().Y + Tile.LIGN_SIZE);
@@ -57,11 +60,6 @@ namespace DespicableGame
             warpExitsPos[1] = new Vector2(labyrinth.GetTile(Labyrinth.WIDTH - 1, 0).GetPosition().X, labyrinth.GetTile(Labyrinth.WIDTH - 1, 0).GetPosition().Y);
             warpExitsPos[2] = new Vector2(labyrinth.GetTile(0, Labyrinth.HEIGHT - 1).GetPosition().X, labyrinth.GetTile(0, Labyrinth.HEIGHT - 1).GetPosition().Y);
             warpExitsPos[3] = new Vector2(labyrinth.GetTile(Labyrinth.WIDTH - 1, Labyrinth.HEIGHT - 1).GetPosition().X, labyrinth.GetTile(Labyrinth.WIDTH - 1, Labyrinth.HEIGHT - 1).GetPosition().Y);
-        }
-
-        public int Level
-        {
-            get { return level; }
         }
 
         public Labyrinth Labyrinth
@@ -90,6 +88,12 @@ namespace DespicableGame
             DetectAndProcessCollisions();
             RemoveDeadObjects();
             CreateNewObjects();
+
+            if (shouldStartLevel)
+            {
+                StartLevel();
+                shouldStartLevel = false;
+            }
         }
 
         public Vector2 WarpEntreePos
@@ -114,10 +118,25 @@ namespace DespicableGame
 
             gru = (PlayerCharacter)CharacterFactory.CreateCharacter(CharacterFactory.CharacterType.GRU, new Vector2(labyrinth.GetTile(DEPART_X, DEPART_Y).GetPosition().X, labyrinth.GetTile(DEPART_X, DEPART_Y).GetPosition().Y), labyrinth.GetTile(DEPART_X, DEPART_Y));
             characters.Add(gru);
+            gru.AddObserver(this);
 
             characters.Add(CharacterFactory.CreateCharacter(CharacterFactory.CharacterType.POLICE_OFFICER, new Vector2(labyrinth.GetTile(7, 9).GetPosition().X, labyrinth.GetTile(7, 9).GetPosition().Y), labyrinth.GetTile(7, 9)));
 
             SpawnGoal();
+        }
+
+        private void ResetPosition()
+        {
+            gru.CurrentTile = labyrinth.GetTile(DEPART_X, DEPART_Y);
+            gru.Destination = gru.CurrentTile;
+            gru.SpeedX = 0;
+            gru.SpeedY = 0;
+        }
+
+        //This is just to allow testing until next merge with the master
+        public PlayerCharacter Gru
+        {
+            get {return gru; }
         }
 
         private void RemoveDeadObjects()
@@ -194,9 +213,20 @@ namespace DespicableGame
             newGoal.AddObserver(this);
         }
 
+        public string GetGoalProgress()
+        {
+            return gru.GoalCollected.ToString() + "$ out of " + (level * EXTRA_GOAL_TO_COLLECT_PER_LEVEL + MINIMUM_GOAL_TO_COLLECT).ToString() + "$ needed";
+        }
 
+        public string GetLivesRemaining()
+        {
+            return "Lives remaining: " + gru.Lives.ToString();
+        }
 
-
+        public string GetCurrentLevel()
+        {
+            return "Level: " + level.ToString();
+        }
 
         public void Notify(Subject subject, Subject.NotifyReason reason)
         {
@@ -207,25 +237,30 @@ namespace DespicableGame
                     break;
 
                 case Subject.NotifyReason.MONEY_GAINED:
-                    //TODO: display new money amount
+                    //nothing?
                     break;
 
                 case Subject.NotifyReason.LIFE_LOST:
                     if (gru.Lives < 1)
                     {
                         level = 1;
-                        StartLevel();
-                        //TODO: display you lsot message
+                        shouldStartLevel = true;
+                        //TODO: display you lost message
                     }
-                    //TODO: display remaining lives
+                    else
+                    {
+                        ResetPosition();
+                    }
+
                     break;
 
                 case Subject.NotifyReason.EXIT_REACHED:
                     level++;
-                    StartLevel();
+                    shouldStartLevel = true;
                     break;
             }
         }
+
 
     }
 }

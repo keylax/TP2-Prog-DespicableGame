@@ -180,28 +180,28 @@ namespace DespicableGame
 
             if (Keyboard.GetState().IsKeyDown(Keys.Enter) || padOneState.Buttons.Start == ButtonState.Pressed) PauseButtonPressAction(totalGameTime);
 
-            //if (Gru.Destination == null)
-            //{
-            //    if (Keyboard.GetState().IsKeyDown(Keys.Up) || padOneState.DPad.Up == ButtonState.Pressed)
-            //    {
-            //        Gru.CheckMovement(Gru.CurrentTile.TileUp, 0, -VITESSE);
-            //    }
+            if (manager.Gru.Destination == null)
+            {
+                if (Keyboard.GetState().IsKeyDown(Keys.Up) || padOneState.DPad.Up == ButtonState.Pressed)
+                {
+                    manager.Gru.CheckMovement(manager.Gru.CurrentTile.TileUp, 0, -VITESSE);
+                }
 
-            //    else if (Keyboard.GetState().IsKeyDown(Keys.Down) || padOneState.DPad.Down == ButtonState.Pressed)
-            //    {
-            //        Gru.CheckMovement(Gru.CurrentTile.TileDown, 0, VITESSE);
-            //    }
+                else if (Keyboard.GetState().IsKeyDown(Keys.Down) || padOneState.DPad.Down == ButtonState.Pressed)
+                {
+                    manager.Gru.CheckMovement(manager.Gru.CurrentTile.TileDown, 0, VITESSE);
+                }
 
-            //    else if (Keyboard.GetState().IsKeyDown(Keys.Left) || padOneState.DPad.Left == ButtonState.Pressed)
-            //    {
-            //        Gru.CheckMovement(Gru.CurrentTile.TileLeft, -VITESSE, 0);
-            //    }
+                else if (Keyboard.GetState().IsKeyDown(Keys.Left) || padOneState.DPad.Left == ButtonState.Pressed)
+                {
+                    manager.Gru.CheckMovement(manager.Gru.CurrentTile.TileLeft, -VITESSE, 0);
+                }
 
-            //    else if (Keyboard.GetState().IsKeyDown(Keys.Right) || padOneState.DPad.Right == ButtonState.Pressed)
-            //    {
-            //        Gru.CheckMovement(Gru.CurrentTile.TileRight, VITESSE, 0);
-            //    }
-            //}
+                else if (Keyboard.GetState().IsKeyDown(Keys.Right) || padOneState.DPad.Right == ButtonState.Pressed)
+                {
+                    manager.Gru.CheckMovement(manager.Gru.CurrentTile.TileRight, VITESSE, 0);
+                }
+            }
         }      
 
         /// <summary>
@@ -213,7 +213,12 @@ namespace DespicableGame
             GraphicsDevice.Clear(Color.Black);
             spriteBatch.Begin();
 
-            spriteBatch.DrawString(textFont, "Level: " + manager.Level.ToString(), new Vector2(1, 1), Color.Yellow,
+            //Draw the player info elements
+            spriteBatch.DrawString(textFont, manager.GetCurrentLevel(), new Vector2(1, 1), Color.Yellow,
+                0, Vector2.One, 0.8f, SpriteEffects.None, 0.5f);
+            spriteBatch.DrawString(textFont, manager.GetGoalProgress(), new Vector2(240, 1), Color.Yellow,
+                0, Vector2.One, 0.8f, SpriteEffects.None, 0.5f);
+            spriteBatch.DrawString(textFont, manager.GetLivesRemaining(), new Vector2(775, 1), Color.Yellow,
                 0, Vector2.One, 0.8f, SpriteEffects.None, 0.5f);
 
             //Draw each tile

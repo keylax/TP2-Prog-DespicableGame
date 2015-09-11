@@ -12,10 +12,23 @@ namespace DespicableGame
         protected Texture2D drawing;
         protected Vector2 position;
         protected bool isFriendly;
+        protected Tile currentTile;
 
-        public Tile CurrentTile { get; set; }
+        public Tile CurrentTile
+        {
+            get { return currentTile; }
+
+            set
+            {
+                currentTile = value;
+                position = new Vector2(currentTile.GetPosition().X, currentTile.GetPosition().Y);
+            }
+        }
+
         public Tile Destination { get; set; }
+
         public int SpeedX { get; set; }
+
         public int SpeedY { get; set; }
 
         public bool IsFriendly

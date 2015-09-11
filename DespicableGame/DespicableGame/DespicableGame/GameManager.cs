@@ -12,9 +12,12 @@ namespace DespicableGame
     {
         private int MINIMUM_GOAL_TO_COLLECT = 3;
         private int EXTRA_GOAL_TO_COLLECT_PER_LEVEL = 2;
+
         //Gru's starting position
         private const int DEPART_X = 6;
         private const int DEPART_Y = 7;
+
+        private List<Vector2> policeHouseTiles;
 
         private List<Character> characters; //Minions and police officers
         private List<Character> charactersToDelete; //Minions and police officers that should be deleted
@@ -37,6 +40,15 @@ namespace DespicableGame
         public GameManager()
         {
             labyrinth = new Labyrinth();
+            policeHouseTiles = new List<Vector2>();
+
+            policeHouseTiles.Add(new Vector2(6, 0));
+            policeHouseTiles.Add(new Vector2(0, 4));
+            policeHouseTiles.Add(new Vector2(0, 5));
+            policeHouseTiles.Add(new Vector2(6, 9));
+            policeHouseTiles.Add(new Vector2(7, 9));
+            policeHouseTiles.Add(new Vector2(13, 9));
+            policeHouseTiles.Add(new Vector2(13, 5));
 
             characters = new List<Character>();
             charactersToDelete = new List<Character>();
@@ -48,7 +60,12 @@ namespace DespicableGame
 
             level = 1;
 
+            gru = (PlayerCharacter)CharacterFactory.CreateCharacter(CharacterFactory.CharacterType.GRU, new Vector2(labyrinth.GetTile(DEPART_X, DEPART_Y).GetPosition().X, labyrinth.GetTile(DEPART_X, DEPART_Y).GetPosition().Y), labyrinth.GetTile(DEPART_X, DEPART_Y));
+            characters.Add(gru);
+            gru.AddObserver(this);
+
             StartLevel();
+
             shouldStartLevel = false;
 
             //Teleporter entrance
@@ -108,6 +125,7 @@ namespace DespicableGame
         private void StartLevel()
         {
             characters.Clear();
+            characters.Add(gru);
             charactersToCreate.Clear();
             charactersToDelete.Clear();
 
@@ -115,9 +133,8 @@ namespace DespicableGame
             collectiblesToCreate.Clear();
             collectiblesToDelete.Clear();
 
-            gru = (PlayerCharacter)CharacterFactory.CreateCharacter(CharacterFactory.CharacterType.GRU, new Vector2(labyrinth.GetTile(DEPART_X, DEPART_Y).GetPosition().X, labyrinth.GetTile(DEPART_X, DEPART_Y).GetPosition().Y), labyrinth.GetTile(DEPART_X, DEPART_Y));
-            characters.Add(gru);
-            gru.AddObserver(this);
+            gru.SetPlayerToStartingValues();
+            ResetPosition();
 
             characters.Add(CharacterFactory.CreateCharacter(CharacterFactory.CharacterType.POLICE_OFFICER, new Vector2(labyrinth.GetTile(7, 9).GetPosition().X, labyrinth.GetTile(7, 9).GetPosition().Y), labyrinth.GetTile(7, 9)));
 
@@ -135,7 +152,7 @@ namespace DespicableGame
         //This is just to allow testing until next merge with the master
         public PlayerCharacter Gru
         {
-            get {return gru; }
+            get { return gru; }
         }
 
         private void RemoveDeadObjects()
@@ -184,7 +201,11 @@ namespace DespicableGame
 
         private void SpawnShip()
         {
-            Vector2 randomTile = RandomManager.GetRandomVector(Labyrinth.WIDTH, Labyrinth.HEIGHT);
+            Vector2 randomTile;
+            do
+            {
+                randomTile = RandomManager.GetRandomVector(Labyrinth.WIDTH, Labyrinth.HEIGHT);
+            } while (IsTileInPoliceHouse(randomTile));
             Vector2 visualPosition = new Vector2(labyrinth.GetTile((int)randomTile.X, (int)randomTile.Y).GetPosition().X, labyrinth.GetTile((int)randomTile.X, (int)randomTile.Y).GetPosition().Y);
             Collectible newShip = CollectibleFactory.CreateCollectible(CollectibleFactory.CollectibleType.SHIP, visualPosition, labyrinth.GetTile((int)randomTile.X, (int)randomTile.Y));
             collectiblesToCreate.Add(newShip);
@@ -205,11 +226,28 @@ namespace DespicableGame
 
         private void SpawnGoal()
         {
-            Vector2 randomTile = RandomManager.GetRandomVector(Labyrinth.WIDTH, Labyrinth.HEIGHT);
+            Vector2 randomTile;
+            do
+            {
+                randomTile = RandomManager.GetRandomVector(Labyrinth.WIDTH, Labyrinth.HEIGHT);
+            } while (IsTileInPoliceHouse(randomTile));
             Vector2 visualPosition = new Vector2(labyrinth.GetTile((int)randomTile.X, (int)randomTile.Y).GetPosition().X, labyrinth.GetTile((int)randomTile.X, (int)randomTile.Y).GetPosition().Y);
             Collectible newGoal = CollectibleFactory.CreateCollectible(CollectibleFactory.CollectibleType.GOAL, visualPosition, labyrinth.GetTile((int)randomTile.X, (int)randomTile.Y));
             collectiblesToCreate.Add(newGoal);
             newGoal.AddObserver(this);
+        }
+
+        private bool IsTileInPoliceHouse(Vector2 tile)
+        {
+            foreach (Vector2 poTile in policeHouseTiles)
+            {
+                if (tile == poTile)
+                {
+                    return true;
+                }
+            }
+
+            return false;
         }
 
         public string GetGoalProgress()

@@ -47,7 +47,6 @@ namespace DespicableGame
 
 	    public void Update()
 	    {
-
             try
             {
                 foreach (Buttons button in pressedButtons)
@@ -77,7 +76,7 @@ namespace DespicableGame
 
         public void RegisterKeyMapping()
         {
-            if (File.Exists("Controls\\Controls.xml"))
+            if (File.Exists("Controls.xml"))
             {
                 XmlDocument xd = new System.Xml.XmlDocument();
                 xd.Load("Controls.xml");
@@ -98,7 +97,6 @@ namespace DespicableGame
                     }
                 }
             }
-
         }
 
         protected Buttons GetButton(string value)

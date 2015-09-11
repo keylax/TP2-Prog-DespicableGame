@@ -7,6 +7,6 @@ namespace DespicableGame.Observer
 {
     public interface Observer
     {
-        void Notify(Subject subject);
+        void Notify(Subject subject, Subject.NotifyReason reason);
     }
 }

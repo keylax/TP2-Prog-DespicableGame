@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using DespicableGame.Observer;
 
 namespace DespicableGame
 {
@@ -18,7 +19,7 @@ namespace DespicableGame
         {
             if (character is PlayerCharacter)
             {
-                NotifyAllObservers();
+                NotifyAllObservers(Subject.NotifyReason.EXIT_REACHED);
             }
             Active = false;
         }

@@ -48,7 +48,7 @@ namespace DespicableGame.Factory
 
         private static NonPlayerCharacter CreatePoliceOfficer(Vector2 position, Tile CurrentTile)
         {
-            return new NonPlayerCharacter(DespicableGame.GetTexture(DespicableGame.GameTextures.POLICE_OFFICER), position, CurrentTile);
+            return new NonPlayerCharacter(DespicableGame.GetTexture(DespicableGame.GameTextures.POLICE_OFFICER), position, CurrentTile, false);
         }
 
 

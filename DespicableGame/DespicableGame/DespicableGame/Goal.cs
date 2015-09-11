@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using DespicableGame.Observer;
 
 namespace DespicableGame
 {
@@ -22,7 +23,7 @@ namespace DespicableGame
             }
             Active = false;
 
-            NotifyAllObservers();
+            NotifyAllObservers(Subject.NotifyReason.MONEY_DESTROYED);
         }
 
     }

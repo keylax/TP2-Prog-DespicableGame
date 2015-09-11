@@ -10,6 +10,8 @@ namespace DespicableGame
 {
     class GameManager : Observer.Observer
     {
+        private int MINIMUM_GOAL_TO_COLLECT = 3;
+        private int EXTRA_GOAL_TO_COLLECT_PER_LEVEL = 2;
         //Gru's starting position
         private const int DEPART_X = 6;
         private const int DEPART_Y = 7;
@@ -26,7 +28,7 @@ namespace DespicableGame
         Vector2 warpEntreePos;
         Vector2[] warpExitsPos = new Vector2[4];
 
-        private PlayerCharacter Gru;
+        private PlayerCharacter gru;
 
         int level;
 
@@ -104,8 +106,8 @@ namespace DespicableGame
             collectiblesToCreate.Clear();
             collectiblesToDelete.Clear();
 
-            Gru = (PlayerCharacter)CharacterFactory.CreateCharacter(CharacterFactory.CharacterType.GRU, new Vector2(labyrinth.GetTile(DEPART_X, DEPART_Y).GetPosition().X, labyrinth.GetTile(DEPART_X, DEPART_Y).GetPosition().Y), labyrinth.GetTile(DEPART_X, DEPART_Y));
-            characters.Add(Gru);
+            gru = (PlayerCharacter)CharacterFactory.CreateCharacter(CharacterFactory.CharacterType.GRU, new Vector2(labyrinth.GetTile(DEPART_X, DEPART_Y).GetPosition().X, labyrinth.GetTile(DEPART_X, DEPART_Y).GetPosition().Y), labyrinth.GetTile(DEPART_X, DEPART_Y));
+            characters.Add(gru);
 
             characters.Add(CharacterFactory.CreateCharacter(CharacterFactory.CharacterType.POLICE_OFFICER, new Vector2(labyrinth.GetTile(7, 9).GetPosition().X, labyrinth.GetTile(7, 9).GetPosition().Y), labyrinth.GetTile(7, 9)));
 
@@ -144,6 +146,8 @@ namespace DespicableGame
 
         private void DetectAndProcessCollisions()
         {
+            gru.FindCollisions(characters);
+
             foreach (Collectible collectible in collectibles)
             {
                 collectible.FindCollisions(characters);
@@ -165,7 +169,7 @@ namespace DespicableGame
 
         private void RespawnGoalAfterPickup()
         {
-            if (Gru.GoalCollected >= level * 2 + 3)
+            if (gru.GoalCollected >= level * EXTRA_GOAL_TO_COLLECT_PER_LEVEL + MINIMUM_GOAL_TO_COLLECT)
             {
                 SpawnShip();
             }
@@ -188,22 +192,28 @@ namespace DespicableGame
 
 
 
-        public void Notify(Subject subject)
+        public void Notify(Subject subject, Subject.NotifyReason reason)
         {
-            if (subject is PlayerCharacter)
+            switch (reason)
             {
-                //Change ths score to display
-            }
-            else if (subject is Goal)
-            {
-                RespawnGoalAfterPickup();
-            }
-            else if (subject is Ship)
-            {
-                level++;
-                StartLevel();
-            }
+                case Subject.NotifyReason.MONEY_DESTROYED:
+                    RespawnGoalAfterPickup();
+                    break;
 
+                case Subject.NotifyReason.MONEY_GAINED:
+                    //TODO: update money!
+                    break;
+
+                case Subject.NotifyReason.LIFE_LOST:
+                    //TODO: Check is lose, if so reset game
+                    //either way, display remaining lives
+                    break;
+
+                case Subject.NotifyReason.EXIT_REACHED:
+                    level++;
+                    StartLevel();
+                    break;
+            }
         }
 
     }

@@ -8,10 +8,11 @@ namespace DespicableGame
 {
     public class NonPlayerCharacter : Character
     {
-        public NonPlayerCharacter(Texture2D dessin, Vector2 position, Tile ActualCase)
+        public NonPlayerCharacter(Texture2D dessin, Vector2 position, Tile ActualCase, bool isFriendly)
             : base(dessin, position, ActualCase)
         {
             Destination = MouvementIA(ActualCase);
+            this.isFriendly = isFriendly;
         }
 
         public override void Move()
@@ -80,6 +81,8 @@ namespace DespicableGame
                 }
             }
         }
+
+
 
     }
 }

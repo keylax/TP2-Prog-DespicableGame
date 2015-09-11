@@ -3,27 +3,36 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using DespicableGame.Observer;
 
 namespace DespicableGame
 {
     class PlayerCharacter : Character
     {
+        private const int STARTING_LIVES = 3;
         private int goalCollected;
+        private int lives;
     
         public int GoalCollected
         {
             get { return goalCollected;  }
             set
             {
-                NotifyAllObservers();
+                NotifyAllObservers(Subject.NotifyReason.MONEY_GAINED);
                 goalCollected = value;
             }
+        }
+
+        public int Lives
+        {
+            get { return lives; }
         }
 
         public PlayerCharacter(Texture2D drawing, Vector2 position, Tile CurrentTile)
             : base(drawing, position, CurrentTile)
         {
             goalCollected = 0;
+            lives = STARTING_LIVES;
             Destination = null;
         }
 
@@ -74,6 +83,26 @@ namespace DespicableGame
                 return ((Teleporter)theTile).Teleport();
             }
             return null;
+        }
+
+        public void FindCollisions(List<Character> characters)
+        {
+            foreach (Character character in characters)
+            {
+                if (character.IsFriendly)
+                {
+                    if (this.CurrentTile == character.Destination)
+                    {
+                        LoseLife();
+                    }
+                }
+            }
+        }
+
+        public void LoseLife()
+        {
+            lives--;
+            NotifyAllObservers(Subject.NotifyReason.LIFE_LOST);
         }
 
     }

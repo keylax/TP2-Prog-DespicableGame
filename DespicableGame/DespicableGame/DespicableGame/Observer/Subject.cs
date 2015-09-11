@@ -7,6 +7,8 @@ namespace DespicableGame.Observer
 {
     public class Subject
     {
+        public enum NotifyReason { MONEY_GAINED, MONEY_DESTROYED, EXIT_REACHED, LIFE_LOST }
+
         protected List<Observer> observers;
 
         public Subject()
@@ -27,11 +29,11 @@ namespace DespicableGame.Observer
             }
         }
 
-        protected void NotifyAllObservers()
+        protected void NotifyAllObservers(NotifyReason reason)
         {
             foreach (Observer obs in observers)
             {
-                obs.Notify(this);
+                obs.Notify(this, reason);
             }
         }
 

@@ -22,13 +22,14 @@ namespace DespicableGame
         public const int SCREENWIDTH = 1280;
         public const int SCREENHEIGHT = 796;
 
-        enum GameStates { MAIN_MENU, PAUSED, PLAYING }
+        enum GameStates { PAUSED, PLAYING }
         public enum GameTextures { HORIZONTAL_WALL, VERTICAL_WALL, WARP_ENTRANCE, WARP_EXIT, GOAL, GRU, POLICE_OFFICER, LEVEL_EXIT, NUMBER_OF_TEXTURES }
 
         static Texture2D[] gameTextures = new Texture2D[(int)GameTextures.NUMBER_OF_TEXTURES];
 
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
+        private SpriteFont textFont;
 
         GameStates currentState;
         TimeSpan lastPauseButtonPress = new TimeSpan(0, 0, 0);
@@ -54,7 +55,7 @@ namespace DespicableGame
         /// </summary>
         protected override void Initialize()
         {
-            currentState = GameStates.PLAYING;
+            currentState = GameStates.PAUSED;
 
             InitGraphicsMode(SCREENWIDTH, SCREENHEIGHT, true);
             base.Initialize();
@@ -117,6 +118,8 @@ namespace DespicableGame
             gameTextures[(int)GameTextures.WARP_EXIT] = Content.Load<Texture2D>("Sprites\\Warp2");
             gameTextures[(int)GameTextures.LEVEL_EXIT] = Content.Load<Texture2D>("Sprites\\SpaceShip");
 
+            textFont = Content.Load<SpriteFont>("Fonts/gamefont");
+
             manager = new GameManager();
         }
 
@@ -140,11 +143,7 @@ namespace DespicableGame
 
             switch (currentState)
             {
-                case GameStates.MAIN_MENU:
-                    //Nothing for now
-                    break;
-
-                case GameStates.PAUSED:
+                 case GameStates.PAUSED:
                     //Nothing for now
                     break;
 
@@ -213,6 +212,9 @@ namespace DespicableGame
         {
             GraphicsDevice.Clear(Color.Black);
             spriteBatch.Begin();
+
+            spriteBatch.DrawString(textFont, "Level: " + manager.Level.ToString(), new Vector2(1, 1), Color.Yellow,
+                0, Vector2.One, 0.8f, SpriteEffects.None, 0.5f);
 
             //Draw each tile
             for (int i = 0; i < Labyrinth.WIDTH; i++)

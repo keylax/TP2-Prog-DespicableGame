@@ -30,7 +30,8 @@ namespace DespicableGame
 
         private PlayerCharacter gru;
 
-        int level;
+        private int level;
+
 
         public GameManager()
         {
@@ -56,6 +57,11 @@ namespace DespicableGame
             warpExitsPos[1] = new Vector2(labyrinth.GetTile(Labyrinth.WIDTH - 1, 0).GetPosition().X, labyrinth.GetTile(Labyrinth.WIDTH - 1, 0).GetPosition().Y);
             warpExitsPos[2] = new Vector2(labyrinth.GetTile(0, Labyrinth.HEIGHT - 1).GetPosition().X, labyrinth.GetTile(0, Labyrinth.HEIGHT - 1).GetPosition().Y);
             warpExitsPos[3] = new Vector2(labyrinth.GetTile(Labyrinth.WIDTH - 1, Labyrinth.HEIGHT - 1).GetPosition().X, labyrinth.GetTile(Labyrinth.WIDTH - 1, Labyrinth.HEIGHT - 1).GetPosition().Y);
+        }
+
+        public int Level
+        {
+            get { return level; }
         }
 
         public Labyrinth Labyrinth

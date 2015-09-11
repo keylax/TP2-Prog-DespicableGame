@@ -51,7 +51,7 @@ namespace DespicableGame
             this.isFriendly = isFriendly;
         }
 
-        public abstract void Move();
+        public abstract void Act();
 
         public void Draw(SpriteBatch spritebatch)
         {

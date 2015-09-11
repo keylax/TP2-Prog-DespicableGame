@@ -99,7 +99,7 @@ namespace DespicableGame
 
             foreach (Character c in characters)
             {
-                c.Move();
+                c.Act();
             }
             DetectAndProcessCollisions();
             RemoveDeadObjects();

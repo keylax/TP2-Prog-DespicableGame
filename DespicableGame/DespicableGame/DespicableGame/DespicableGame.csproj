@@ -85,6 +85,8 @@
     <Compile Include="Powerups.cs" />
     <Compile Include="RandomManager.cs" />
     <Compile Include="Ship.cs" />
+    <Compile Include="States\AIStates.cs" />
+    <Compile Include="States\Patrol.cs" />
     <Compile Include="Tile.cs" />
     <Compile Include="Labyrinth.cs" />
     <Compile Include="Character.cs" />

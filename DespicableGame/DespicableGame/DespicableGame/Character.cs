@@ -7,7 +7,7 @@ using DespicableGame.Observer;
 
 namespace DespicableGame
 {
-    public abstract class Character : Subject
+    public abstract class Character : Subject, Observer.Observer
     {
         protected Texture2D drawing;
         protected Vector2 position;
@@ -58,5 +58,14 @@ namespace DespicableGame
             spritebatch.Draw(drawing, position, Color.White);
         }
 
+        public void Notify(Subject subject, Subject.NotifyReason reason)
+        {
+            switch (reason)
+            {
+                case Subject.NotifyReason.TRAP_EXPIRED:
+                    SPEED = 4;
+                    break;
+            }
+        }
     }
 }

@@ -7,13 +7,13 @@ using Microsoft.Xna.Framework.Graphics;
 using DespicableGame.Observer;
 namespace DespicableGame
 {
-    class Trap : Collectible
+    class Trap : Collectible, Observer.Observer
     {
 
         TimeSpan lastActivated = new TimeSpan(0, 0, 0);
         public bool Activated { get; set; }
 
-        private List<Character> affectedCharacters = new List<Character>();
+        private Character affectedCharacter;
         public TimeSpan LastActivated
         {
             get
@@ -23,6 +23,14 @@ namespace DespicableGame
             set
             {
                 lastActivated = value;
+            }
+        }
+
+        public Character AffectedCharacter
+        {
+            get
+            {
+                return affectedCharacter;
             }
         }
         public Trap(Texture2D drawing, Vector2 position, Tile CurrentTile)
@@ -35,24 +43,15 @@ namespace DespicableGame
         {
             Activated = true;
             character.SPEED = RandomManager.GetRandomInt(1,3-1);
-            affectedCharacters.Add(character);
+            affectedCharacter = character;
             NotifyAllObservers(Subject.NotifyReason.TRAP_ACTIVATED);
         }
 
-        public void EffectExpire()
-        {
-            foreach (Character character in affectedCharacters)
-            {
-                character.SPEED = 4;
-            }
-            affectedCharacters.Clear();
-        }
 
-        public void Disarm()
+        public void Notify(Subject subject, Subject.NotifyReason reason)
         {
             Activated = false;
         }
-
 
         public override void FindCollisions(List<Character> characters)
         {

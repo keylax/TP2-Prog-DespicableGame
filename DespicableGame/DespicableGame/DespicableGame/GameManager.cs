@@ -21,12 +21,13 @@ namespace DespicableGame
         private List<Character> characters; //Minions and police officers
         private List<Character> charactersToDelete; //Minions and police officers that should be deleted
         private List<Character> charactersToCreate; //Minions and police officers that will be created at end of frame
-        private List<Countdown> countDowns;
+
+        private List<Countdown> countDowns; //Countdowns that are active at a given time
+        private List<Countdown> countDownsToDelete; //Countdowns that have reached 0 should be deleted
 
         private List<Collectible> collectibles; //Goals and powerups
         private List<Collectible> collectiblesToDelete; //Goals and powerups that should be deleted
         private List<Collectible> collectiblesToCreate; //Goals and powerups that will be created at end of frame
-        private List<Countdown> countDownsToDelete; //Countdowns that have reached 0 should be deleted
         private Labyrinth labyrinth;
         Vector2 warpEntreePos;
         Vector2[] warpExitsPos = new Vector2[4];
@@ -192,7 +193,6 @@ namespace DespicableGame
                 countDowns.Remove(cd);
             }
             countDownsToDelete.Clear();
-
         }
 
         private void CreateNewObjects()

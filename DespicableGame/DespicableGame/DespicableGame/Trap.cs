@@ -9,22 +9,8 @@ namespace DespicableGame
 {
     class Trap : Collectible, Observer.Observer
     {
-
-        TimeSpan lastActivated = new TimeSpan(0, 0, 0);
         public bool Activated { get; set; }
-
         private Character affectedCharacter;
-        public TimeSpan LastActivated
-        {
-            get
-            {
-                return lastActivated;
-            }
-            set
-            {
-                lastActivated = value;
-            }
-        }
 
         public Character AffectedCharacter
         {
@@ -46,7 +32,6 @@ namespace DespicableGame
             affectedCharacter = character;
             NotifyAllObservers(Subject.NotifyReason.TRAP_ACTIVATED);
         }
-
 
         public void Notify(Subject subject, Subject.NotifyReason reason)
         {

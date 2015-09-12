@@ -108,7 +108,7 @@ namespace DespicableGame
                 }
             }
 
-            if (RandomManager.GetRandomInt(0, 10000000) <= 2000 * level)
+            if (RandomManager.GetRandomInt(0, 10000000) <= 4000 * level)
             {
                 SpawnTrap();
             }
@@ -216,21 +216,10 @@ namespace DespicableGame
 
             foreach (Collectible collectible in collectibles)
             {
-                if (collectible is Trap)
+                collectible.FindCollisions(characters);
+                if (!collectible.Active)
                 {
-                    Trap tempTrap = (Trap)collectible;
-                    if (tempTrap.Activated == false)
-                    {
-                        collectible.FindCollisions(characters);
-                    }
-                }
-                else
-                {
-                    collectible.FindCollisions(characters);
-                    if (!collectible.Active)
-                    {
-                        collectiblesToDelete.Add(collectible);
-                    }
+                    collectiblesToDelete.Add(collectible);
                 }
             }
         }
@@ -348,8 +337,7 @@ namespace DespicableGame
 
                 case Subject.NotifyReason.TRAP_ACTIVATED:
                     Trap tempTrap = (Trap)subject;
-                    Countdown trapCountDown = new Countdown(0,0,3, Subject.NotifyReason.TRAP_EXPIRED);
-                    trapCountDown.AddObserver(tempTrap);
+                    Countdown trapCountDown = new Countdown(0, 0, 3, Subject.NotifyReason.TRAP_EXPIRED);
                     trapCountDown.AddObserver(tempTrap.AffectedCharacter);
                     countDowns.Add(trapCountDown);
                     break;

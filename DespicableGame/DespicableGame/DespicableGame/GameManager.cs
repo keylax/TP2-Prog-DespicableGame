@@ -12,7 +12,8 @@ namespace DespicableGame
     {
         private int MINIMUM_GOAL_TO_COLLECT = 3;
         private int EXTRA_GOAL_TO_COLLECT_PER_LEVEL = 2;
-
+        readonly TimeSpan TRAP_ACTIVATION_DELAY = new TimeSpan(0, 0, 0, 5, 0);
+        readonly TimeSpan TRAP_EFFECT_DELAY = new TimeSpan(0, 0, 0, 4, 0);
         //Gru's starting position
         private const int DEPART_X = 6;
         private const int DEPART_Y = 7;
@@ -32,7 +33,7 @@ namespace DespicableGame
         Vector2[] warpExitsPos = new Vector2[4];
         private bool shouldStartLevel;
         private bool shouldRestartLevel;
-
+        TimeSpan totalGameTime;
         private PlayerCharacter gru;
 
         private int level;
@@ -43,6 +44,7 @@ namespace DespicableGame
             policeHouseTiles = new List<Vector2>();
 
             policeHouseTiles.Add(new Vector2(6, 0));
+            policeHouseTiles.Add(new Vector2(7, 0));
             policeHouseTiles.Add(new Vector2(0, 4));
             policeHouseTiles.Add(new Vector2(0, 5));
             policeHouseTiles.Add(new Vector2(6, 9));
@@ -96,6 +98,11 @@ namespace DespicableGame
         public void ProcessFrame(TimeSpan timeSinceLastFrame)
         {
             //Timers!
+            totalGameTime += timeSinceLastFrame;
+            if (RandomManager.GetRandomInt(0, 10000000) <= 1000 * level)
+            {
+                SpawnTrap();
+            }
 
             foreach (Character c in characters)
             {
@@ -110,6 +117,7 @@ namespace DespicableGame
                 StartLevel();
                 shouldStartLevel = false;
             }
+
         }
 
         public Vector2 WarpEntreePos
@@ -191,10 +199,46 @@ namespace DespicableGame
 
             foreach (Collectible collectible in collectibles)
             {
-                collectible.FindCollisions(characters);
-                if (!collectible.Active)
+                if (collectible is Trap)
                 {
-                    collectiblesToDelete.Add(collectible);
+                    Trap tempTrap = (Trap)collectible;
+                    if (totalGameTime - tempTrap.LastActivated > TRAP_EFFECT_DELAY)
+                    {
+                        tempTrap.EffectExpire();
+                    }
+
+                    if (totalGameTime - tempTrap.LastActivated > TRAP_ACTIVATION_DELAY)
+                    {
+                        tempTrap.Disarm();
+                    }
+
+                    if (tempTrap.Activated == false)
+                    {
+                        collectible.FindCollisions(characters);
+                    }
+                }
+                else
+                {
+                    collectible.FindCollisions(characters);
+                    if (!collectible.Active)
+                    {
+                        collectiblesToDelete.Add(collectible);
+                    }
+                }
+            }
+        }
+
+        private void DeactivateTraps()
+        {
+            foreach (Collectible collectible in collectibles)
+            {
+                if (collectible is Trap)
+                {
+                    Trap tempTrap = (Trap)collectible;
+                    if (totalGameTime - tempTrap.LastActivated > TRAP_ACTIVATION_DELAY && tempTrap.Activated == false)
+                    {
+                        collectible.FindCollisions(characters);
+                    }
                 }
             }
         }
@@ -235,6 +279,19 @@ namespace DespicableGame
             Collectible newGoal = CollectibleFactory.CreateCollectible(CollectibleFactory.CollectibleType.GOAL, visualPosition, labyrinth.GetTile((int)randomTile.X, (int)randomTile.Y));
             collectiblesToCreate.Add(newGoal);
             newGoal.AddObserver(this);
+        }
+
+        private void SpawnTrap()
+        {
+            Vector2 randomTile;
+            do
+            {
+                randomTile = RandomManager.GetRandomVector(Labyrinth.WIDTH, Labyrinth.HEIGHT);
+            } while (IsTileInPoliceHouse(randomTile));
+            Vector2 visualPosition = new Vector2(labyrinth.GetTile((int)randomTile.X, (int)randomTile.Y).GetPosition().X, labyrinth.GetTile((int)randomTile.X, (int)randomTile.Y).GetPosition().Y);
+            Collectible newTrap = CollectibleFactory.CreateCollectible(CollectibleFactory.CollectibleType.TRAP, visualPosition, labyrinth.GetTile((int)randomTile.X, (int)randomTile.Y));
+            collectiblesToCreate.Add(newTrap);
+            newTrap.AddObserver(this);
         }
 
         private bool IsTileInPoliceHouse(Vector2 tile)
@@ -294,6 +351,11 @@ namespace DespicableGame
                 case Subject.NotifyReason.EXIT_REACHED:
                     level++;
                     shouldStartLevel = true;
+                    break;
+
+                case Subject.NotifyReason.TRAP_ACTIVATED:
+                    Trap tempTrap = (Trap)subject;
+                    tempTrap.LastActivated = totalGameTime;
                     break;
             }
         }

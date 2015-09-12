@@ -25,7 +25,7 @@ namespace DespicableGame.Factory
                     break;
 
                 case CollectibleType.TRAP:
-                    //    newCollectible =  new Trap(DespicableGame.GetTexture(DespicableGame.GameTextures.LEVEL_EXIT), position, currentTile);
+                    newCollectible =  new Trap(DespicableGame.GetTexture(DespicableGame.GameTextures.TRAP), position, currentTile);
                     break;
 
                 case CollectibleType.SHIP:

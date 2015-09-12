@@ -14,7 +14,7 @@ namespace DespicableGame
         protected bool isFriendly;
         protected Tile currentTile;
         //64 must be dividable by SPEED
-        public const int SPEED = 4;
+        public int SPEED = 4;
         public Tile CurrentTile
         {
             get { return currentTile; }

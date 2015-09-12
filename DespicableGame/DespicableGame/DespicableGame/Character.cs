@@ -7,14 +7,15 @@ using DespicableGame.Observer;
 
 namespace DespicableGame
 {
-    public abstract class Character : Subject
+    public abstract class Character : Subject, Observer.Observer
     {
         protected Texture2D drawing;
         protected Vector2 position;
         protected bool isFriendly;
         protected Tile currentTile;
         //64 must be dividable by SPEED
-        public const int SPEED = 4;
+        public int SPEED = 4;
+
         public Tile CurrentTile
         {
             get { return currentTile; }
@@ -59,5 +60,14 @@ namespace DespicableGame
             spritebatch.Draw(drawing, position, Color.White);
         }
 
+        public void Notify(Subject subject, Subject.NotifyReason reason)
+        {
+            switch (reason)
+            {
+                case Subject.NotifyReason.TRAP_EXPIRED:
+                    SPEED = 4;
+                    break;
+            }
+        }
     }
 }

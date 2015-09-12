@@ -42,7 +42,7 @@ namespace DespicableGame
             spritebatch.Draw(drawing, position, Color.White);
         }
 
-        public void FindCollisions(List<Character> characters)
+        public virtual void FindCollisions(List<Character> characters)
         {
             foreach (Character character in characters)
             {

@@ -12,7 +12,6 @@ namespace DespicableGame
     {
         private int MINIMUM_GOAL_TO_COLLECT = 3;
         private int EXTRA_GOAL_TO_COLLECT_PER_LEVEL = 2;
-
         //Gru's starting position
         private const int DEPART_X = 6;
         private const int DEPART_Y = 7;
@@ -23,16 +22,17 @@ namespace DespicableGame
         private List<Character> charactersToDelete; //Minions and police officers that should be deleted
         private List<Character> charactersToCreate; //Minions and police officers that will be created at end of frame
 
+        private List<Countdown> countDowns; //Countdowns that are active at a given time
+        private List<Countdown> countDownsToDelete; //Countdowns that have reached 0 should be deleted
+
         private List<Collectible> collectibles; //Goals and powerups
         private List<Collectible> collectiblesToDelete; //Goals and powerups that should be deleted
         private List<Collectible> collectiblesToCreate; //Goals and powerups that will be created at end of frame
-
         private Labyrinth labyrinth;
         Vector2 warpEntreePos;
         Vector2[] warpExitsPos = new Vector2[4];
         private bool shouldStartLevel;
         private bool shouldRestartLevel;
-
         private PlayerCharacter gru;
 
         private int level;
@@ -43,16 +43,19 @@ namespace DespicableGame
             policeHouseTiles = new List<Vector2>();
 
             policeHouseTiles.Add(new Vector2(6, 0));
+            policeHouseTiles.Add(new Vector2(7, 0));
             policeHouseTiles.Add(new Vector2(0, 4));
             policeHouseTiles.Add(new Vector2(0, 5));
             policeHouseTiles.Add(new Vector2(6, 9));
             policeHouseTiles.Add(new Vector2(7, 9));
-            policeHouseTiles.Add(new Vector2(13, 9));
+            policeHouseTiles.Add(new Vector2(13, 4));
             policeHouseTiles.Add(new Vector2(13, 5));
 
+            countDowns = new List<Countdown>();
             characters = new List<Character>();
             charactersToDelete = new List<Character>();
             charactersToCreate = new List<Character>();
+            countDownsToDelete = new List<Countdown>();
 
             collectibles = new List<Collectible>();
             collectiblesToDelete = new List<Collectible>();
@@ -96,6 +99,19 @@ namespace DespicableGame
         public void ProcessFrame(TimeSpan timeSinceLastFrame)
         {
             //Timers!
+            foreach (Countdown cd in countDowns)
+            {
+                cd.CountDown -= timeSinceLastFrame;
+                if (cd.CountDown.TotalMilliseconds <= 0)
+                {
+                    countDownsToDelete.Add(cd);
+                }
+            }
+
+            if (RandomManager.GetRandomInt(0, 10000000) <= 2000 * level)
+            {
+                SpawnTrap();
+            }
 
             foreach (Character c in characters)
             {
@@ -110,6 +126,7 @@ namespace DespicableGame
                 StartLevel();
                 shouldStartLevel = false;
             }
+
         }
 
         public Vector2 WarpEntreePos
@@ -129,9 +146,11 @@ namespace DespicableGame
             charactersToCreate.Clear();
             charactersToDelete.Clear();
 
+            countDowns.Clear();
             collectibles.Clear();
             collectiblesToCreate.Clear();
             collectiblesToDelete.Clear();
+            countDownsToDelete.Clear();
 
             gru.SetPlayerToStartingValues();
             ResetPosition();
@@ -168,6 +187,12 @@ namespace DespicableGame
                 collectibles.Remove(collectible);
             }
             collectiblesToDelete.Clear();
+
+            foreach (Countdown cd in countDownsToDelete)
+            {
+                countDowns.Remove(cd);
+            }
+            countDownsToDelete.Clear();
         }
 
         private void CreateNewObjects()
@@ -191,13 +216,25 @@ namespace DespicableGame
 
             foreach (Collectible collectible in collectibles)
             {
-                collectible.FindCollisions(characters);
-                if (!collectible.Active)
+                if (collectible is Trap)
                 {
-                    collectiblesToDelete.Add(collectible);
+                    Trap tempTrap = (Trap)collectible;
+                    if (tempTrap.Activated == false)
+                    {
+                        collectible.FindCollisions(characters);
+                    }
+                }
+                else
+                {
+                    collectible.FindCollisions(characters);
+                    if (!collectible.Active)
+                    {
+                        collectiblesToDelete.Add(collectible);
+                    }
                 }
             }
         }
+
 
         private void SpawnShip()
         {
@@ -235,6 +272,19 @@ namespace DespicableGame
             Collectible newGoal = CollectibleFactory.CreateCollectible(CollectibleFactory.CollectibleType.GOAL, visualPosition, labyrinth.GetTile((int)randomTile.X, (int)randomTile.Y));
             collectiblesToCreate.Add(newGoal);
             newGoal.AddObserver(this);
+        }
+
+        private void SpawnTrap()
+        {
+            Vector2 randomTile;
+            do
+            {
+                randomTile = RandomManager.GetRandomVector(Labyrinth.WIDTH, Labyrinth.HEIGHT);
+            } while (IsTileInPoliceHouse(randomTile));
+            Vector2 visualPosition = new Vector2(labyrinth.GetTile((int)randomTile.X, (int)randomTile.Y).GetPosition().X, labyrinth.GetTile((int)randomTile.X, (int)randomTile.Y).GetPosition().Y);
+            Collectible newTrap = CollectibleFactory.CreateCollectible(CollectibleFactory.CollectibleType.TRAP, visualPosition, labyrinth.GetTile((int)randomTile.X, (int)randomTile.Y));
+            collectiblesToCreate.Add(newTrap);
+            newTrap.AddObserver(this);
         }
 
         private bool IsTileInPoliceHouse(Vector2 tile)
@@ -294,6 +344,14 @@ namespace DespicableGame
                 case Subject.NotifyReason.EXIT_REACHED:
                     level++;
                     shouldStartLevel = true;
+                    break;
+
+                case Subject.NotifyReason.TRAP_ACTIVATED:
+                    Trap tempTrap = (Trap)subject;
+                    Countdown trapCountDown = new Countdown(0,0,3, Subject.NotifyReason.TRAP_EXPIRED);
+                    trapCountDown.AddObserver(tempTrap);
+                    trapCountDown.AddObserver(tempTrap.AffectedCharacter);
+                    countDowns.Add(trapCountDown);
                     break;
             }
         }

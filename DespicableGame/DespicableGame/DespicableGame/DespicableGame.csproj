@@ -73,6 +73,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Collectible.cs" />
+    <Compile Include="Countdown.cs" />
     <Compile Include="Factory\CharacterFactory.cs" />
     <Compile Include="Factory\CollectibleFactory.cs" />
     <Compile Include="GameManager.cs" />

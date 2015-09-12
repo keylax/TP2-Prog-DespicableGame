@@ -10,7 +10,7 @@ namespace DespicableGame
 {
     public abstract class Collectible : Subject
     {
-        public bool Active{get; set;}
+        public bool Active { get; set; }
         protected Texture2D drawing;
         protected Vector2 position;
         public Tile CurrentTile { get; set; }
@@ -42,17 +42,15 @@ namespace DespicableGame
             spritebatch.Draw(drawing, position, Color.White);
         }
 
-        public virtual void FindCollisions(List<Character> characters)
+        public void FindCollisions(List<Character> characters)
         {
             foreach (Character character in characters)
             {
-                if (character is PlayerCharacter)
+                if (this.CurrentTile == character.Destination)
                 {
-                    if (this.CurrentTile == character.Destination)
-                    {
-                        Effect(character);
-                    }
+                    Effect(character);
                 }
+
             }
         }
 

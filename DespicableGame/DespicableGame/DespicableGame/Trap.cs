@@ -7,9 +7,8 @@ using Microsoft.Xna.Framework.Graphics;
 using DespicableGame.Observer;
 namespace DespicableGame
 {
-    class Trap : Collectible, Observer.Observer
+    class Trap : Collectible
     {
-        public bool Activated { get; set; }
         private Character affectedCharacter;
 
         public Character AffectedCharacter
@@ -22,32 +21,18 @@ namespace DespicableGame
         public Trap(Texture2D drawing, Vector2 position, Tile CurrentTile)
             : base(drawing, position, CurrentTile)
         {
-            Activated = false;
+
         }
 
         public override void Effect(Character character)
         {
-            Activated = true;
+            Active = false;
             character.SPEED = RandomManager.GetRandomInt(1,3-1);
             affectedCharacter = character;
             NotifyAllObservers(Subject.NotifyReason.TRAP_ACTIVATED);
         }
 
-        public void Notify(Subject subject, Subject.NotifyReason reason)
-        {
-            Activated = false;
-        }
 
-        public override void FindCollisions(List<Character> characters)
-        {
-            foreach (Character character in characters)
-            {
-                if (this.CurrentTile == character.Destination)
-                {
-                    Effect(character);
-                }
 
-            }
-        }
     }
 }

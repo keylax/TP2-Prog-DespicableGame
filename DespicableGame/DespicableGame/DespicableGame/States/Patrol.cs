@@ -22,22 +22,22 @@ namespace DespicableGame.States
 
             if (!(character.Destination.TileUp == null || character.Destination.TileUp is Teleporter || character.Destination.TileUp == character.CurrentTile))
             {
-                possibleTiles.Add(character.CurrentTile.TileUp);
+                possibleTiles.Add(character.Destination.TileUp);
             }
 
             if (!(character.Destination.TileDown == null || character.Destination.TileDown is Teleporter || character.Destination.TileDown == character.CurrentTile))
             {
-                possibleTiles.Add(character.CurrentTile.TileDown);
+                possibleTiles.Add(character.Destination.TileDown);
             }
 
             if (!(character.Destination.TileLeft == null || character.Destination.TileLeft is Teleporter || character.Destination.TileLeft == character.CurrentTile))
             {
-                possibleTiles.Add(character.CurrentTile.TileLeft);
+                possibleTiles.Add(character.Destination.TileLeft);
             }
 
             if (!(character.Destination.TileRight == null || character.Destination.TileRight is Teleporter || character.Destination.TileRight == character.CurrentTile))
             {
-                possibleTiles.Add(character.CurrentTile.TileRight);
+                possibleTiles.Add(character.Destination.TileRight);
             }
 
             if (possibleTiles.Count == 0)

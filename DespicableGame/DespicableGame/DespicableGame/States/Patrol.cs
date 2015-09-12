@@ -56,24 +56,24 @@ namespace DespicableGame.States
             if (character.Destination == character.CurrentTile.TileUp)
             {
                 character.SpeedX = 0;
-                character.SpeedY = -Character.SPEED;
+                character.SpeedY = -character.SPEED;
                 //character.Destination = character.CurrentTile.TileUp;
             }
             else if (character.Destination == character.CurrentTile.TileDown)
             {
                 character.SpeedX = 0;
-                character.SpeedY = Character.SPEED;
+                character.SpeedY = character.SPEED;
                 //character.Destination = character.CurrentTile.TileDown;
             }
             else if (character.Destination == character.CurrentTile.TileLeft)
             {
-                character.SpeedX = -Character.SPEED;
+                character.SpeedX = -character.SPEED;
                 character.SpeedY = 0;
                 //character.Destination = character.CurrentTile.TileLeft;
             }
             else if (character.Destination == character.CurrentTile.TileRight)
             {
-                character.SpeedX = Character.SPEED;
+                character.SpeedX = character.SPEED;
                 character.SpeedY = 0;
                 //character.Destination = character.CurrentTile.TileRight;
             }

@@ -15,6 +15,7 @@ namespace DespicableGame
         protected Tile currentTile;
         //64 must be dividable by SPEED
         public int SPEED = 4;
+
         public Tile CurrentTile
         {
             get { return currentTile; }

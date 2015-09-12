@@ -108,7 +108,7 @@ namespace DespicableGame
                 }
             }
 
-            if (RandomManager.GetRandomInt(0, 10000000) <= 4000 * level)
+            if (RandomManager.GetRandomInt(0, 1000000) <= 1000 * level)
             {
                 SpawnTrap();
             }

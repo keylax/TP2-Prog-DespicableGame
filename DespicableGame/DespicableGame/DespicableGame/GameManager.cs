@@ -99,7 +99,7 @@ namespace DespicableGame
         {
             //Timers!
             totalGameTime += timeSinceLastFrame;
-            if (RandomManager.GetRandomInt(0, 10000000) <= 1000 * level)
+            if (RandomManager.GetRandomInt(0, 10000000) <= 2000 * level)
             {
                 SpawnTrap();
             }

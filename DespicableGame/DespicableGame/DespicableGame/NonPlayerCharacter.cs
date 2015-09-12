@@ -3,18 +3,22 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using DespicableGame.States;
 
 namespace DespicableGame
 {
     public class NonPlayerCharacter : Character
     {
+        private AIStates currentState;
+
         public NonPlayerCharacter(Texture2D dessin, Vector2 position, Tile currentTile, bool isFriendly)
             : base(dessin, position, currentTile, isFriendly)
         {
-            Destination = MouvementIA(currentTile);
+            currentState = new Patrol(this);
+            currentState.OnUpdate();
         }
 
-        public override void Move()
+        public override void Act()
         {
             if (Destination != null)
             {
@@ -23,65 +27,12 @@ namespace DespicableGame
 
                 if (position.X == Destination.GetPosition().X && position.Y == Destination.GetPosition().Y)
                 {
-                    CurrentTile = Destination;
-                    Destination = MouvementIA(CurrentTile);
+                    currentState.OnUpdate();
+                    //CurrentTile = Destination;
+                    
                 }
             }
         }
-
-        //AI totalement random et qui ne peut pas entrer dans les téléporteurs.  À revoir absolument.
-        private Tile MouvementIA(Tile AI_Case)
-        {
-            int randomChoice;
-
-            while (true)
-            {
-                randomChoice = RandomManager.GetRandomInt(0, 3);
-
-                if (randomChoice == 0)
-                {
-                    //Plus efficace qu'un &&, dès que la première condition courante est remplie, on arrête le test
-                    if (!(AI_Case.TileUp == null || AI_Case.TileUp is Teleporter))
-                    {
-                        SpeedX = 0;
-                        SpeedY = -SPEED;
-                        return AI_Case.TileUp;
-                    }
-                }
-
-                if (randomChoice == 1)
-                {
-                    if (!(AI_Case.TileDown == null || AI_Case.TileDown is Teleporter))
-                    {
-                        SpeedX = 0;
-                        SpeedY = SPEED;
-                        return AI_Case.TileDown;
-                    }
-                }
-
-                if (randomChoice == 2)
-                {
-                    if (!(AI_Case.TileLeft == null || AI_Case.TileLeft is Teleporter))
-                    {
-                        SpeedX = -SPEED;
-                        SpeedY = 0;
-                        return AI_Case.TileLeft;
-                    }
-                }
-
-                if (randomChoice == 3)
-                {
-                    if (!(AI_Case.TileRight == null || AI_Case.TileRight is Teleporter))
-                    {
-                        SpeedX = SPEED;
-                        SpeedY = 0;
-                        return AI_Case.TileRight;
-                    }
-                }
-            }
-        }
-
-
 
     }
 }

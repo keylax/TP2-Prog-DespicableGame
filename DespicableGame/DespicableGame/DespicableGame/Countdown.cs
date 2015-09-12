@@ -33,12 +33,7 @@ namespace DespicableGame
 
                 if (countDown.TotalMilliseconds <= 0)
                 {
-                    switch (reasonOfCountdown)
-                    {
-                        case NotifyReason.TRAP_EXPIRED:
-                            NotifyAllObservers(reasonOfCountdown);
-                            break;
-                    }
+                    NotifyAllObservers(reasonOfCountdown);
                 }
             }
         }

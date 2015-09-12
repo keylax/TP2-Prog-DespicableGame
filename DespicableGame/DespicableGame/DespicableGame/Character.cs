@@ -48,6 +48,7 @@ namespace DespicableGame
             drawing = sprite;
             this.position = position;
             CurrentTile = currentTile;
+            Destination = currentTile;
             this.isFriendly = isFriendly;
         }
 

@@ -16,55 +16,66 @@ namespace DespicableGame.States
 
         public void OnUpdate()
         {
+            //Note that at this point the destination is the current and the current is the previous
+            Tile chosenTile;
             List<Tile> possibleTiles = new List<Tile>();
 
-            if (!(character.CurrentTile.TileUp == null || character.CurrentTile.TileUp is Teleporter))
+            if (!(character.Destination.TileUp == null || character.Destination.TileUp is Teleporter || character.Destination.TileUp == character.CurrentTile))
             {
                 possibleTiles.Add(character.CurrentTile.TileUp);
             }
 
-            if (!(character.CurrentTile.TileDown == null || character.CurrentTile.TileDown is Teleporter))
+            if (!(character.Destination.TileDown == null || character.Destination.TileDown is Teleporter || character.Destination.TileDown == character.CurrentTile))
             {
                 possibleTiles.Add(character.CurrentTile.TileDown);
             }
 
-            if (!(character.CurrentTile.TileLeft == null || character.CurrentTile.TileLeft is Teleporter))
+            if (!(character.Destination.TileLeft == null || character.Destination.TileLeft is Teleporter || character.Destination.TileLeft == character.CurrentTile))
             {
                 possibleTiles.Add(character.CurrentTile.TileLeft);
             }
 
-            if (!(character.CurrentTile.TileRight == null || character.CurrentTile.TileRight is Teleporter))
+            if (!(character.Destination.TileRight == null || character.Destination.TileRight is Teleporter || character.Destination.TileRight == character.CurrentTile))
             {
                 possibleTiles.Add(character.CurrentTile.TileRight);
             }
 
-            int randomChoice = RandomManager.GetRandomInt(0, possibleTiles.Count - 1);
-
-            character.Destination = possibleTiles[randomChoice];
+            if (possibleTiles.Count == 0)
+            {
+                chosenTile = character.CurrentTile;
+            }
+            else
+            {
+                int randomChoice = RandomManager.GetRandomInt(0, possibleTiles.Count - 1);
+                chosenTile = possibleTiles[randomChoice];
+            }
+            
+            character.CurrentTile = character.Destination; //the current tile is no longer where he was
+            character.Destination = chosenTile; //a new destination has been chosen
 
             if (character.Destination == character.CurrentTile.TileUp)
             {
                 character.SpeedX = 0;
                 character.SpeedY = -Character.SPEED;
-                character.Destination = character.CurrentTile.TileUp;
+                //character.Destination = character.CurrentTile.TileUp;
             }
             else if (character.Destination == character.CurrentTile.TileDown)
             {
                 character.SpeedX = 0;
                 character.SpeedY = Character.SPEED;
-                character.Destination = character.CurrentTile.TileDown;
+                //character.Destination = character.CurrentTile.TileDown;
             }
             else if (character.Destination == character.CurrentTile.TileLeft)
             {
                 character.SpeedX = -Character.SPEED;
                 character.SpeedY = 0;
-                character.Destination = character.CurrentTile.TileLeft;
+                //character.Destination = character.CurrentTile.TileLeft;
             }
-            else
+            else if (character.Destination == character.CurrentTile.TileRight)
             {
                 character.SpeedX = Character.SPEED;
                 character.SpeedY = 0;
-                character.Destination = character.CurrentTile.TileRight;
+                //character.Destination = character.CurrentTile.TileRight;
             }
         }
 

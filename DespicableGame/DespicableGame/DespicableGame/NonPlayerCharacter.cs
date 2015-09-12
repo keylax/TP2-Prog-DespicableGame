@@ -27,8 +27,9 @@ namespace DespicableGame
 
                 if (position.X == Destination.GetPosition().X && position.Y == Destination.GetPosition().Y)
                 {
-                    CurrentTile = Destination;
                     currentState.OnUpdate();
+                    //CurrentTile = Destination;
+                    
                 }
             }
         }

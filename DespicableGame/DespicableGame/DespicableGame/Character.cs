@@ -48,10 +48,11 @@ namespace DespicableGame
             drawing = sprite;
             this.position = position;
             CurrentTile = currentTile;
+            Destination = currentTile;
             this.isFriendly = isFriendly;
         }
 
-        public abstract void Move();
+        public abstract void Act();
 
         public void Draw(SpriteBatch spritebatch)
         {

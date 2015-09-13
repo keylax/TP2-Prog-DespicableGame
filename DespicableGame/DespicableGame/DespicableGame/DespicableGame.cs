@@ -23,7 +23,7 @@ namespace DespicableGame
         public const int SCREENHEIGHT = 796;
 
         enum GameStates { PAUSED, PLAYING }
-        public enum GameTextures { HORIZONTAL_WALL, VERTICAL_WALL, WARP_ENTRANCE, WARP_EXIT, GOAL, GRU, POLICE_OFFICER, LEVEL_EXIT, NUMBER_OF_TEXTURES }
+        public enum GameTextures { HORIZONTAL_WALL, VERTICAL_WALL, WARP_ENTRANCE, WARP_EXIT, GOAL, GRU, POLICE_OFFICER, LEVEL_EXIT, TRAP, NUMBER_OF_TEXTURES }
 
         static Texture2D[] gameTextures = new Texture2D[(int)GameTextures.NUMBER_OF_TEXTURES];
 
@@ -112,7 +112,7 @@ namespace DespicableGame
             gameTextures[(int)GameTextures.WARP_ENTRANCE] = Content.Load<Texture2D>("Sprites\\Warp1");
             gameTextures[(int)GameTextures.WARP_EXIT] = Content.Load<Texture2D>("Sprites\\Warp2");
             gameTextures[(int)GameTextures.LEVEL_EXIT] = Content.Load<Texture2D>("Sprites\\SpaceShip");
-
+            gameTextures[(int)GameTextures.TRAP] = Content.Load<Texture2D>("Sprites\\Trap");
             textFont = Content.Load<SpriteFont>("Fonts/gamefont");
 
             manager = new GameManager();

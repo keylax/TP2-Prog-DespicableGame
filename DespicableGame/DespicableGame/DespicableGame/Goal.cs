@@ -8,7 +8,7 @@ using DespicableGame.Observer;
 
 namespace DespicableGame
 {
-    class Goal : Trap
+    class Goal : Collectible
     {
         public Goal(Texture2D drawing, Vector2 position, Tile CurrentTile): base(drawing, position, CurrentTile)
         {

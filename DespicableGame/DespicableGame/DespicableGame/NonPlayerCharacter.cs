@@ -9,13 +9,13 @@ namespace DespicableGame
 {
     public class NonPlayerCharacter : Character
     {
-        private AIStates currentState;
+        public AIStates CurrentState { get; set; }
 
         public NonPlayerCharacter(Texture2D dessin, Vector2 position, Tile currentTile, bool isFriendly)
             : base(dessin, position, currentTile, isFriendly)
         {
-            currentState = new Patrol(this);
-            currentState.OnUpdate();
+            CurrentState = new Patrol(this);
+            CurrentState.OnUpdate();
         }
 
         public override void Act()
@@ -27,9 +27,8 @@ namespace DespicableGame
 
                 if (position.X == Destination.GetPosition().X && position.Y == Destination.GetPosition().Y)
                 {
-                    currentState.OnUpdate();
-                    //CurrentTile = Destination;
-                    
+                    CurrentState.OnUpdate();
+                   
                 }
             }
         }

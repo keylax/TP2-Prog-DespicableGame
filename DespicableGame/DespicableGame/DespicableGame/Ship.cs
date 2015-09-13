@@ -21,6 +21,10 @@ namespace DespicableGame
             {
                 NotifyAllObservers(Subject.NotifyReason.EXIT_REACHED);
             }
+            else
+            {
+                NotifyAllObservers(Subject.NotifyReason.EXIT_DESTROYED);
+            }
             Active = false;
         }
 

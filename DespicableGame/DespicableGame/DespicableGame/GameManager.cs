@@ -37,7 +37,18 @@ namespace DespicableGame
 
         private int level;
 
-        public GameManager()
+        private static GameManager manager;
+
+        public static GameManager GetInstance()
+        {
+            if (manager == null)
+            {
+                manager = new GameManager();
+            }
+            return manager;
+        }
+
+        private GameManager()
         {
             labyrinth = new Labyrinth();
             policeHouseTiles = new List<Vector2>();
@@ -98,7 +109,6 @@ namespace DespicableGame
 
         public void ProcessFrame(TimeSpan timeSinceLastFrame)
         {
-            //Timers!
             foreach (Countdown cd in countDowns)
             {
                 cd.CountDown -= timeSinceLastFrame;
@@ -127,6 +137,12 @@ namespace DespicableGame
                 shouldStartLevel = false;
             }
 
+            if (shouldRestartLevel)
+            {
+                ResetPositionsAndObjects();
+                shouldRestartLevel = false;
+            }
+
         }
 
         public Vector2 WarpEntreePos
@@ -141,6 +157,12 @@ namespace DespicableGame
 
         private void StartLevel()
         {
+            ResetPositionsAndObjects();
+            gru.SetPlayerToStartingValues();
+        }
+
+        private void ResetPositionsAndObjects()
+        {
             characters.Clear();
             characters.Add(gru);
             charactersToCreate.Clear();
@@ -152,20 +174,14 @@ namespace DespicableGame
             collectiblesToDelete.Clear();
             countDownsToDelete.Clear();
 
-            gru.SetPlayerToStartingValues();
-            ResetPosition();
-
             characters.Add(CharacterFactory.CreateCharacter(CharacterFactory.CharacterType.POLICE_OFFICER, new Vector2(labyrinth.GetTile(7, 9).GetPosition().X, labyrinth.GetTile(7, 9).GetPosition().Y), labyrinth.GetTile(7, 9)));
 
-            SpawnGoal();
-        }
-
-        private void ResetPosition()
-        {
             gru.CurrentTile = labyrinth.GetTile(DEPART_X, DEPART_Y);
             gru.Destination = gru.CurrentTile;
             gru.SpeedX = 0;
             gru.SpeedY = 0;
+
+            SpawnGoal();
         }
 
         //This is just to allow testing until next merge with the master
@@ -277,9 +293,9 @@ namespace DespicableGame
 
         private bool IsTileInPoliceHouse(Vector2 tile)
         {
-            foreach (Vector2 poTile in policeHouseTiles)
+            foreach (Vector2 policeTile in policeHouseTiles)
             {
-                if (tile == poTile)
+                if (tile == policeTile)
                 {
                     return true;
                 }
@@ -324,7 +340,7 @@ namespace DespicableGame
                     }
                     else
                     {
-                        ResetPosition();
+                        shouldRestartLevel = true;
                     }
 
                     break;
@@ -340,9 +356,12 @@ namespace DespicableGame
                     trapCountDown.AddObserver(tempTrap.AffectedCharacter);
                     countDowns.Add(trapCountDown);
                     break;
+
+                case Subject.NotifyReason.EXIT_DESTROYED:
+                    RespawnGoalAfterPickup();
+                    break;
             }
         }
-
 
     }
 }

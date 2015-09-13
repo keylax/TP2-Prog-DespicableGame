@@ -38,7 +38,6 @@ namespace DespicableGame
         {
             goalCollected = 0;
             lives = STARTING_LIVES;
-            Destination = null;
         }
 
         //Algo assez ordinaire. Pour que ça fonctionne, la vitesse doit être un diviseur entier de 64, pourrait être à revoir.
@@ -51,15 +50,15 @@ namespace DespicableGame
 
                 if (position.X == Destination.GetPosition().X && position.Y == Destination.GetPosition().Y)
                 {
+                    SpeedX = 0;
+                    SpeedY = 0;
                     currentTile = Destination;
-                    Destination = null;
                 }
             }
         }
 
         public void CheckMovement(Tile tileDestination, int vitesseX, int vitesseY)
         {
-            //If direction is not null
             if (tileDestination != null)
             {
                 //Check if the tile is a teleporter
@@ -76,6 +75,7 @@ namespace DespicableGame
                 else
                 {
                     CurrentTile = testTeleportation;
+                    Destination = CurrentTile;
                 }
             }
         }
@@ -96,6 +96,7 @@ namespace DespicableGame
                 if (!character.IsFriendly)
                 {
                     if (this.Destination == character.Destination || this.currentTile == character.Destination)
+                    //if (drawing.Bounds.Intersects(character.Drawing.Bounds))
                     {
                         LoseLife();
                     }

@@ -34,7 +34,6 @@ namespace DespicableGame
         GameStates currentState;
         TimeSpan lastPauseButtonPress = new TimeSpan(0, 0, 0);
         TimeSpan totalGameTime = new TimeSpan(0, 0, 0);
-        GameManager manager;
 
         public DespicableGame()
         {
@@ -115,8 +114,7 @@ namespace DespicableGame
             gameTextures[(int)GameTextures.TRAP] = Content.Load<Texture2D>("Sprites\\Trap");
             textFont = Content.Load<SpriteFont>("Fonts/gamefont");
 
-            manager = new GameManager();
-            gamePad = new Gamepad(manager.Gru, this);
+            gamePad = new Gamepad(GameManager.GetInstance().Gru, this);
             gamePad.RegisterKeyMapping();
         }
 
@@ -145,7 +143,7 @@ namespace DespicableGame
                     break;
 
                 case GameStates.PLAYING:
-                    manager.ProcessFrame(gameTime.ElapsedGameTime);
+                    GameManager.GetInstance().ProcessFrame(gameTime.ElapsedGameTime);
                     break;
             }
 
@@ -172,7 +170,7 @@ namespace DespicableGame
         {
             GamePadState padOneState = GamePad.GetState(PlayerIndex.One);
 
-            if (manager.Gru.Destination == null)
+            if (GameManager.GetInstance().Gru.Destination == null || GameManager.GetInstance().Gru.CurrentTile == GameManager.GetInstance().Gru.Destination)
             {
                 gamePad.GetPressedButtons(padOneState);
                 gamePad.Update();
@@ -193,29 +191,29 @@ namespace DespicableGame
             {
                 for (int j = 0; j < Labyrinth.HEIGHT; j++)
                 {
-                    manager.Labyrinth.GetTile(i, j).DrawWalls(spriteBatch, GetTexture(GameTextures.HORIZONTAL_WALL), GetTexture(GameTextures.VERTICAL_WALL));
+                    GameManager.GetInstance().Labyrinth.GetTile(i, j).DrawWalls(spriteBatch, GetTexture(GameTextures.HORIZONTAL_WALL), GetTexture(GameTextures.VERTICAL_WALL));
                 }
             }
 
             //Draw of the outside border
-            manager.Labyrinth.DrawHorizontal(spriteBatch, GetTexture(GameTextures.HORIZONTAL_WALL));
-            manager.Labyrinth.DrawVertical(spriteBatch, GetTexture(GameTextures.VERTICAL_WALL));
+            GameManager.GetInstance().Labyrinth.DrawHorizontal(spriteBatch, GetTexture(GameTextures.HORIZONTAL_WALL));
+            GameManager.GetInstance().Labyrinth.DrawVertical(spriteBatch, GetTexture(GameTextures.VERTICAL_WALL));
 
             //Draw of the teleporter entrance and exits
-            spriteBatch.Draw(GetTexture(GameTextures.WARP_ENTRANCE), manager.WarpEntreePos, Color.White);
+            spriteBatch.Draw(GetTexture(GameTextures.WARP_ENTRANCE), GameManager.GetInstance().WarpEntreePos, Color.White);
             for (int i = 0; i < 4; i++)
             {
-                spriteBatch.Draw(GetTexture(GameTextures.WARP_EXIT), manager.WarpExitsPos[i], Color.White);
+                spriteBatch.Draw(GetTexture(GameTextures.WARP_EXIT), GameManager.GetInstance().WarpExitsPos[i], Color.White);
             }
 
             //Draw the police officers and the minions
-            foreach (Character c in manager.Characters)
+            foreach (Character c in GameManager.GetInstance().Characters)
             {
                 c.Draw(spriteBatch);
             }
 
             //Draw the pickups
-            foreach (Collectible collectible in manager.Collectibles)
+            foreach (Collectible collectible in GameManager.GetInstance().Collectibles)
             {
                 collectible.Draw(spriteBatch);
             }
@@ -227,11 +225,11 @@ namespace DespicableGame
             }
 
             //Draw the player info elements
-            spriteBatch.DrawString(textFont, manager.GetCurrentLevel(), new Vector2(1, 1), Color.Yellow,
+            spriteBatch.DrawString(textFont, GameManager.GetInstance().GetCurrentLevel(), new Vector2(1, 1), Color.Yellow,
                 0, Vector2.One, 0.8f, SpriteEffects.None, 0.5f);
-            spriteBatch.DrawString(textFont, manager.GetGoalProgress(), new Vector2(240, 1), Color.Yellow,
+            spriteBatch.DrawString(textFont, GameManager.GetInstance().GetGoalProgress(), new Vector2(240, 1), Color.Yellow,
                 0, Vector2.One, 0.8f, SpriteEffects.None, 0.5f);
-            spriteBatch.DrawString(textFont, manager.GetLivesRemaining(), new Vector2(775, 1), Color.Yellow,
+            spriteBatch.DrawString(textFont, GameManager.GetInstance().GetLivesRemaining(), new Vector2(775, 1), Color.Yellow,
                 0, Vector2.One, 0.8f, SpriteEffects.None, 0.5f);
 
             spriteBatch.End();

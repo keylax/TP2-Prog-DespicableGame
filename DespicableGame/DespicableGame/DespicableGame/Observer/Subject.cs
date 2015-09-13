@@ -7,7 +7,7 @@ namespace DespicableGame.Observer
 {
     public class Subject
     {
-        public enum NotifyReason { MONEY_GAINED, MONEY_DESTROYED, EXIT_REACHED, LIFE_LOST, TRAP_ACTIVATED, TRAP_EXPIRED}
+        public enum NotifyReason { MONEY_GAINED, MONEY_DESTROYED, EXIT_REACHED, EXIT_DESTROYED, LIFE_LOST, TRAP_ACTIVATED, TRAP_EXPIRED}
 
         protected List<Observer> observers;
 

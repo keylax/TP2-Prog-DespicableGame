@@ -59,7 +59,6 @@ namespace DespicableGame
 
         public void CheckMovement(Tile tileDestination, int vitesseX, int vitesseY)
         {
-            //If direction is not null
             if (tileDestination != null)
             {
                 //Check if the tile is a teleporter
@@ -76,6 +75,7 @@ namespace DespicableGame
                 else
                 {
                     CurrentTile = testTeleportation;
+                    Destination = CurrentTile;
                 }
             }
         }

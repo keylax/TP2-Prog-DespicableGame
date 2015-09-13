@@ -159,7 +159,6 @@ namespace DespicableGame
         {
             ResetPositionsAndObjects();
             gru.SetPlayerToStartingValues();
-            SpawnGoal();
         }
 
         private void ResetPositionsAndObjects()
@@ -182,7 +181,7 @@ namespace DespicableGame
             gru.SpeedX = 0;
             gru.SpeedY = 0;
 
-
+            SpawnGoal();
         }
 
         //This is just to allow testing until next merge with the master

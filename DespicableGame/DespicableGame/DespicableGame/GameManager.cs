@@ -386,6 +386,10 @@ namespace DespicableGame
                     shouldStartGame = true;
                     break;
 
+                case Subject.NotifyReason.EXIT_DESTROYED:
+                    RespawnGoalAfterPickup();
+                    break;
+
                 case Subject.NotifyReason.TRAP_ACTIVATED:
                     Countdown trapCountDown = new Countdown(0, 0, 3, Subject.NotifyReason.TRAP_EXPIRED);
                     trapCountDown.AddObserver(((Trap)subject).AffectedCharacter);

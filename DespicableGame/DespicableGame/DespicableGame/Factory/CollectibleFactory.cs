@@ -8,7 +8,7 @@ namespace DespicableGame.Factory
 {
     public static class CollectibleFactory
     {
-        public enum CollectibleType { POWERUP, GOAL, TRAP, SHIP }
+        public enum CollectibleType { POWERUP, GOAL, TRAP, SHIP, BANANA }
 
         public static Collectible CreateCollectible(CollectibleType collectibleType, Vector2 position, Tile currentTile)
         {
@@ -38,6 +38,10 @@ namespace DespicableGame.Factory
                     break;
 
                 case CollectibleType.SHIP:
+                    newCollectible = new Ship(DespicableGame.GetTexture(DespicableGame.GameTextures.LEVEL_EXIT), position, currentTile);
+                    break;
+
+                case CollectibleType.BANANA:
                     newCollectible = new Ship(DespicableGame.GetTexture(DespicableGame.GameTextures.LEVEL_EXIT), position, currentTile);
                     break;
             }

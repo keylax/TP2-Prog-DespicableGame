@@ -75,6 +75,12 @@ namespace DespicableGame
                 case Subject.NotifyReason.SPEEDBOOST_EXPIRED:
                     SPEED = 4;
                     break;
+                case Subject.NotifyReason.STUNNED:
+                    SPEED = 0;
+                    break;
+                case Subject.NotifyReason.WOKE_UP:
+                    SPEED = 4;
+                    break; 
             }
         }
     }

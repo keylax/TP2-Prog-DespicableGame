@@ -341,6 +341,11 @@ namespace DespicableGame
             return false;
         }
 
+        public void SpawnBanana(Tile spawnTile)
+        {
+            
+        }
+
         public string GetGoalProgress()
         {
             return gru.GoalCollected.ToString() + "$ out of " + (level * EXTRA_GOAL_TO_COLLECT_PER_LEVEL + MINIMUM_GOAL_TO_COLLECT).ToString() + "$ needed";
@@ -373,7 +378,6 @@ namespace DespicableGame
                     {
                         level = 1;
                         shouldStartGame = true;
-                        //TODO: display you lost message
                     }
                     else
                     {
@@ -418,6 +422,10 @@ namespace DespicableGame
                     Countdown newPowerupCountDown = new Countdown(0, 0, 25 - level, Subject.NotifyReason.SPAWN_NEW_POWERUP);
                     newPowerupCountDown.AddObserver(this);
                     newCountDowns.Add(newPowerupCountDown);
+                    break;
+
+                case Subject.NotifyReason.BANANA:
+                    SpawnBanana(((Character)subject).CurrentTile);
                     break;
             }
         }

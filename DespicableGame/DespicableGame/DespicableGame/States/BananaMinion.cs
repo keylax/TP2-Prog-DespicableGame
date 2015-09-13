@@ -7,6 +7,11 @@ namespace DespicableGame.States
 {
     class BananaMinion : NonPlayerCharacter
     {
+        public BananaMinion()
+        {
+            CurrentState = new Wander(this);
+        }
+
 
     }
 }

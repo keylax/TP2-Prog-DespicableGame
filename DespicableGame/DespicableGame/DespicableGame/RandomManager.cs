@@ -21,5 +21,19 @@ namespace DespicableGame
             return new Vector2(GetRandomInt(0, maximumX - 1), GetRandomInt(0, maximumY - 1));
         }
 
+        public static bool GetRandomTrueFalse(int trueChance)
+        {
+            int rand = GetRandomInt(1, 1000);
+
+            if (rand <= trueChance)
+            {
+                return false;
+            }
+            else
+            {
+                return true;
+            }
+        }
+
     }
 }

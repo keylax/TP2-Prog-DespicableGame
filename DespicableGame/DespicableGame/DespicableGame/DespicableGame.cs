@@ -227,9 +227,9 @@ namespace DespicableGame
                   0, Vector2.One, 2f, SpriteEffects.None, 0.5f);
             }
             spriteBatch.Draw(GetTexture(GameTextures.POWERUP_IN_STORE), new Vector2(1000, 75), Color.White);
-            if (manager.Gru.PowerUpInStore != null)
+            if (GameManager.GetInstance().Gru.PowerUpInStore != null)
             {
-                spriteBatch.Draw(manager.Gru.PowerUpInStore.Drawing, new Vector2(1005, 80), Color.White);
+                spriteBatch.Draw(GameManager.GetInstance().Gru.PowerUpInStore.Drawing, new Vector2(1005, 80), Color.White);
             }
             //Draw the player info elements
             spriteBatch.DrawString(textFont, GameManager.GetInstance().GetCurrentLevel(), new Vector2(1, 1), Color.Yellow,

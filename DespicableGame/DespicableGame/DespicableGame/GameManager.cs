@@ -113,6 +113,11 @@ namespace DespicableGame
                 SpawnTrap();
             }
 
+            if (RandomManager.GetRandomInt(0, 1000000) <= 1000 * level)
+            {
+                SpawnPowerup();
+            }
+
             foreach (Character c in characters)
             {
                 c.Act();
@@ -238,6 +243,19 @@ namespace DespicableGame
             newShip.AddObserver(this);
         }
 
+        private void SpawnPowerup()
+        {
+            Vector2 randomTile;
+            do
+            {
+                randomTile = RandomManager.GetRandomVector(Labyrinth.WIDTH, Labyrinth.HEIGHT);
+            } while (IsTileInPoliceHouse(randomTile));
+            Vector2 visualPosition = new Vector2(labyrinth.GetTile((int)randomTile.X, (int)randomTile.Y).GetPosition().X, labyrinth.GetTile((int)randomTile.X, (int)randomTile.Y).GetPosition().Y);
+            Collectible newPowerup = CollectibleFactory.CreateCollectible(CollectibleFactory.CollectibleType.POWERUP, visualPosition, labyrinth.GetTile((int)randomTile.X, (int)randomTile.Y));
+            collectiblesToCreate.Add(newPowerup);
+            newPowerup.AddObserver(this);
+        }
+
         private void RespawnGoalAfterPickup()
         {
             if (gru.GoalCollected >= level * EXTRA_GOAL_TO_COLLECT_PER_LEVEL + MINIMUM_GOAL_TO_COLLECT)
@@ -336,10 +354,15 @@ namespace DespicableGame
                     break;
 
                 case Subject.NotifyReason.TRAP_ACTIVATED:
-                    Trap tempTrap = (Trap)subject;
                     Countdown trapCountDown = new Countdown(0, 0, 3, Subject.NotifyReason.TRAP_EXPIRED);
-                    trapCountDown.AddObserver(tempTrap.AffectedCharacter);
+                    trapCountDown.AddObserver(((Trap)subject).AffectedCharacter);
                     countDowns.Add(trapCountDown);
+                    break;
+
+                case Subject.NotifyReason.SPEEDBOOST_ACTIVATED:
+                    Countdown powerupCountDown = new Countdown(0, 0, 2, Subject.NotifyReason.SPEEDBOOST_EXPIRED);
+                    powerupCountDown.AddObserver((PlayerCharacter)subject);
+                    countDowns.Add(powerupCountDown);
                     break;
             }
         }

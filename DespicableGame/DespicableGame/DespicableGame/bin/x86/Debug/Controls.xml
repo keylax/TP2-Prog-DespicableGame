@@ -22,20 +22,8 @@
     <Key>Back</Key>
   </Command>
   <Command>
-    <Action>A</Action>
+    <Action>Powerup</Action>
     <Key>A</Key>
-  </Command>
-  <Command>
-    <Action>B</Action>
-    <Key>B</Key>
-  </Command>
-  <Command>
-    <Action>Y</Action>
-    <Key>Y</Key>
-  </Command>
-  <Command>
-    <Action>X</Action>
-    <Key>X</Key>
   </Command>
   <Command>
     <Action>Pause</Action>

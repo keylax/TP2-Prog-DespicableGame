@@ -67,6 +67,9 @@ namespace DespicableGame
                 case Subject.NotifyReason.TRAP_EXPIRED:
                     SPEED = 4;
                     break;
+                case Subject.NotifyReason.SPEEDBOOST_EXPIRED:
+                    SPEED = 4;
+                    break;
             }
         }
     }

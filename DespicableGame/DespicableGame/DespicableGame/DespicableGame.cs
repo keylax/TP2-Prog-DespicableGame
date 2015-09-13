@@ -23,7 +23,7 @@ namespace DespicableGame
         public const int SCREENHEIGHT = 796;
 
         enum GameStates { PAUSED, PLAYING }
-        public enum GameTextures { HORIZONTAL_WALL, VERTICAL_WALL, WARP_ENTRANCE, WARP_EXIT, GOAL, GRU, POLICE_OFFICER, LEVEL_EXIT, TRAP, NUMBER_OF_TEXTURES }
+        public enum GameTextures { HORIZONTAL_WALL, VERTICAL_WALL, WARP_ENTRANCE, WARP_EXIT, GOAL, GRU, POLICE_OFFICER, LEVEL_EXIT, TRAP, SPEEDBOOST, POWERUP_IN_STORE, NUMBER_OF_TEXTURES }
 
         static Texture2D[] gameTextures = new Texture2D[(int)GameTextures.NUMBER_OF_TEXTURES];
 
@@ -113,6 +113,8 @@ namespace DespicableGame
             gameTextures[(int)GameTextures.WARP_EXIT] = Content.Load<Texture2D>("Sprites\\Warp2");
             gameTextures[(int)GameTextures.LEVEL_EXIT] = Content.Load<Texture2D>("Sprites\\SpaceShip");
             gameTextures[(int)GameTextures.TRAP] = Content.Load<Texture2D>("Sprites\\Trap");
+            gameTextures[(int)GameTextures.SPEEDBOOST] = Content.Load<Texture2D>("Sprites\\Speedboost");
+            gameTextures[(int)GameTextures.POWERUP_IN_STORE] = Content.Load<Texture2D>("Sprites\\PowerupInStore");
             textFont = Content.Load<SpriteFont>("Fonts/gamefont");
 
             manager = new GameManager();
@@ -225,7 +227,11 @@ namespace DespicableGame
                 spriteBatch.DrawString(textFont, "Game Paused", new Vector2(SCREENWIDTH / 7, SCREENHEIGHT / 3), Color.Yellow,
                   0, Vector2.One, 2f, SpriteEffects.None, 0.5f);
             }
-
+            spriteBatch.Draw(GetTexture(GameTextures.POWERUP_IN_STORE), new Vector2(1000, 75), Color.White);
+            if (manager.Gru.PowerUpInStore != null)
+            {
+                spriteBatch.Draw(manager.Gru.PowerUpInStore.Drawing, new Vector2(1005, 80), Color.White);
+            }
             //Draw the player info elements
             spriteBatch.DrawString(textFont, manager.GetCurrentLevel(), new Vector2(1, 1), Color.Yellow,
                 0, Vector2.One, 0.8f, SpriteEffects.None, 0.5f);

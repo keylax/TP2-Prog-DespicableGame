@@ -17,7 +17,7 @@ namespace DespicableGame.Factory
             switch (collectibleType)
             {
                 case CollectibleType.POWERUP:
-                    //    newCollectible = new Powerups(DespicableGame.GetTexture(DespicableGame.GameTextures.LEVEL_EXIT), position, currentTile);
+                    newCollectible = new Speedboost(DespicableGame.GetTexture(DespicableGame.GameTextures.SPEEDBOOST), position, currentTile);
                     break;
 
                 case CollectibleType.GOAL:

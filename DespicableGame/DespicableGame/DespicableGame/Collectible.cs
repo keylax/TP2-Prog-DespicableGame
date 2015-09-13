@@ -27,6 +27,13 @@ namespace DespicableGame
             }
         }
 
+        public Texture2D Drawing
+        {
+            get
+            {
+                return drawing;
+            }
+        }
         public Collectible(Texture2D sprite, Vector2 position, Tile currentTile)
         {
             Active = true;

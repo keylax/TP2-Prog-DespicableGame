@@ -83,7 +83,7 @@
     <Compile Include="Inputs.cs" />
     <Compile Include="Observer\Observer.cs" />
     <Compile Include="Observer\Subject.cs" />
-    <Compile Include="Powerups.cs" />
+    <Compile Include="Speedboost.cs" />
     <Compile Include="RandomManager.cs" />
     <Compile Include="Ship.cs" />
     <Compile Include="States\AIStates.cs" />

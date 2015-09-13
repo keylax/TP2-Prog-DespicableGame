@@ -15,7 +15,7 @@ namespace DespicableGame
             : base(dessin, position, currentTile, isFriendly)
         {
             CurrentState = new Patrol(this);
-            CurrentState.OnUpdate();
+            //CurrentState.OnUpdate();
         }
 
         public override void Act()
@@ -27,9 +27,32 @@ namespace DespicableGame
 
                 if (position.X == Destination.GetPosition().X && position.Y == Destination.GetPosition().Y)
                 {
-                    CurrentState.OnUpdate();
-                   
+                    CurrentState.OnUpdate();                   
                 }
+            }
+        }
+
+        public void SetSpeedToDestination()
+        {
+            if (Destination == CurrentTile.TileUp)
+            {
+                SpeedX = 0;
+                SpeedY = -SPEED;
+            }
+            else if (Destination == CurrentTile.TileDown)
+            {
+                SpeedX = 0;
+                SpeedY = SPEED;
+            }
+            else if (Destination == CurrentTile.TileLeft)
+            {
+                SpeedX = -SPEED;
+                SpeedY = 0;
+            }
+            else if (Destination == CurrentTile.TileRight)
+            {
+                SpeedX = SPEED;
+                SpeedY = 0;
             }
         }
 

@@ -38,7 +38,6 @@ namespace DespicableGame
         {
             goalCollected = 0;
             lives = STARTING_LIVES;
-            Destination = null;
         }
 
         //Algo assez ordinaire. Pour que ça fonctionne, la vitesse doit être un diviseur entier de 64, pourrait être à revoir.
@@ -51,8 +50,9 @@ namespace DespicableGame
 
                 if (position.X == Destination.GetPosition().X && position.Y == Destination.GetPosition().Y)
                 {
+                    SpeedX = 0;
+                    SpeedY = 0;
                     currentTile = Destination;
-                    Destination = null;
                 }
             }
         }

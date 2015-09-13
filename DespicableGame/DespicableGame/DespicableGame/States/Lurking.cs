@@ -34,25 +34,39 @@ namespace DespicableGame.States
                 List<Tile> possibleDirections = new List<Tile>();
                 Tile chosenTile = null;
 
-                if (tileToLurkAround.PositionY < character.Destination.PositionY && character.Destination.TileUp != null)
+                if (tileToLurkAround.PositionY < character.Destination.PositionY && character.Destination.TileUp != null && character.Destination.TileUp != character.CurrentTile)
                 {
                     possibleDirections.Add(character.Destination.TileUp);
                 }
-                else if (character.Destination.TileDown != null)
-                {
-                    possibleDirections.Add(character.Destination.TileDown);
-                }
-
-                if (tileToLurkAround.PositionX < character.Destination.PositionX && character.Destination.TileLeft != null)
+                else if (tileToLurkAround.PositionX < character.Destination.PositionX && character.Destination.TileLeft != null && character.Destination.TileLeft != character.CurrentTile)
                 {
                     possibleDirections.Add(character.Destination.TileLeft);
                 }
-                else if (character.Destination.TileRight != null)
+                else if (character.Destination.TileDown != null && character.Destination.TileDown != character.CurrentTile)
+                {
+                    possibleDirections.Add(character.Destination.TileDown);
+                }
+                else if (character.Destination.TileRight != null && character.Destination.TileRight != character.CurrentTile)
                 {
                     possibleDirections.Add(character.Destination.TileRight);
                 }
 
-                chosenTile = possibleDirections[0];
+                int counter = 0;
+
+                while (chosenTile == null)
+                {
+                    if (possibleDirections.Count == counter)
+                    {
+                        chosenTile = character.CurrentTile;
+                    }
+                    else
+                    {
+                        chosenTile = possibleDirections[counter];
+                    }
+                    
+                    counter++;
+                }
+                
 
                 character.CurrentTile = character.Destination; //the current tile is no longer where he was
                 character.Destination = chosenTile; //a new destination has been chosen

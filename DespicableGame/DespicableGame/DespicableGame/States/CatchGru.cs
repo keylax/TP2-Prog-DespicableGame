@@ -22,8 +22,6 @@ namespace DespicableGame.States
 
             Tile chosenTile;
 
-            GameManager test = GameManager.GetInstance();
-
             if (GameManager.GetInstance().Gru.Destination.PositionX == character.Destination.PositionX || GameManager.GetInstance().Gru.CurrentTile.PositionX == character.Destination.PositionX)
             {
                 if (GameManager.GetInstance().Gru.Destination.PositionY < character.Destination.PositionY)

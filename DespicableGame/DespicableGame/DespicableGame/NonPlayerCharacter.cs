@@ -15,7 +15,6 @@ namespace DespicableGame
             : base(dessin, position, currentTile, isFriendly)
         {
             CurrentState = new Patrol(this);
-            //CurrentState.OnUpdate();
         }
 
         public override void Act()

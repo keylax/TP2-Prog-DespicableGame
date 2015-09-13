@@ -15,7 +15,6 @@ namespace DespicableGame
             : base(dessin, position, currentTile, isFriendly)
         {
             CurrentState = new Patrol(this);
-            CurrentState.OnUpdate();
         }
 
         public override void Act()
@@ -27,10 +26,87 @@ namespace DespicableGame
 
                 if (position.X == Destination.GetPosition().X && position.Y == Destination.GetPosition().Y)
                 {
-                    CurrentState.OnUpdate();
-                   
+                    CurrentState.OnUpdate();                   
                 }
             }
+        }
+
+        public void SetSpeedToDestination()
+        {
+            if (Destination == CurrentTile.TileUp)
+            {
+                SpeedX = 0;
+                SpeedY = -SPEED;
+            }
+            else if (Destination == CurrentTile.TileDown)
+            {
+                SpeedX = 0;
+                SpeedY = SPEED;
+            }
+            else if (Destination == CurrentTile.TileLeft)
+            {
+                SpeedX = -SPEED;
+                SpeedY = 0;
+            }
+            else if (Destination == CurrentTile.TileRight)
+            {
+                SpeedX = SPEED;
+                SpeedY = 0;
+            }
+        }
+
+        public bool SeesGru()
+        {
+            Tile exploreTile = Destination;
+            bool foundGru = false;
+
+            while (!foundGru && exploreTile.TileRight != null)
+            {
+                exploreTile = exploreTile.TileRight;
+
+                if (exploreTile == GameManager.GetInstance().Gru.CurrentTile || GameManager.GetInstance().Gru.Destination == exploreTile)
+                {
+                    foundGru = true;
+                }
+            }
+
+            exploreTile = Destination;
+
+            while (!foundGru && exploreTile.TileLeft != null)
+            {
+                exploreTile = exploreTile.TileLeft;
+
+                if (exploreTile == GameManager.GetInstance().Gru.CurrentTile || GameManager.GetInstance().Gru.Destination == exploreTile)
+                {
+                    foundGru = true;
+                }
+            }
+
+            exploreTile = Destination;
+
+            while (!foundGru && exploreTile.TileUp != null)
+            {
+                exploreTile = exploreTile.TileUp;
+
+                if (exploreTile == GameManager.GetInstance().Gru.CurrentTile || GameManager.GetInstance().Gru.Destination == exploreTile)
+                {
+                    foundGru = true;
+                }
+            }
+
+            exploreTile = Destination;
+
+            while (!foundGru && exploreTile.TileDown != null)
+            {
+                exploreTile = exploreTile.TileDown;
+
+                if (exploreTile == GameManager.GetInstance().Gru.CurrentTile || GameManager.GetInstance().Gru.Destination == exploreTile)
+                {
+                    foundGru = true;
+                }
+            }
+
+            return foundGru;
         }
 
     }

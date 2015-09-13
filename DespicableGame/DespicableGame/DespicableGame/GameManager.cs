@@ -32,13 +32,24 @@ namespace DespicableGame
         private Labyrinth labyrinth;
         Vector2 warpEntreePos;
         Vector2[] warpExitsPos = new Vector2[4];
+        private bool shouldStartGame;
         private bool shouldStartLevel;
-        private bool shouldRestartLevel;
         private PlayerCharacter gru;
 
         private int level;
 
-        public GameManager()
+        private static GameManager manager;
+
+        public static GameManager GetInstance()
+        {
+            if (manager == null)
+            {
+                manager = new GameManager();
+            }
+            return manager;
+        }
+
+        private GameManager()
         {
             labyrinth = new Labyrinth();
             policeHouseTiles = new List<Vector2>();
@@ -77,9 +88,9 @@ namespace DespicableGame
             characters.Add(gru);
             gru.AddObserver(this);
 
-            StartLevel();
+            StartGame();
 
-            shouldStartLevel = false;
+            shouldStartGame = false;
 
             //Teleporter entrance
             warpEntreePos = new Vector2(labyrinth.GetTile(7, 4).GetPosition().X - Tile.LIGN_SIZE, labyrinth.GetTile(7, 4).GetPosition().Y + Tile.LIGN_SIZE);
@@ -108,7 +119,6 @@ namespace DespicableGame
 
         public void ProcessFrame(TimeSpan timeSinceLastFrame)
         {
-            //Timers!
             foreach (Countdown cd in countDowns)
             {
                 cd.CountDown -= timeSinceLastFrame;
@@ -128,6 +138,12 @@ namespace DespicableGame
             RemoveDeadObjects();
             CreateNewObjects();
 
+            if (shouldStartGame)
+            {
+                StartGame();
+                shouldStartGame = false;
+            }
+
             if (shouldStartLevel)
             {
                 StartLevel();
@@ -145,6 +161,12 @@ namespace DespicableGame
             get { return warpExitsPos; }
         }
 
+        private void StartGame()
+        {
+            StartLevel();
+            gru.SetPlayerToStartingValues();
+        }
+
         private void StartLevel()
         {
 
@@ -158,20 +180,14 @@ namespace DespicableGame
             collectiblesToDelete.Clear();
             countDownsToDelete.Clear();
 
-            gru.SetPlayerToStartingValues();
-            ResetPosition();
-
             characters.Add(CharacterFactory.CreateCharacter(CharacterFactory.CharacterType.POLICE_OFFICER, new Vector2(labyrinth.GetTile(7, 9).GetPosition().X, labyrinth.GetTile(7, 9).GetPosition().Y), labyrinth.GetTile(7, 9)));
 
-            SpawnGoal();
-        }
-
-        private void ResetPosition()
-        {
             gru.CurrentTile = labyrinth.GetTile(DEPART_X, DEPART_Y);
             gru.Destination = gru.CurrentTile;
             gru.SpeedX = 0;
             gru.SpeedY = 0;
+
+            SpawnGoal();
         }
 
         //This is just to allow testing until next merge with the master
@@ -314,9 +330,9 @@ namespace DespicableGame
 
         private bool IsTileInPoliceHouse(Vector2 tile)
         {
-            foreach (Vector2 poTile in policeHouseTiles)
+            foreach (Vector2 policeTile in policeHouseTiles)
             {
-                if (tile == poTile)
+                if (tile == policeTile)
                 {
                     return true;
                 }
@@ -356,19 +372,18 @@ namespace DespicableGame
                     if (gru.Lives < 1)
                     {
                         level = 1;
-                        shouldStartLevel = true;
+                        shouldStartGame = true;
                         //TODO: display you lost message
                     }
                     else
                     {
-                        ResetPosition();
+                        shouldStartLevel = true;
                     }
-
                     break;
 
                 case Subject.NotifyReason.EXIT_REACHED:
                     level++;
-                    shouldStartLevel = true;
+                    shouldStartGame = true;
                     break;
 
                 case Subject.NotifyReason.TRAP_ACTIVATED:
@@ -402,7 +417,6 @@ namespace DespicableGame
                     break;
             }
         }
-
 
     }
 }

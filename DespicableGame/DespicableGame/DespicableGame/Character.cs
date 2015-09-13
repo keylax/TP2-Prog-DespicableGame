@@ -27,6 +27,11 @@ namespace DespicableGame
             }
         }
 
+        public Texture2D Drawing
+        {
+            get { return drawing; }
+        }
+
         public Tile Destination { get; set; }
 
         public int SpeedX { get; set; }

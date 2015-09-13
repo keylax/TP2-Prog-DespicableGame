@@ -87,6 +87,7 @@
     <Compile Include="RandomManager.cs" />
     <Compile Include="Ship.cs" />
     <Compile Include="States\AIStates.cs" />
+    <Compile Include="States\CatchGru.cs" />
     <Compile Include="States\Patrol.cs" />
     <Compile Include="Tile.cs" />
     <Compile Include="Labyrinth.cs" />

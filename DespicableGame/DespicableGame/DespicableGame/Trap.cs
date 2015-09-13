@@ -18,10 +18,10 @@ namespace DespicableGame
                 return affectedCharacter;
             }
         }
+
         public Trap(Texture2D drawing, Vector2 position, Tile CurrentTile)
             : base(drawing, position, CurrentTile)
         {
-
         }
 
         public override void Effect(Character character)

@@ -229,7 +229,6 @@ namespace DespicableGame
             }
         }
 
-
         private void SpawnShip()
         {
             Vector2 randomTile;

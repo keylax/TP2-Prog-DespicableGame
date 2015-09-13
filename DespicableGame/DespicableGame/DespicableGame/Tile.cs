@@ -12,8 +12,8 @@ namespace DespicableGame
     {
         private int surroundings;
         private Vector2 position;
-        private int ordreX;
-        private int ordreY;
+        private int positionX;
+        private int positionY;
 
         //a reference to each tile surrounding it
         private Tile tileUp = null;
@@ -66,10 +66,20 @@ namespace DespicableGame
         {
             //Contour: ce qu'on vérifie c'est les présences bit à bit: premier bit = mur haut, second = mur bas, troisième = gauche, quatrière droite
             this.surroundings = surroundings;
-            this.ordreX = ordreX;
-            this.ordreY = ordreY;
+            this.positionX = ordreX;
+            this.positionY = ordreY;
             this.position.X = ordreX * SIZE_TILE + GAP_X;
             this.position.Y = ordreY * SIZE_TILE + GAP_Y;
+        }
+
+        public int PositionX
+        {
+            get { return positionX; }
+        }
+
+        public int PositionY
+        {
+            get { return positionY; }
         }
 
         public int Contour

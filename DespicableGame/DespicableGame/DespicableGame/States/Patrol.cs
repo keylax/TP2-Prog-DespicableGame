@@ -5,7 +5,7 @@ using System.Text;
 
 namespace DespicableGame.States
 {
-    class Patrol : AIStates
+    public class Patrol : AIStates
     {
         private readonly NonPlayerCharacter character;
 
@@ -57,25 +57,21 @@ namespace DespicableGame.States
             {
                 character.SpeedX = 0;
                 character.SpeedY = -character.SPEED;
-                //character.Destination = character.CurrentTile.TileUp;
             }
             else if (character.Destination == character.CurrentTile.TileDown)
             {
                 character.SpeedX = 0;
                 character.SpeedY = character.SPEED;
-                //character.Destination = character.CurrentTile.TileDown;
             }
             else if (character.Destination == character.CurrentTile.TileLeft)
             {
                 character.SpeedX = -character.SPEED;
                 character.SpeedY = 0;
-                //character.Destination = character.CurrentTile.TileLeft;
             }
             else if (character.Destination == character.CurrentTile.TileRight)
             {
                 character.SpeedX = character.SPEED;
                 character.SpeedY = 0;
-                //character.Destination = character.CurrentTile.TileRight;
             }
         }
 

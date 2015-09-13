@@ -5,7 +5,7 @@ using System.Text;
 
 namespace DespicableGame.States
 {
-    interface AIStates
+    public interface AIStates
     {
         void OnUpdate();
     }

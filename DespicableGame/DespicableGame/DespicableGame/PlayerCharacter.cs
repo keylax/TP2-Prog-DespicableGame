@@ -12,10 +12,23 @@ namespace DespicableGame
         private const int STARTING_LIVES = 3;
         private int goalCollected;
         private int lives;
+        private Collectible powerUpInStore;
+
+        public Collectible PowerUpInStore
+        {
+            get
+            {
+                return powerUpInStore;
+            }
+            set
+            {
+                powerUpInStore = value;
+            }
+        }
 
         public int GoalCollected
         {
-            get { return goalCollected;  }
+            get { return goalCollected; }
             set
             {
                 NotifyAllObservers(Subject.NotifyReason.MONEY_GAINED);
@@ -31,6 +44,7 @@ namespace DespicableGame
         public PlayerCharacter(Texture2D drawing, Vector2 position, Tile currentTile)
             : base(drawing, position, currentTile)
         {
+            powerUpInStore = null;
             SetPlayerToStartingValues();
         }
 
@@ -132,5 +146,24 @@ namespace DespicableGame
             CheckMovement(this.CurrentTile.TileLeft, -SPEED, 0);
         }
 
+        public void ActivatePowerup()
+        {
+            if (powerUpInStore != null)
+            {
+                switch (((Powerup)powerUpInStore).Type)
+                {
+                    case Powerup.PowerupType.SPEEDBOOST:
+                        SPEED = 8;
+                        NotifyAllObservers(NotifyReason.SPEEDBOOST_ACTIVATED);
+                        powerUpInStore = null;
+                        break;
+
+                    case Powerup.PowerupType.PLAYERTRAP:
+                        NotifyAllObservers(NotifyReason.PLAYERTRAP_ACTIVATED);
+                        powerUpInStore = null;
+                        break;
+                }
+            }
+        }
     }
 }

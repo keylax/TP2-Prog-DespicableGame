@@ -94,18 +94,18 @@ namespace DespicableGame
         }
     }
 
-    public class ACommand : ICommand
+    public class PowerupCommand : ICommand
     {
         private PlayerCharacter player;
 
-        public ACommand(PlayerCharacter f)
+        public PowerupCommand(PlayerCharacter f)
         {
             player = f;
         }
 
         public void Execute(Gamepad pad)
         {
-
+            player.ActivatePowerup();
         }
     }
 

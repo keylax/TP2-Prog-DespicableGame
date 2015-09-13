@@ -60,10 +60,10 @@ namespace DespicableGame
             charactersToCreate = new List<Character>();
             countDownsToDelete = new List<Countdown>();
 
-            Countdown firstTrapCountDown = new Countdown(0, 0, 30 - level - 1, Subject.NotifyReason.SPAWN_NEW_TRAP);
+            Countdown firstTrapCountDown = new Countdown(0, 0, 30 - level, Subject.NotifyReason.SPAWN_NEW_TRAP);
             firstTrapCountDown.AddObserver(this);
             countDowns.Add(firstTrapCountDown);
-            Countdown firstPowerupCountDown = new Countdown(0, 0, 25 - level - 1, Subject.NotifyReason.SPAWN_NEW_POWERUP);
+            Countdown firstPowerupCountDown = new Countdown(0, 0, 25 - level, Subject.NotifyReason.SPAWN_NEW_POWERUP);
             firstPowerupCountDown.AddObserver(this);
             countDowns.Add(firstPowerupCountDown);
 

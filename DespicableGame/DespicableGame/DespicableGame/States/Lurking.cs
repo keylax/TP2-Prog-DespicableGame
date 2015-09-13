@@ -51,27 +51,35 @@ namespace DespicableGame.States
                     possibleDirections.Add(character.Destination.TileRight);
                 }
 
-                int counter = 0;
-
-                while (chosenTile == null)
+                if (possibleDirections.Count == 0)
                 {
-                    if (possibleDirections.Count == counter)
-                    {
-                        chosenTile = character.CurrentTile;
-                    }
-                    else
-                    {
-                        chosenTile = possibleDirections[counter];
-                    }
-                    
-                    counter++;
+                    character.CurrentState = new Patrol(character);
+                    character.CurrentState.OnUpdate();
                 }
-                
+                else
+                {
+                    int counter = 0;
 
-                character.CurrentTile = character.Destination; //the current tile is no longer where he was
-                character.Destination = chosenTile; //a new destination has been chosen
+                    while (chosenTile == null)
+                    {
+                        if (possibleDirections.Count == counter)
+                        {
+                            chosenTile = character.CurrentTile;
+                        }
+                        else
+                        {
+                            chosenTile = possibleDirections[counter];
+                        }
 
-                character.SetSpeedToDestination();
+                        counter++;
+                    }
+
+                    character.CurrentTile = character.Destination; //the current tile is no longer where he was
+                    character.Destination = chosenTile; //a new destination has been chosen
+
+                    character.SetSpeedToDestination();
+                }
+               
             }
         }
 

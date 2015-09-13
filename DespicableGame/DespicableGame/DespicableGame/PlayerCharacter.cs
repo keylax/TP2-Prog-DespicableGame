@@ -28,7 +28,7 @@ namespace DespicableGame
 
         public int GoalCollected
         {
-            get { return goalCollected;  }
+            get { return goalCollected; }
             set
             {
                 NotifyAllObservers(Subject.NotifyReason.MONEY_GAINED);
@@ -147,9 +147,19 @@ namespace DespicableGame
         {
             if (powerUpInStore != null)
             {
-                SPEED = 8;
-                NotifyAllObservers(NotifyReason.SPEEDBOOST_ACTIVATED);
-                powerUpInStore = null;
+                switch (((Powerup)powerUpInStore).Type)
+                {
+                    case Powerup.PowerupType.SPEEDBOOST:
+                        SPEED = 8;
+                        NotifyAllObservers(NotifyReason.SPEEDBOOST_ACTIVATED);
+                        powerUpInStore = null;
+                        break;
+
+                    case Powerup.PowerupType.PLAYERTRAP:
+                        NotifyAllObservers(NotifyReason.PLAYERTRAP_ACTIVATED);
+                        powerUpInStore = null;
+                        break;
+                }
             }
         }
     }

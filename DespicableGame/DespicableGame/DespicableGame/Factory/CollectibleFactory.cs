@@ -17,7 +17,16 @@ namespace DespicableGame.Factory
             switch (collectibleType)
             {
                 case CollectibleType.POWERUP:
-                    newCollectible = new Speedboost(DespicableGame.GetTexture(DespicableGame.GameTextures.SPEEDBOOST), position, currentTile);
+                    int randomType = RandomManager.GetRandomInt(0, 2-1);
+                    switch (randomType)
+                    {
+                        case 0:
+                            newCollectible = new Powerup(DespicableGame.GetTexture(DespicableGame.GameTextures.SPEEDBOOST), position, currentTile, Powerup.PowerupType.SPEEDBOOST);
+                            break;
+                        case 1:
+                            newCollectible = new Powerup(DespicableGame.GetTexture(DespicableGame.GameTextures.PLAYERTRAP_COLLECTIBLE), position, currentTile, Powerup.PowerupType.PLAYERTRAP);
+                            break;
+                    }
                     break;
 
                 case CollectibleType.GOAL:

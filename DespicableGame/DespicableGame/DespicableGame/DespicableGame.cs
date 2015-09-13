@@ -51,7 +51,7 @@ namespace DespicableGame
         {
             currentState = GameStates.PLAYING;
 
-            InitGraphicsMode(SCREENWIDTH, SCREENHEIGHT, true);
+            InitGraphicsMode(SCREENWIDTH, SCREENHEIGHT, false);
             base.Initialize();
         }
 

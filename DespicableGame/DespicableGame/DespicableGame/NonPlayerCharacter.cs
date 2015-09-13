@@ -56,5 +56,59 @@ namespace DespicableGame
             }
         }
 
+        public bool SeesGru()
+        {
+            Tile exploreTile = Destination;
+            bool foundGru = false;
+
+            while (!foundGru && exploreTile.TileRight != null)
+            {
+                exploreTile = exploreTile.TileRight;
+
+                if (exploreTile == GameManager.GetInstance().Gru.CurrentTile || GameManager.GetInstance().Gru.Destination == exploreTile)
+                {
+                    foundGru = true;
+                }
+            }
+
+            exploreTile = Destination;
+
+            while (!foundGru && exploreTile.TileLeft != null)
+            {
+                exploreTile = exploreTile.TileLeft;
+
+                if (exploreTile == GameManager.GetInstance().Gru.CurrentTile || GameManager.GetInstance().Gru.Destination == exploreTile)
+                {
+                    foundGru = true;
+                }
+            }
+
+            exploreTile = Destination;
+
+            while (!foundGru && exploreTile.TileUp != null)
+            {
+                exploreTile = exploreTile.TileUp;
+
+                if (exploreTile == GameManager.GetInstance().Gru.CurrentTile || GameManager.GetInstance().Gru.Destination == exploreTile)
+                {
+                    foundGru = true;
+                }
+            }
+
+            exploreTile = Destination;
+
+            while (!foundGru && exploreTile.TileDown != null)
+            {
+                exploreTile = exploreTile.TileDown;
+
+                if (exploreTile == GameManager.GetInstance().Gru.CurrentTile || GameManager.GetInstance().Gru.Destination == exploreTile)
+                {
+                    foundGru = true;
+                }
+            }
+
+            return foundGru;
+        }
+
     }
 }

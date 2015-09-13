@@ -48,9 +48,9 @@ namespace DespicableGame.States
             }
             else
             {
-                character.CurrentState = new Patrol(character); //Lurking! With last seen player position
+                character.CurrentState = new Lurking(character, GameManager.GetInstance().Gru.CurrentTile);
                 character.CurrentState.OnUpdate();
-                return;
+                return; //This is not very clean
             }
 
             character.CurrentTile = character.Destination; //the current tile is no longer where he was

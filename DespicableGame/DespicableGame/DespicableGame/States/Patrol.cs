@@ -18,57 +18,7 @@ namespace DespicableGame.States
         {
             //Note that at this point the destination is the current and the current is the previous
 
-
-            Tile exploreTile = character.Destination;
-            bool foundGru = false;
-
-            while (!foundGru && exploreTile.TileRight != null)
-            {
-                exploreTile = exploreTile.TileRight;
-
-                if (exploreTile == GameManager.GetInstance().Gru.CurrentTile || GameManager.GetInstance().Gru.Destination == exploreTile)
-                {
-                    foundGru = true;
-                }
-            }
-
-            exploreTile = character.Destination;
-
-            while (!foundGru && exploreTile.TileLeft != null)
-            {
-                exploreTile = exploreTile.TileLeft;
-
-                if (exploreTile == GameManager.GetInstance().Gru.CurrentTile || GameManager.GetInstance().Gru.Destination == exploreTile)
-                {
-                    foundGru = true;
-                }
-            }
-
-            exploreTile = character.Destination;
-
-            while (!foundGru && exploreTile.TileUp != null)
-            {
-                exploreTile = exploreTile.TileUp;
-
-                if (exploreTile == GameManager.GetInstance().Gru.CurrentTile || GameManager.GetInstance().Gru.Destination == exploreTile)
-                {
-                    foundGru = true;
-                }
-            }
-
-            exploreTile = character.Destination;
-
-            while (!foundGru && exploreTile.TileDown != null)
-            {
-                exploreTile = exploreTile.TileDown;
-
-                if (exploreTile == GameManager.GetInstance().Gru.CurrentTile || GameManager.GetInstance().Gru.Destination == exploreTile)
-                {
-                    foundGru = true;
-                }
-            }
-
-            if (foundGru)
+            if (character.SeesGru())
             {
                 character.CurrentState = new CatchGru(character);
                 character.CurrentState.OnUpdate();

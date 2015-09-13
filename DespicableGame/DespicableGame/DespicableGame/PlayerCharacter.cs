@@ -78,7 +78,7 @@ namespace DespicableGame
                 //Check if the tile is a teleporter
                 Tile testTeleportation = TestTeleporter(tileDestination);
 
-                //Is not, we move
+                //If not, we move
                 if (testTeleportation == null)
                 {
                     Destination = tileDestination;
@@ -90,6 +90,8 @@ namespace DespicableGame
                 {
                     CurrentTile = testTeleportation;
                     Destination = CurrentTile;
+                    SpeedX = 0;
+                    SpeedY = 0;
                 }
             }
         }

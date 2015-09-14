@@ -15,7 +15,7 @@ namespace DespicableGame.States
             this.character = character;
             this.tileToLurkAround = tileToLurkAround;
             character.Speed = 4;
-            character.Calm();
+            character.Lurk();
         }
 
         public void OnUpdate()

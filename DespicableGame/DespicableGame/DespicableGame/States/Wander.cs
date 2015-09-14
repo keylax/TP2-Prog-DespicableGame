@@ -19,7 +19,7 @@ namespace DespicableGame.States
         {
             if (RandomManager.GetRandomTrueFalse(200))
             {
-                GameManager.GetInstance().Notify(character, Observer.Subject.NotifyReason.BANANA);
+                ((Minion)character).JustMinionThings();
             }
 
             if (character.SeesGru())
@@ -69,7 +69,7 @@ namespace DespicableGame.States
 
                 character.SetSpeedToDestination();
             }
-
+   
         }
 
     }

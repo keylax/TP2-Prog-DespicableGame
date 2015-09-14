@@ -350,19 +350,32 @@ namespace DespicableGame
             newBanana.AddObserver(this);
         }
 
-        public void SpawnBananaMinion()
+        private void MinionDropPowerup(Tile spawnTile)
         {
-            Vector2 visualPosition = new Vector2(labyrinth.GetTile(gru.CurrentTile.PositionX, gru.CurrentTile.PositionY).GetPosition().X, labyrinth.GetTile(gru.CurrentTile.PositionX, gru.CurrentTile.PositionY).GetPosition().Y);
-            Character newBananaMinion = CharacterFactory.CreateCharacter(CharacterFactory.CharacterType.MINION_BANANA, visualPosition, labyrinth.GetTile(gru.CurrentTile.PositionX, gru.CurrentTile.PositionY));
-            charactersToCreate.Add(newBananaMinion);
-            newBananaMinion.AddObserver(this);
+            Vector2 visualPosition = new Vector2(labyrinth.GetTile(spawnTile.PositionX, spawnTile.PositionY).GetPosition().X, labyrinth.GetTile(spawnTile.PositionX, spawnTile.PositionY).GetPosition().Y);
+            Collectible newPowerup = CollectibleFactory.CreateCollectible(CollectibleFactory.CollectibleType.POWERUP, visualPosition, spawnTile);
+            collectiblesToCreate.Add(newPowerup);
+            newPowerup.AddObserver(this);
         }
 
-        public void KillBananaMinion()
+        private void SpawnMinions()
+        {
+            Vector2 visualPosition = new Vector2(labyrinth.GetTile(gru.CurrentTile.PositionX, gru.CurrentTile.PositionY).GetPosition().X, labyrinth.GetTile(gru.CurrentTile.PositionX, gru.CurrentTile.PositionY).GetPosition().Y);
+            Character newMinion = CharacterFactory.CreateCharacter(CharacterFactory.CharacterType.MINION_BANANA, visualPosition, labyrinth.GetTile(gru.CurrentTile.PositionX, gru.CurrentTile.PositionY));
+            charactersToCreate.Add(newMinion);
+            newMinion.AddObserver(this);
+
+            visualPosition = new Vector2(labyrinth.GetTile(gru.CurrentTile.PositionX, gru.CurrentTile.PositionY).GetPosition().X, labyrinth.GetTile(gru.CurrentTile.PositionX, gru.CurrentTile.PositionY).GetPosition().Y);
+            newMinion = CharacterFactory.CreateCharacter(CharacterFactory.CharacterType.POWERUP_MINION, visualPosition, labyrinth.GetTile(gru.CurrentTile.PositionX, gru.CurrentTile.PositionY));
+            charactersToCreate.Add(newMinion);
+            newMinion.AddObserver(this);
+        }
+
+        private void KillMinions()
         {
             foreach (Character character in characters)
             {
-                if (character is BananaMinion)
+                if (character is BananaMinion || character is PowerupMinion)
                 {
                     charactersToDelete.Add(character);
                 }
@@ -458,17 +471,20 @@ namespace DespicableGame
                     countDowns.Add(bananaCountDown);
                     break;
 
-                case Subject.NotifyReason.BANANA_MINION_SPAWN:
-                    SpawnBananaMinion();
-                    Countdown bananaMinionCountDown = new Countdown(0, 0, 7, Subject.NotifyReason.BANANA_MINION_KILL);
-                    bananaMinionCountDown.AddObserver(this);
-                    countDowns.Add(bananaMinionCountDown);
+                case Subject.NotifyReason.MINION_SPAWN:
+                    SpawnMinions();
+                    Countdown minionCountDown = new Countdown(0, 0, 7, Subject.NotifyReason.MINION_KILL);
+                    minionCountDown.AddObserver(this);
+                    countDowns.Add(minionCountDown);
                     break;
 
-                case Subject.NotifyReason.BANANA_MINION_KILL:
-                    KillBananaMinion();
+                case Subject.NotifyReason.MINION_KILL:
+                    KillMinions();
                     break;
 
+                case Subject.NotifyReason.MINION_DROP_POWERUP:
+                    MinionDropPowerup(((Character)subject).CurrentTile);
+                    break;
             }
         }
 

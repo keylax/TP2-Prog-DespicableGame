@@ -19,8 +19,7 @@ namespace DespicableGame.States
         {
             if (RandomManager.GetRandomTrueFalse(300))
             {
-                GameManager.GetInstance().Notify(character, Observer.Subject.NotifyReason.BANANA);
-                character.CurrentState.OnUpdate();
+                ((Minion)character).JustMinionThings();
             }
 
             if (!character.SeesGru())

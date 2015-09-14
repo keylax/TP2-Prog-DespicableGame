@@ -82,14 +82,16 @@
     <Compile Include="Goal.cs" />
     <Compile Include="ICommand.cs" />
     <Compile Include="Inputs.cs" />
+    <Compile Include="Minion.cs" />
     <Compile Include="Observer\Observer.cs" />
     <Compile Include="Observer\Subject.cs" />
     <Compile Include="PoliceOfficer.cs" />
     <Compile Include="Powerup.cs" />
+    <Compile Include="PowerupMinion.cs" />
     <Compile Include="RandomManager.cs" />
     <Compile Include="Ship.cs" />
     <Compile Include="States\AIStates.cs" />
-    <Compile Include="States\BananaMinion.cs" />
+    <Compile Include="BananaMinion.cs" />
     <Compile Include="States\CatchGru.cs" />
     <Compile Include="States\Lurking.cs" />
     <Compile Include="States\Patrol.cs" />

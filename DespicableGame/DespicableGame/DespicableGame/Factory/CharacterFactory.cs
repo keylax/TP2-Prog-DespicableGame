@@ -9,7 +9,7 @@ namespace DespicableGame.Factory
 {
     public static class CharacterFactory
     {
-        public enum CharacterType { GRU, MINION_BANANA, MINON_TRAP, MINION_FREAK, POLICE_OFFICER }
+        public enum CharacterType { GRU, MINION_BANANA, MINON_TRAP, MINION_FREAK, POLICE_OFFICER, POWERUP_MINION }
 
         public static Character CreateCharacter(CharacterType newCharacterType, Vector2 position, Tile CurrentTile)
         {
@@ -25,13 +25,9 @@ namespace DespicableGame.Factory
                     newCharacter = CreateBananaMinion(position, CurrentTile);
                     break;
 
-                //case CharacterType.MINION_FREAK:
-
-                //    break;
-
-                //case CharacterType.MINON_TRAP:
-
-                //    break;
+                case CharacterType.POWERUP_MINION:
+                    newCharacter = CreatePowerupMinion(position, CurrentTile);
+                    break;
 
                 case CharacterType.POLICE_OFFICER:
                     newCharacter = CreatePoliceOfficer(position, CurrentTile);
@@ -54,6 +50,11 @@ namespace DespicableGame.Factory
         private static BananaMinion CreateBananaMinion(Vector2 position, Tile CurrentTile)
         {
             return new BananaMinion(DespicableGame.GetTexture(DespicableGame.GameTextures.BANANA_MINION), position, CurrentTile, true);
+        }
+
+        private static PowerupMinion CreatePowerupMinion(Vector2 position, Tile CurrentTile)
+        {
+            return new PowerupMinion(DespicableGame.GetTexture(DespicableGame.GameTextures.POWERUP_MINION), position, CurrentTile, true);
         }
     }
 }

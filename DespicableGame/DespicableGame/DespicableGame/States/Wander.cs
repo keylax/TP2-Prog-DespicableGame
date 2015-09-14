@@ -18,8 +18,7 @@ namespace DespicableGame.States
         {
             if (RandomManager.GetRandomTrueFalse(200))
             {
-                //character.CurrentState = new SpawnBanana(character);
-                GameManager.GetInstance().Notify(character, Observer.Subject.NotifyReason.BANANA);
+                ((Minion)character).JustMinionThings();
                 character.CurrentState.OnUpdate();
             }
             else

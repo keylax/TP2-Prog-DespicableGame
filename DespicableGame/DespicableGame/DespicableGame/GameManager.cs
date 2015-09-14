@@ -406,7 +406,7 @@ namespace DespicableGame
                     break;
 
                 case Subject.NotifyReason.MONEY_GAINED:
-                    //nothing?
+                    //nothing
                     break;
 
                 case Subject.NotifyReason.LIFE_LOST:

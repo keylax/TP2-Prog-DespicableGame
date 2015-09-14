@@ -24,7 +24,10 @@ namespace DespicableGame
 
         enum GameStates { START_MENU, PAUSED, PLAYING }
 
-        public enum GameTextures { HORIZONTAL_WALL, VERTICAL_WALL, WARP_ENTRANCE, WARP_EXIT, GOAL, GRU, POLICE_OFFICER, LEVEL_EXIT, TRAP, SPEEDBOOST, POWERUP_IN_STORE, PLAYERTRAP_COLLECTIBLE, BANANA, BANANA_MINION, ALERTED_POLICE, POWERUP_MINION, LURKING_POLICE, START_MENU, NUMBER_OF_TEXTURES }
+        public enum GameTextures { HORIZONTAL_WALL, VERTICAL_WALL, WARP_ENTRANCE, WARP_EXIT, GOAL, GRU, POLICE_OFFICER, LEVEL_EXIT, TRAP, SPEEDBOOST, POWERUP_IN_STORE,
+            PLAYERTRAP_COLLECTIBLE, BANANA, BANANA_MINION, ALERTED_POLICE_OFFICER, POWERUP_MINION, LURKING_POLICE_OFFICER, START_MENU, TOY_PISTOL, SCARY_GRU,
+            SCARED_POLICE_OFFICER, NUMBER_OF_TEXTURES
+        }
 
 
         static Texture2D[] gameTextures = new Texture2D[(int)GameTextures.NUMBER_OF_TEXTURES];
@@ -121,9 +124,12 @@ namespace DespicableGame
             gameTextures[(int)GameTextures.BANANA] = Content.Load<Texture2D>("Sprites\\Banana");
             gameTextures[(int)GameTextures.BANANA_MINION] = Content.Load<Texture2D>("Sprites\\Minion2");
             gameTextures[(int)GameTextures.POWERUP_MINION] = Content.Load<Texture2D>("Sprites\\Minion1");
-            gameTextures[(int)GameTextures.ALERTED_POLICE] = Content.Load<Texture2D>("Sprites\\AlertedPolice");
-            gameTextures[(int)GameTextures.LURKING_POLICE] = Content.Load<Texture2D>("Sprites\\LurkingPolice");
+            gameTextures[(int)GameTextures.ALERTED_POLICE_OFFICER] = Content.Load<Texture2D>("Sprites\\AlertedPolice");
+            gameTextures[(int)GameTextures.LURKING_POLICE_OFFICER] = Content.Load<Texture2D>("Sprites\\LurkingPolice");
             gameTextures[(int)GameTextures.START_MENU] = Content.Load<Texture2D>("Sprites\\StartMenu");
+            gameTextures[(int)GameTextures.TOY_PISTOL] = Content.Load<Texture2D>("Sprites\\ToyGun");
+            gameTextures[(int)GameTextures.SCARED_POLICE_OFFICER] = Content.Load<Texture2D>("Sprites\\ScaredPoliceOfficer");
+            gameTextures[(int)GameTextures.SCARY_GRU] = Content.Load<Texture2D>("Sprites\\ScaryGru");
             textFont = Content.Load<SpriteFont>("Fonts/gamefont");
 
             gamePad = new Gamepad(GameManager.GetInstance().Gru, this);

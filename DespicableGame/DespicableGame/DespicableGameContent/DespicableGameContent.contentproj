@@ -84,8 +84,8 @@
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="Sprites\Weapon.png">
-      <Name>Weapon</Name>
+    <Compile Include="Sprites\ToyGun.png">
+      <Name>ToyGun</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
@@ -159,6 +159,20 @@
   <ItemGroup>
     <Compile Include="Sprites\StartMenu.png">
       <Name>StartMenu</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Sprites\ScaredPoliceOfficer.png">
+      <Name>ScaredPoliceOfficer</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Sprites\ScaryGru.png">
+      <Name>ScaryGru</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>

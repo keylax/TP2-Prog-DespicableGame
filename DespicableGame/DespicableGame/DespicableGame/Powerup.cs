@@ -9,7 +9,7 @@ namespace DespicableGame
 {
     class Powerup: Collectible
     {
-        public enum PowerupType { SPEEDBOOST, PLAYERTRAP}
+        public enum PowerupType { SPEEDBOOST, PLAYERTRAP, TOY_PISTOL }
 
         private PowerupType type;
 
@@ -20,6 +20,7 @@ namespace DespicableGame
                 return type;
             }
         }
+
         public Powerup(Texture2D drawing, Vector2 position, Tile CurrentTile, PowerupType type): base(drawing, position, CurrentTile)
         {
             this.type = type;

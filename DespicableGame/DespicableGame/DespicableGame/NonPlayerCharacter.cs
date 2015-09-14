@@ -16,22 +16,7 @@ namespace DespicableGame
         {
             baseSpeed = 2;
             Speed = baseSpeed;
-        }
-
-        public void Alert()
-        {
-            drawing = DespicableGame.GetTexture(DespicableGame.GameTextures.ALERTED_POLICE);
-        }
-
-        public void Calm()
-        {
-            drawing = DespicableGame.GetTexture(DespicableGame.GameTextures.POLICE_OFFICER);
-        }
-
-        public void Lurk()
-        {
-            drawing = DespicableGame.GetTexture(DespicableGame.GameTextures.LURKING_POLICE);
-        }
+        }   
 
         public override void Act()
         {

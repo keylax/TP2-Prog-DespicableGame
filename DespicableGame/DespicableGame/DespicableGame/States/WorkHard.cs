@@ -5,27 +5,26 @@ using System.Text;
 
 namespace DespicableGame.States
 {
-    class RunAway : AIStates
+    public class WorkHard : AIStates
     {
-        private readonly PoliceOfficer character;
+        private readonly NonPlayerCharacter character;
 
-        public RunAway(PoliceOfficer character)
+        public WorkHard(NonPlayerCharacter character)
         {
             this.character = character;
-            character.Speed = 4;
-            character.Scare();
+            character.Speed = 8;
         }
 
         public void OnUpdate()
         {
+            if (RandomManager.GetRandomTrueFalse(300))
+            {
+                ((Minion)character).JustMinionThings();
+            }
+
             if (!character.SeesGru())
             {
-                character.CurrentState = new Patrol(character);
-                character.CurrentState.OnUpdate();
-            }
-            else if (!GameManager.GetInstance().Gru.LooksScary)
-            {
-                character.CurrentState = new CatchGru(character);
+                character.CurrentState = new Wander(character);
                 character.CurrentState.OnUpdate();
             }
             else
@@ -77,6 +76,7 @@ namespace DespicableGame.States
 
                 character.SetSpeedToDestination();
             }
+
         }
 
     }

@@ -19,12 +19,19 @@ namespace DespicableGame.States
         public void OnUpdate()
         {
             //Note that at this point the destination is the current and the current is the previous
-            character.Speed = 2;
 
             if (character.SeesGru())
             {
-                character.CurrentState = new CatchGru(character);
-                character.CurrentState.OnUpdate();
+                if (GameManager.GetInstance().Gru.LooksScary)
+                {
+                    character.CurrentState = new RunAway(character);
+                    character.CurrentState.OnUpdate();
+                }
+                else
+                {
+                    character.CurrentState = new CatchGru(character);
+                    character.CurrentState.OnUpdate();
+                }
             }
             else
             {
@@ -65,7 +72,6 @@ namespace DespicableGame.States
                 character.Destination = chosenTile; //a new destination has been chosen
 
                 character.SetSpeedToDestination();
-
             }
         }
 

@@ -24,7 +24,7 @@ namespace DespicableGame.States
 
             if (character.SeesGru())
             {
-                character.CurrentState = new RunAway(character);
+                character.CurrentState = new WorkHard(character);
                 character.CurrentState.OnUpdate();
             }
             else

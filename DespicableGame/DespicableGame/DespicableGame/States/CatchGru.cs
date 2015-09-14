@@ -20,14 +20,17 @@ namespace DespicableGame.States
 
         public void OnUpdate()
         {
-            //Note that at this point the destination is the current and the current is the previous (check this shit up)
-            character.Speed = 4;
+            //Note that at this point the destination is the current and the current is the previous
 
             if (!character.SeesGru())
             {
                 character.CurrentState = new Lurking(character, GameManager.GetInstance().Gru.CurrentTile);
                 character.CurrentState.OnUpdate();
-                return; //This is not very clean
+            }
+            else if (GameManager.GetInstance().Gru.LooksScary)
+            {
+                character.CurrentState = new RunAway(character);
+                character.CurrentState.OnUpdate();
             }
             else
             {

@@ -18,12 +18,22 @@ namespace DespicableGame
 
         public void Alert()
         {
-            drawing = DespicableGame.GetTexture(DespicableGame.GameTextures.ALERTED_POLICE);
+            drawing = DespicableGame.GetTexture(DespicableGame.GameTextures.ALERTED_POLICE_OFFICER);
         }
 
         public void Calm()
         {
             drawing = DespicableGame.GetTexture(DespicableGame.GameTextures.POLICE_OFFICER);
+        }
+
+        public void Lurk()
+        {
+            drawing = DespicableGame.GetTexture(DespicableGame.GameTextures.LURKING_POLICE_OFFICER);
+        }
+
+        public void Scare()
+        {
+            drawing = DespicableGame.GetTexture(DespicableGame.GameTextures.SCARED_POLICE_OFFICER);
         }
 
     }

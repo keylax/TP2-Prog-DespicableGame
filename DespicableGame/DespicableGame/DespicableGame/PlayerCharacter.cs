@@ -15,6 +15,7 @@ namespace DespicableGame
         private int lives;
         private Collectible powerUpInStore;
         private bool unleashed;
+        private bool looksScary;
 
         public Collectible PowerUpInStore
         {
@@ -52,6 +53,7 @@ namespace DespicableGame
             baseSpeed = 4;
             Speed = baseSpeed;
             goalCollected = 0;
+            looksScary = false;
         }
 
         public void ResetLives()
@@ -167,8 +169,20 @@ namespace DespicableGame
                         NotifyAllObservers(NotifyReason.PLAYERTRAP_ACTIVATED);
                         powerUpInStore = null;
                         break;
+
+                    case Powerup.PowerupType.TOY_PISTOL:
+                        drawing = DespicableGame.GetTexture(DespicableGame.GameTextures.SCARY_GRU);
+                        //TODO: make it stop at some point
+                        looksScary = true;
+                        powerUpInStore = null;
+                        break;
                 }
             }
+        }
+
+        public bool LooksScary
+        {
+            get { return looksScary; }
         }
 
         public void UnleashMinions()
@@ -184,6 +198,8 @@ namespace DespicableGame
         {
             unleashed = false;
             goalCollected = 0;
+            looksScary = false;
+            drawing = DespicableGame.GetTexture(DespicableGame.GameTextures.GRU);
         }
 
     }

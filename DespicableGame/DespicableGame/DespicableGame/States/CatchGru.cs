@@ -14,11 +14,13 @@ namespace DespicableGame.States
         public CatchGru(NonPlayerCharacter character)
         {
             this.character = character;
+            character.Speed = 4;
         }
 
         public void OnUpdate()
         {
             //Note that at this point the destination is the current and the current is the previous (check this shit up)
+            character.Speed = 4;
 
             Tile chosenTile;
 

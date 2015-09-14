@@ -5,9 +5,10 @@ using System.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using DespicableGame.Observer;
+
 namespace DespicableGame
 {
-    class Trap : Collectible
+    class Banana : Collectible
     {
         private Character affectedCharacter;
 
@@ -19,20 +20,19 @@ namespace DespicableGame
             }
         }
 
-        public Trap(Texture2D drawing, Vector2 position, Tile CurrentTile)
+        public Banana(Texture2D drawing, Vector2 position, Tile CurrentTile)
             : base(drawing, position, CurrentTile)
         {
+
         }
 
         public override void Effect(Character character)
         {
             Active = false;
-            character.Speed = RandomManager.GetRandomInt(1,3-1);
+            character.Stunned = true;
             affectedCharacter = character;
-            NotifyAllObservers(Subject.NotifyReason.TRAP_ACTIVATED);
+            NotifyAllObservers(Subject.NotifyReason.STUNNED);
         }
-
-
 
     }
 }

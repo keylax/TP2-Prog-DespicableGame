@@ -29,4 +29,8 @@
     <Action>Pause</Action>
     <Key>Start</Key>
   </Command>
+  <Command>
+    <Action>UnleashMinions</Action>
+    <Key>Y</Key>
+  </Command>
 </Table>

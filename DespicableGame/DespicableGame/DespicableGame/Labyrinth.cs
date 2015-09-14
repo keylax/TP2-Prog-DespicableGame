@@ -202,9 +202,22 @@ namespace DespicableGame
                 }
             }
 
-            //Pour tester le policier, on lui offre une ouverture
+            //To allow the police officers to exit:
+            //Down
             Tiles[6][9].TileUp = Tiles[6][8];
             Tiles[7][9].TileUp = Tiles[7][8];
+
+            //Up
+            Tiles[6][0].TileDown = Tiles[6][1];
+            Tiles[7][0].TileDown = Tiles[7][1];
+
+            //Left
+            Tiles[0][4].TileRight = Tiles[1][4];
+            Tiles[0][5].TileRight = Tiles[1][5];
+
+            //Right
+            Tiles[13][4].TileLeft = Tiles[12][4];
+            Tiles[13][5].TileLeft = Tiles[12][5];
 
             //Placing the teleporters
             Teleporter teleporter = new Teleporter(Tiles[0][0], Tiles[13][0], Tiles[0][9], Tiles[13][9]);

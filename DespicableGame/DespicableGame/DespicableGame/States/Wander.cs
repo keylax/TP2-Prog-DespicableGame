@@ -5,28 +5,27 @@ using System.Text;
 
 namespace DespicableGame.States
 {
-    public class Patrol : AIStates
+    class Wander : AIStates
     {
         private readonly NonPlayerCharacter character;
 
-        public Patrol(NonPlayerCharacter character)
+        public Wander(NonPlayerCharacter character)
         {
             this.character = character;
-            character.Speed = 2;
         }
 
         public void OnUpdate()
         {
-            //Note that at this point the destination is the current and the current is the previous
-            character.Speed = 2;
-
-            if (character.SeesGru())
+            if (RandomManager.GetRandomTrueFalse(200))
             {
-                character.CurrentState = new CatchGru(character);
+                //character.CurrentState = new SpawnBanana(character);
+                GameManager.GetInstance().Notify(character, Observer.Subject.NotifyReason.BANANA);
                 character.CurrentState.OnUpdate();
             }
             else
             {
+                //Note that at this point the destination is the current and the current is the previous
+
                 Tile chosenTile;
                 List<Tile> possibleTiles = new List<Tile>();
 
@@ -64,8 +63,8 @@ namespace DespicableGame.States
                 character.Destination = chosenTile; //a new destination has been chosen
 
                 character.SetSpeedToDestination();
-
             }
+   
         }
 
     }

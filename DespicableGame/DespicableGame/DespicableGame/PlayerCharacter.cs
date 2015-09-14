@@ -4,7 +4,8 @@ using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using DespicableGame.Observer;
-
+using DespicableGame.States;
+using DespicableGame.Factory;
 namespace DespicableGame
 {
     public class PlayerCharacter : Character
@@ -13,6 +14,7 @@ namespace DespicableGame
         private int goalCollected;
         private int lives;
         private Collectible powerUpInStore;
+        private bool unleashed;
 
         public Collectible PowerUpInStore
         {
@@ -44,8 +46,11 @@ namespace DespicableGame
         public PlayerCharacter(Texture2D drawing, Vector2 position, Tile currentTile)
             : base(drawing, position, currentTile)
         {
+            unleashed = false;
             powerUpInStore = null;
             SetPlayerToStartingValues();
+            baseSpeed = 4;
+            Speed = baseSpeed;
         }
 
         public void SetPlayerToStartingValues()
@@ -54,10 +59,10 @@ namespace DespicableGame
             lives = STARTING_LIVES;
         }
 
-        //Algo assez ordinaire. Pour que ça fonctionne, la vitesse doit être un diviseur entier de 64, pourrait être à revoir.
+        //64 must be dividable by speed
         public override void Act()
         {
-            if (Destination != null)
+            if (Destination != null && Stunned == false)
             {
                 position.X += SpeedX;
                 position.Y += SpeedY;
@@ -111,8 +116,7 @@ namespace DespicableGame
             {
                 if (!character.IsFriendly)
                 {
-                    if (this.Destination == character.Destination || this.currentTile == character.Destination)
-                    //if (drawing.Bounds.Intersects(character.Drawing.Bounds))
+                    if (this.currentTile == character.CurrentTile)
                     {
                         LoseLife();
                     }
@@ -128,22 +132,22 @@ namespace DespicableGame
 
         public void Down()
         {
-            CheckMovement(this.CurrentTile.TileDown, 0, SPEED);
+            CheckMovement(this.CurrentTile.TileDown, 0, Speed);
         }
 
         public void Up()
         {
-            CheckMovement(this.CurrentTile.TileUp, 0, -SPEED);
+            CheckMovement(this.CurrentTile.TileUp, 0, -Speed);
         }
 
         public void Right()
         {
-            CheckMovement(this.CurrentTile.TileRight, SPEED, 0);
+            CheckMovement(this.CurrentTile.TileRight, Speed, 0);
         }
 
         public void Left()
         {
-            CheckMovement(this.CurrentTile.TileLeft, -SPEED, 0);
+            CheckMovement(this.CurrentTile.TileLeft, -Speed, 0);
         }
 
         public void ActivatePowerup()
@@ -153,7 +157,7 @@ namespace DespicableGame
                 switch (((Powerup)powerUpInStore).Type)
                 {
                     case Powerup.PowerupType.SPEEDBOOST:
-                        SPEED = 8;
+                        Speed = 8;
                         NotifyAllObservers(NotifyReason.SPEEDBOOST_ACTIVATED);
                         powerUpInStore = null;
                         break;
@@ -164,6 +168,20 @@ namespace DespicableGame
                         break;
                 }
             }
+        }
+
+        public void UnleashMinions()
+        {
+            if (unleashed == false)
+            {
+                NotifyAllObservers(NotifyReason.BANANA_MINION_SPAWN);
+                unleashed = true;
+            }
+        }
+
+        public void ResetMinions()
+        {
+            unleashed = false;
         }
     }
 }

@@ -14,11 +14,14 @@ namespace DespicableGame.States
         {
             this.character = character;
             this.tileToLurkAround = tileToLurkAround;
+            character.Speed = 4;
         }
 
         public void OnUpdate()
         {
             //Note that at this point the destination is the current and the current is the previous
+            character.Speed = 4;
+
             if (character.SeesGru())
             {
                 character.CurrentState = new CatchGru(character);

@@ -5,7 +5,7 @@ using System.Text;
 using DespicableGame.Observer;
 using DespicableGame.Factory;
 using Microsoft.Xna.Framework;
-
+using DespicableGame.States;
 namespace DespicableGame
 {
     class GameManager : Observer.Observer
@@ -14,7 +14,7 @@ namespace DespicableGame
         private int EXTRA_GOAL_TO_COLLECT_PER_LEVEL = 2;
         //Gru's starting position
         private const int DEPART_X = 6;
-        private const int DEPART_Y = 7;
+        private const int DEPART_Y = 3;
 
         private List<Vector2> policeHouseTiles;
 
@@ -164,12 +164,12 @@ namespace DespicableGame
         private void StartGame()
         {
             StartLevel();
+            gru.ResetMinions();
             gru.SetPlayerToStartingValues();
         }
 
         private void StartLevel()
         {
-
             characters.Clear();
             characters.Add(gru);
             charactersToCreate.Clear();
@@ -180,7 +180,10 @@ namespace DespicableGame
             collectiblesToDelete.Clear();
             countDownsToDelete.Clear();
 
+            characters.Add(CharacterFactory.CreateCharacter(CharacterFactory.CharacterType.POLICE_OFFICER, new Vector2(labyrinth.GetTile(6, 0).GetPosition().X, labyrinth.GetTile(6, 0).GetPosition().Y), labyrinth.GetTile(6, 0)));
+            characters.Add(CharacterFactory.CreateCharacter(CharacterFactory.CharacterType.POLICE_OFFICER, new Vector2(labyrinth.GetTile(0, 4).GetPosition().X, labyrinth.GetTile(0, 4).GetPosition().Y), labyrinth.GetTile(0, 4)));
             characters.Add(CharacterFactory.CreateCharacter(CharacterFactory.CharacterType.POLICE_OFFICER, new Vector2(labyrinth.GetTile(7, 9).GetPosition().X, labyrinth.GetTile(7, 9).GetPosition().Y), labyrinth.GetTile(7, 9)));
+            characters.Add(CharacterFactory.CreateCharacter(CharacterFactory.CharacterType.POLICE_OFFICER, new Vector2(labyrinth.GetTile(13, 5).GetPosition().X, labyrinth.GetTile(13, 5).GetPosition().Y), labyrinth.GetTile(13, 5)));
 
             gru.CurrentTile = labyrinth.GetTile(DEPART_X, DEPART_Y);
             gru.Destination = gru.CurrentTile;
@@ -190,7 +193,6 @@ namespace DespicableGame
             SpawnGoal();
         }
 
-        //This is just to allow testing until next merge with the master
         public PlayerCharacter Gru
         {
             get { return gru; }
@@ -204,7 +206,6 @@ namespace DespicableGame
             }
             newCountDowns.Clear();
         }
-
 
         private void RemoveDeadObjects()
         {
@@ -341,6 +342,33 @@ namespace DespicableGame
             return false;
         }
 
+        public void SpawnBanana(Tile spawnTile)
+        {
+            Vector2 visualPosition = new Vector2(labyrinth.GetTile(spawnTile.PositionX, spawnTile.PositionY).GetPosition().X, labyrinth.GetTile(spawnTile.PositionX, spawnTile.PositionY).GetPosition().Y);
+            Collectible newBanana = CollectibleFactory.CreateCollectible(CollectibleFactory.CollectibleType.BANANA, visualPosition, spawnTile);
+            collectiblesToCreate.Add(newBanana);
+            newBanana.AddObserver(this);
+        }
+
+        public void SpawnBananaMinion()
+        {
+            Vector2 visualPosition = new Vector2(labyrinth.GetTile(gru.CurrentTile.PositionX, gru.CurrentTile.PositionY).GetPosition().X, labyrinth.GetTile(gru.CurrentTile.PositionX, gru.CurrentTile.PositionY).GetPosition().Y);
+            Character newBananaMinion = CharacterFactory.CreateCharacter(CharacterFactory.CharacterType.MINION_BANANA, visualPosition, labyrinth.GetTile(gru.CurrentTile.PositionX, gru.CurrentTile.PositionY));
+            charactersToCreate.Add(newBananaMinion);
+            newBananaMinion.AddObserver(this);
+        }
+
+        public void KillBananaMinion()
+        {
+            foreach (Character character in characters)
+            {
+                if (character is BananaMinion)
+                {
+                    charactersToDelete.Add(character);
+                }
+            }
+        }
+
         public string GetGoalProgress()
         {
             return gru.GoalCollected.ToString() + "$ out of " + (level * EXTRA_GOAL_TO_COLLECT_PER_LEVEL + MINIMUM_GOAL_TO_COLLECT).ToString() + "$ needed";
@@ -373,7 +401,6 @@ namespace DespicableGame
                     {
                         level = 1;
                         shouldStartGame = true;
-                        //TODO: display you lost message
                     }
                     else
                     {
@@ -383,6 +410,7 @@ namespace DespicableGame
 
                 case Subject.NotifyReason.EXIT_REACHED:
                     level++;
+                    gru.ResetMinions();
                     shouldStartGame = true;
                     break;
 
@@ -419,6 +447,28 @@ namespace DespicableGame
                     newPowerupCountDown.AddObserver(this);
                     newCountDowns.Add(newPowerupCountDown);
                     break;
+
+                case Subject.NotifyReason.BANANA:
+                    SpawnBanana(((Character)subject).CurrentTile);
+                    break;
+
+                case Subject.NotifyReason.STUNNED:
+                    Countdown bananaCountDown = new Countdown(0, 0, 1, Subject.NotifyReason.WOKE_UP);
+                    bananaCountDown.AddObserver(((Banana)subject).AffectedCharacter);
+                    countDowns.Add(bananaCountDown);
+                    break;
+
+                case Subject.NotifyReason.BANANA_MINION_SPAWN:
+                    SpawnBananaMinion();
+                    Countdown bananaMinionCountDown = new Countdown(0, 0, 7, Subject.NotifyReason.BANANA_MINION_KILL);
+                    bananaMinionCountDown.AddObserver(this);
+                    countDowns.Add(bananaMinionCountDown);
+                    break;
+
+                case Subject.NotifyReason.BANANA_MINION_KILL:
+                    KillBananaMinion();
+                    break;
+
             }
         }
 

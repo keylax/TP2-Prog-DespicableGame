@@ -18,7 +18,7 @@ namespace DespicableGame
         ICommand gamePadExit;
         ICommand gamePadPause;
         ICommand gamePadPowerup;
-        ICommand gamePadB;
+        ICommand gamePadUnleashMinions;
         ICommand gamePadY;
         ICommand gamePadX;
         ICommand gamePadRShoulder;
@@ -32,7 +32,7 @@ namespace DespicableGame
             gamePadRight = new RightCommand(Gru);
             gamePadLeft = new LeftCommand(Gru);
             gamePadPowerup = new PowerupCommand(Gru);
-            gamePadB = new BCommand(Gru);
+            gamePadUnleashMinions = new UnleashMinionsCommand(Gru);
             gamePadY = new YCommand(Gru);
             gamePadX = new XCommand(Gru);
             gamePadLShoulder = new LeftShoulderCommand(Gru);
@@ -165,6 +165,9 @@ namespace DespicableGame
                     break;
                 case "Powerup":
                     associatedCommand = gamePadPowerup;
+                    break;
+                case "UnleashMinions":
+                    associatedCommand = gamePadUnleashMinions;
                     break;
             }
             return associatedCommand;

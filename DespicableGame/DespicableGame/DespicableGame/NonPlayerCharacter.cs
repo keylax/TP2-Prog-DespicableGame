@@ -29,6 +29,11 @@ namespace DespicableGame
             drawing = DespicableGame.GetTexture(DespicableGame.GameTextures.POLICE_OFFICER);
         }
 
+        public void Lurk()
+        {
+            drawing = DespicableGame.GetTexture(DespicableGame.GameTextures.LURKING_POLICE);
+        }
+
         public override void Act()
         {
             if (Destination != null && Stunned == false)
@@ -42,6 +47,7 @@ namespace DespicableGame
                 }
             }
         }
+
 
         public void SetSpeedToDestination()
         {

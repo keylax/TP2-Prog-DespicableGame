@@ -163,8 +163,8 @@ namespace DespicableGame
 
         private void StartGame()
         {
-            StartLevel();
             gru.ResetMinionsAndMoney();
+            StartLevel();
             gru.ResetLives();
         }
 

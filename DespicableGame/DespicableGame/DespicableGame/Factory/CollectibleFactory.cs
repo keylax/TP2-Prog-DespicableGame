@@ -25,13 +25,13 @@ namespace DespicableGame.Factory
                             break;
 
                         case 1:
-                            if (RandomManager.GetRandomTrueFalse(50))
+                            if (RandomManager.GetRandomTrueFalse(75))
                             {
-                                newCollectible = new Powerup(DespicableGame.GetTexture(DespicableGame.GameTextures.PLAYERTRAP_COLLECTIBLE), position, currentTile, Powerup.PowerupType.PLAYERTRAP);
+                                newCollectible = new Powerup(DespicableGame.GetTexture(DespicableGame.GameTextures.TOY_PISTOL), position, currentTile, Powerup.PowerupType.TOY_PISTOL);
                             }
                             else
                             {
-                                newCollectible = new Powerup(DespicableGame.GetTexture(DespicableGame.GameTextures.TOY_PISTOL), position, currentTile, Powerup.PowerupType.TOY_PISTOL);
+                                newCollectible = new Powerup(DespicableGame.GetTexture(DespicableGame.GameTextures.PLAYERTRAP_COLLECTIBLE), position, currentTile, Powerup.PowerupType.PLAYERTRAP);
                             }
                             
                             break;

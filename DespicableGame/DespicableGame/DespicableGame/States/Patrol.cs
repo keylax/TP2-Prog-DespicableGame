@@ -7,9 +7,9 @@ namespace DespicableGame.States
 {
     public class Patrol : AIStates
     {
-        private readonly NonPlayerCharacter character;
+        private readonly PoliceOfficer character;
 
-        public Patrol(NonPlayerCharacter character)
+        public Patrol(PoliceOfficer character)
         {
             this.character = character;
             character.Speed = 2;

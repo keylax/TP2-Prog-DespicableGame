@@ -9,9 +9,9 @@ namespace DespicableGame.States
 {
     public class CatchGru : AIStates
     {
-        private readonly NonPlayerCharacter character;
+        private readonly PoliceOfficer character;
 
-        public CatchGru(NonPlayerCharacter character)
+        public CatchGru(PoliceOfficer character)
         {
             this.character = character;
             character.Speed = 4;
@@ -29,36 +29,38 @@ namespace DespicableGame.States
                 character.CurrentState.OnUpdate();
                 return; //This is not very clean
             }
-
-            Tile chosenTile = null;
-
-            if (GameManager.GetInstance().Gru.Destination.PositionX == character.Destination.PositionX || GameManager.GetInstance().Gru.CurrentTile.PositionX == character.Destination.PositionX)
+            else
             {
-                if (GameManager.GetInstance().Gru.Destination.PositionY < character.Destination.PositionY)
-                {
-                    chosenTile = character.Destination.TileUp;
-                }
-                else
-                {
-                    chosenTile = character.Destination.TileDown;
-                }
-            }
-            else if (GameManager.GetInstance().Gru.Destination.PositionY == character.Destination.PositionY || GameManager.GetInstance().Gru.CurrentTile.PositionY == character.Destination.PositionY)
-            {
-                if (GameManager.GetInstance().Gru.Destination.PositionX < character.Destination.PositionX)
-                {
-                    chosenTile = character.Destination.TileLeft;
-                }
-                else
-                {
-                    chosenTile = character.Destination.TileRight;
-                }
-            }
+                Tile chosenTile = null;
 
-            character.CurrentTile = character.Destination; //the current tile is no longer where he was
-            character.Destination = chosenTile; //a new destination has been chosen
+                if (GameManager.GetInstance().Gru.Destination.PositionX == character.Destination.PositionX || GameManager.GetInstance().Gru.CurrentTile.PositionX == character.Destination.PositionX)
+                {
+                    if (GameManager.GetInstance().Gru.Destination.PositionY < character.Destination.PositionY)
+                    {
+                        chosenTile = character.Destination.TileUp;
+                    }
+                    else
+                    {
+                        chosenTile = character.Destination.TileDown;
+                    }
+                }
+                else if (GameManager.GetInstance().Gru.Destination.PositionY == character.Destination.PositionY || GameManager.GetInstance().Gru.CurrentTile.PositionY == character.Destination.PositionY)
+                {
+                    if (GameManager.GetInstance().Gru.Destination.PositionX < character.Destination.PositionX)
+                    {
+                        chosenTile = character.Destination.TileLeft;
+                    }
+                    else
+                    {
+                        chosenTile = character.Destination.TileRight;
+                    }
+                }
 
-            character.SetSpeedToDestination();
+                character.CurrentTile = character.Destination; //the current tile is no longer where he was
+                character.Destination = chosenTile; //a new destination has been chosen
+
+                character.SetSpeedToDestination();
+            }
 
         }
 

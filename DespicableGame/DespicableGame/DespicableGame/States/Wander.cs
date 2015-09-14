@@ -12,6 +12,7 @@ namespace DespicableGame.States
         public Wander(NonPlayerCharacter character)
         {
             this.character = character;
+            character.Speed = 2;
         }
 
         public void OnUpdate()
@@ -19,6 +20,12 @@ namespace DespicableGame.States
             if (RandomManager.GetRandomTrueFalse(200))
             {
                 ((Minion)character).JustMinionThings();
+            }
+
+            if (character.SeesGru())
+            {
+                character.CurrentState = new RunAway(character);
+                character.CurrentState.OnUpdate();
             }
             else
             {

@@ -7,10 +7,10 @@ namespace DespicableGame.States
 {
     class Lurking : AIStates
     {
-        private readonly NonPlayerCharacter character;
+        private readonly PoliceOfficer character;
         private readonly Tile tileToLurkAround;
 
-        public Lurking(NonPlayerCharacter character, Tile tileToLurkAround)
+        public Lurking(PoliceOfficer character, Tile tileToLurkAround)
         {
             this.character = character;
             this.tileToLurkAround = tileToLurkAround;

@@ -116,8 +116,7 @@ namespace DespicableGame
             {
                 if (!character.IsFriendly)
                 {
-                    if (this.Destination == character.Destination || this.currentTile == character.CurrentTile)
-                    //if (drawing.Bounds.Intersects(character.Drawing.Bounds))
+                    if (this.currentTile == character.CurrentTile)
                     {
                         LoseLife();
                     }

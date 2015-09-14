@@ -164,12 +164,12 @@ namespace DespicableGame
         private void StartGame()
         {
             StartLevel();
+            gru.ResetMinions();
             gru.SetPlayerToStartingValues();
         }
 
         private void StartLevel()
         {
-
             characters.Clear();
             characters.Add(gru);
             charactersToCreate.Clear();
@@ -191,10 +191,8 @@ namespace DespicableGame
             gru.SpeedY = 0;
 
             SpawnGoal();
-            gru.ResetMinions();
         }
 
-        //This is just to allow testing until next merge with the master
         public PlayerCharacter Gru
         {
             get { return gru; }
@@ -412,6 +410,7 @@ namespace DespicableGame
 
                 case Subject.NotifyReason.EXIT_REACHED:
                     level++;
+                    gru.ResetMinions();
                     shouldStartGame = true;
                     break;
 

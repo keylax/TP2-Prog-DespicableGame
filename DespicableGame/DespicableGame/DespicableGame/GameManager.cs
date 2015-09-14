@@ -181,9 +181,9 @@ namespace DespicableGame
             countDownsToDelete.Clear();
 
             characters.Add(CharacterFactory.CreateCharacter(CharacterFactory.CharacterType.POLICE_OFFICER, new Vector2(labyrinth.GetTile(6, 0).GetPosition().X, labyrinth.GetTile(6, 0).GetPosition().Y), labyrinth.GetTile(6, 0)));
-            characters.Add(CharacterFactory.CreateCharacter(CharacterFactory.CharacterType.POLICE_OFFICER, new Vector2(labyrinth.GetTile(0, 4).GetPosition().X, labyrinth.GetTile(0, 4).GetPosition().Y), labyrinth.GetTile(0, 4)));
-            characters.Add(CharacterFactory.CreateCharacter(CharacterFactory.CharacterType.POLICE_OFFICER, new Vector2(labyrinth.GetTile(7, 9).GetPosition().X, labyrinth.GetTile(7, 9).GetPosition().Y), labyrinth.GetTile(7, 9)));
-            characters.Add(CharacterFactory.CreateCharacter(CharacterFactory.CharacterType.POLICE_OFFICER, new Vector2(labyrinth.GetTile(13, 5).GetPosition().X, labyrinth.GetTile(13, 5).GetPosition().Y), labyrinth.GetTile(13, 5)));
+            if (level > 1) characters.Add(CharacterFactory.CreateCharacter(CharacterFactory.CharacterType.POLICE_OFFICER, new Vector2(labyrinth.GetTile(0, 4).GetPosition().X, labyrinth.GetTile(0, 4).GetPosition().Y), labyrinth.GetTile(0, 4)));
+            if (level > 2) characters.Add(CharacterFactory.CreateCharacter(CharacterFactory.CharacterType.POLICE_OFFICER, new Vector2(labyrinth.GetTile(7, 9).GetPosition().X, labyrinth.GetTile(7, 9).GetPosition().Y), labyrinth.GetTile(7, 9)));
+            if (level > 3) characters.Add(CharacterFactory.CreateCharacter(CharacterFactory.CharacterType.POLICE_OFFICER, new Vector2(labyrinth.GetTile(13, 5).GetPosition().X, labyrinth.GetTile(13, 5).GetPosition().Y), labyrinth.GetTile(13, 5)));
 
             gru.CurrentTile = labyrinth.GetTile(DEPART_X, DEPART_Y);
             gru.Destination = gru.CurrentTile;

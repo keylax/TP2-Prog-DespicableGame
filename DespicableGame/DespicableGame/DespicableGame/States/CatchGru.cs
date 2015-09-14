@@ -34,28 +34,45 @@ namespace DespicableGame.States
             }
             else
             {
+                //Note that at this point the destination is the current and the current is the previous
+
                 Tile chosenTile = null;
 
-                if (GameManager.GetInstance().Gru.Destination.PositionX == character.Destination.PositionX || GameManager.GetInstance().Gru.CurrentTile.PositionX == character.Destination.PositionX)
+                List<Tile> possibleTiles = new List<Tile>();
+
+                if (character.Destination.TileUp != null)
                 {
-                    if (GameManager.GetInstance().Gru.Destination.PositionY < character.Destination.PositionY)
-                    {
-                        chosenTile = character.Destination.TileUp;
-                    }
-                    else
-                    {
-                        chosenTile = character.Destination.TileDown;
-                    }
+                    possibleTiles.Add(character.Destination.TileUp);
                 }
-                else if (GameManager.GetInstance().Gru.Destination.PositionY == character.Destination.PositionY || GameManager.GetInstance().Gru.CurrentTile.PositionY == character.Destination.PositionY)
+
+                if (character.Destination.TileRight != null && !(character.Destination.TileRight is Teleporter))
                 {
-                    if (GameManager.GetInstance().Gru.Destination.PositionX < character.Destination.PositionX)
+                    possibleTiles.Add(character.Destination.TileRight);
+                }
+
+                if (character.Destination.TileDown != null)
+                {
+                    possibleTiles.Add(character.Destination.TileDown);
+                }
+
+                if (character.Destination.TileLeft != null && !(character.Destination.TileLeft is Teleporter))
+                {
+                    possibleTiles.Add(character.Destination.TileLeft);
+                }
+
+                chosenTile = possibleTiles[0];
+
+                float distanceFromPossibleTile = 9001;
+                float currentTileDistance;
+
+                foreach (Tile t in possibleTiles)
+                {
+                    currentTileDistance = GameManager.GetInstance().Gru.DistanceToTile(t);
+
+                    if (distanceFromPossibleTile > currentTileDistance)
                     {
-                        chosenTile = character.Destination.TileLeft;
-                    }
-                    else
-                    {
-                        chosenTile = character.Destination.TileRight;
+                        chosenTile = t;
+                        distanceFromPossibleTile = currentTileDistance;
                     }
                 }
 

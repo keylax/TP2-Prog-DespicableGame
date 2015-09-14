@@ -172,7 +172,6 @@ namespace DespicableGame
 
                     case Powerup.PowerupType.TOY_PISTOL:
                         drawing = DespicableGame.GetTexture(DespicableGame.GameTextures.SCARY_GRU);
-                        //TODO: make it stop at some point
                         looksScary = true;
                         powerUpInStore = null;
                         break;

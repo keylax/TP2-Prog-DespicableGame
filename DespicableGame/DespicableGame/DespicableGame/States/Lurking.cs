@@ -41,7 +41,7 @@ namespace DespicableGame.States
                 {
                     possibleDirections.Add(character.Destination.TileUp);
                 }
-                else if (tileToLurkAround.PositionX < character.Destination.PositionX && character.Destination.TileLeft != null && character.Destination.TileLeft != character.CurrentTile)
+                else if (tileToLurkAround.PositionX < character.Destination.PositionX && character.Destination.TileLeft != null && character.Destination.TileLeft != character.CurrentTile && !(character.Destination.TileLeft is Teleporter))
                 {
                     possibleDirections.Add(character.Destination.TileLeft);
                 }
@@ -49,7 +49,7 @@ namespace DespicableGame.States
                 {
                     possibleDirections.Add(character.Destination.TileDown);
                 }
-                else if (character.Destination.TileRight != null && character.Destination.TileRight != character.CurrentTile)
+                else if (character.Destination.TileRight != null && character.Destination.TileRight != character.CurrentTile && !(character.Destination.TileRight is Teleporter))
                 {
                     possibleDirections.Add(character.Destination.TileRight);
                 }

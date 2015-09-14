@@ -13,6 +13,7 @@ namespace DespicableGame.States
         {
             this.character = character;
             character.Speed = 2;
+            character.Calm();
         }
 
         public void OnUpdate()

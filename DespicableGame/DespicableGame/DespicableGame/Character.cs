@@ -15,7 +15,8 @@ namespace DespicableGame
         protected Tile currentTile;
         private bool stunned;
         //64 must be dividable by SPEED
-        public int SPEED = 4;
+        public int Speed { get; set; }
+        protected int baseSpeed;
 
         public bool Stunned
         {
@@ -84,10 +85,10 @@ namespace DespicableGame
             switch (reason)
             {
                 case Subject.NotifyReason.TRAP_EXPIRED:
-                    SPEED = 4;
+                    Speed = baseSpeed;
                     break;
                 case Subject.NotifyReason.SPEEDBOOST_EXPIRED:
-                    SPEED = 4;
+                    Speed = baseSpeed;
                     break;
                 case Subject.NotifyReason.WOKE_UP:
                     stunned = false;

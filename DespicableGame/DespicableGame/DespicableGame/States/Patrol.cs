@@ -12,11 +12,13 @@ namespace DespicableGame.States
         public Patrol(NonPlayerCharacter character)
         {
             this.character = character;
+            character.Speed = 2;
         }
 
         public void OnUpdate()
         {
             //Note that at this point the destination is the current and the current is the previous
+            character.Speed = 2;
 
             if (character.SeesGru())
             {

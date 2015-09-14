@@ -17,7 +17,7 @@ namespace DespicableGame.Factory
             switch (collectibleType)
             {
                 case CollectibleType.POWERUP:
-                    int randomType = RandomManager.GetRandomInt(0, 2-1);
+                    int randomType = RandomManager.GetRandomInt(0, 1);
                     switch (randomType)
                     {
                         case 0:

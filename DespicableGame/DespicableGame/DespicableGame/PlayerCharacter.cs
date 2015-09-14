@@ -16,7 +16,6 @@ namespace DespicableGame
         private Collectible powerUpInStore;
         private bool unleashed;
 
-
         public Collectible PowerUpInStore
         {
             get
@@ -50,6 +49,8 @@ namespace DespicableGame
             unleashed = false;
             powerUpInStore = null;
             SetPlayerToStartingValues();
+            baseSpeed = 4;
+            Speed = baseSpeed;
         }
 
         public void SetPlayerToStartingValues()
@@ -58,7 +59,7 @@ namespace DespicableGame
             lives = STARTING_LIVES;
         }
 
-        //Algo assez ordinaire. Pour que ça fonctionne, la vitesse doit être un diviseur entier de 64, pourrait être à revoir.
+        //64 must be dividable by speed
         public override void Act()
         {
             if (Destination != null && Stunned == false)
@@ -132,22 +133,22 @@ namespace DespicableGame
 
         public void Down()
         {
-            CheckMovement(this.CurrentTile.TileDown, 0, SPEED);
+            CheckMovement(this.CurrentTile.TileDown, 0, Speed);
         }
 
         public void Up()
         {
-            CheckMovement(this.CurrentTile.TileUp, 0, -SPEED);
+            CheckMovement(this.CurrentTile.TileUp, 0, -Speed);
         }
 
         public void Right()
         {
-            CheckMovement(this.CurrentTile.TileRight, SPEED, 0);
+            CheckMovement(this.CurrentTile.TileRight, Speed, 0);
         }
 
         public void Left()
         {
-            CheckMovement(this.CurrentTile.TileLeft, -SPEED, 0);
+            CheckMovement(this.CurrentTile.TileLeft, -Speed, 0);
         }
 
         public void ActivatePowerup()
@@ -157,7 +158,7 @@ namespace DespicableGame
                 switch (((Powerup)powerUpInStore).Type)
                 {
                     case Powerup.PowerupType.SPEEDBOOST:
-                        SPEED = 8;
+                        Speed = 8;
                         NotifyAllObservers(NotifyReason.SPEEDBOOST_ACTIVATED);
                         powerUpInStore = null;
                         break;

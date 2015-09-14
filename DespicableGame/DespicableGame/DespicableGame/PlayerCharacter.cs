@@ -174,7 +174,7 @@ namespace DespicableGame
         {
             if (unleashed == false)
             {
-                NotifyAllObservers(NotifyReason.BANANA_MINION_SPAWN);
+                NotifyAllObservers(NotifyReason.MINION_SPAWN);
                 unleashed = true;
             }
         }

@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+using DespicableGame.Factory;
 namespace DespicableGame.States
 {
     class SpawnBanana : AIStates
@@ -17,6 +19,7 @@ namespace DespicableGame.States
         public void OnUpdate()
         {
             GameManager.GetInstance().Notify(character, Observer.Subject.NotifyReason.BANANA);
+            character.CurrentState = new Wander(character);
         }
 
     }

@@ -27,11 +27,11 @@ namespace DespicableGame
 
             if (rand <= trueChance)
             {
-                return false;
+                return true;
             }
             else
             {
-                return true;
+                return false;
             }
         }
 

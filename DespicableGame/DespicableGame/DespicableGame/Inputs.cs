@@ -109,18 +109,18 @@ namespace DespicableGame
         }
     }
 
-    public class BCommand : ICommand
+    public class UnleashMinionsCommand : ICommand
     {
         private PlayerCharacter player;
 
-        public BCommand(PlayerCharacter f)
+        public UnleashMinionsCommand(PlayerCharacter f)
         {
             player = f;
         }
 
         public void Execute(Gamepad pad)
         {
-
+            player.UnleashMinions();
         }
     }
 

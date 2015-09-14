@@ -23,7 +23,7 @@ namespace DespicableGame
         public const int SCREENHEIGHT = 796;
 
         enum GameStates { PAUSED, PLAYING }
-        public enum GameTextures { HORIZONTAL_WALL, VERTICAL_WALL, WARP_ENTRANCE, WARP_EXIT, GOAL, GRU, POLICE_OFFICER, LEVEL_EXIT, TRAP, SPEEDBOOST, POWERUP_IN_STORE, PLAYERTRAP_COLLECTIBLE, NUMBER_OF_TEXTURES }
+        public enum GameTextures { HORIZONTAL_WALL, VERTICAL_WALL, WARP_ENTRANCE, WARP_EXIT, GOAL, GRU, POLICE_OFFICER, LEVEL_EXIT, TRAP, SPEEDBOOST, POWERUP_IN_STORE, PLAYERTRAP_COLLECTIBLE, BANANA, BANANA_MINION, NUMBER_OF_TEXTURES }
 
         static Texture2D[] gameTextures = new Texture2D[(int)GameTextures.NUMBER_OF_TEXTURES];
 
@@ -51,7 +51,7 @@ namespace DespicableGame
         {
             currentState = GameStates.PLAYING;
 
-            InitGraphicsMode(SCREENWIDTH, SCREENHEIGHT, true);
+            InitGraphicsMode(SCREENWIDTH, SCREENHEIGHT, false);
             base.Initialize();
         }
 
@@ -115,6 +115,8 @@ namespace DespicableGame
             gameTextures[(int)GameTextures.SPEEDBOOST] = Content.Load<Texture2D>("Sprites\\Speedboost");
             gameTextures[(int)GameTextures.POWERUP_IN_STORE] = Content.Load<Texture2D>("Sprites\\PowerupInStore");
             gameTextures[(int)GameTextures.PLAYERTRAP_COLLECTIBLE] = Content.Load<Texture2D>("Sprites\\PlayerTrap_Collectible");
+            gameTextures[(int)GameTextures.BANANA] = Content.Load<Texture2D>("Sprites\\Banana");
+            gameTextures[(int)GameTextures.BANANA_MINION] = Content.Load<Texture2D>("Sprites\\Minion2");
             textFont = Content.Load<SpriteFont>("Fonts/gamefont");
 
             gamePad = new Gamepad(GameManager.GetInstance().Gru, this);

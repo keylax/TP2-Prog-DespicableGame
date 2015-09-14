@@ -4,7 +4,8 @@ using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using DespicableGame.Observer;
-
+using DespicableGame.States;
+using DespicableGame.Factory;
 namespace DespicableGame
 {
     public class PlayerCharacter : Character
@@ -13,6 +14,8 @@ namespace DespicableGame
         private int goalCollected;
         private int lives;
         private Collectible powerUpInStore;
+        private bool unleashed;
+
 
         public Collectible PowerUpInStore
         {
@@ -44,6 +47,7 @@ namespace DespicableGame
         public PlayerCharacter(Texture2D drawing, Vector2 position, Tile currentTile)
             : base(drawing, position, currentTile)
         {
+            unleashed = false;
             powerUpInStore = null;
             SetPlayerToStartingValues();
         }
@@ -57,7 +61,7 @@ namespace DespicableGame
         //Algo assez ordinaire. Pour que ça fonctionne, la vitesse doit être un diviseur entier de 64, pourrait être à revoir.
         public override void Act()
         {
-            if (Destination != null)
+            if (Destination != null && Stunned == false)
             {
                 position.X += SpeedX;
                 position.Y += SpeedY;
@@ -164,6 +168,20 @@ namespace DespicableGame
                         break;
                 }
             }
+        }
+
+        public void UnleashMinions()
+        {
+            if (unleashed == false)
+            {
+                NotifyAllObservers(NotifyReason.BANANA_MINION_SPAWN);
+                unleashed = true;
+            }
+        }
+
+        public void ResetMinions()
+        {
+            unleashed = false;
         }
     }
 }

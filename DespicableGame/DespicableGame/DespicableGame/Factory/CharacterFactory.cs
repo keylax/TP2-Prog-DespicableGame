@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-
+using DespicableGame.States;
 namespace DespicableGame.Factory
 {
     public static class CharacterFactory
@@ -21,9 +21,9 @@ namespace DespicableGame.Factory
                     newCharacter = CreateGru(position, CurrentTile);
                     break;
 
-                //case CharacterType.MINION_BANANA:
-
-                //    break;
+                case CharacterType.MINION_BANANA:
+                    newCharacter = CreateBananaMinion(position, CurrentTile);
+                    break;
 
                 //case CharacterType.MINION_FREAK:
 
@@ -51,6 +51,9 @@ namespace DespicableGame.Factory
             return new NonPlayerCharacter(DespicableGame.GetTexture(DespicableGame.GameTextures.POLICE_OFFICER), position, CurrentTile, false);
         }
 
-
+        private static BananaMinion CreateBananaMinion(Vector2 position, Tile CurrentTile)
+        {
+            return new BananaMinion(DespicableGame.GetTexture(DespicableGame.GameTextures.BANANA_MINION), position, CurrentTile, true);
+        }
     }
 }

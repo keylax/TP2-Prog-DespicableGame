@@ -13,8 +13,21 @@ namespace DespicableGame
         protected Vector2 position;
         protected bool isFriendly;
         protected Tile currentTile;
+        private bool stunned;
         //64 must be dividable by SPEED
         public int SPEED = 4;
+
+        public bool Stunned
+        {
+            get
+            {
+                return stunned;
+            }
+            set
+            {
+                stunned = value;
+            }
+        }
 
         public Tile CurrentTile
         {
@@ -56,6 +69,7 @@ namespace DespicableGame
             CurrentTile = currentTile;
             Destination = currentTile;
             this.isFriendly = isFriendly;
+            stunned = false;
         }
 
         public abstract void Act();
@@ -75,11 +89,8 @@ namespace DespicableGame
                 case Subject.NotifyReason.SPEEDBOOST_EXPIRED:
                     SPEED = 4;
                     break;
-                case Subject.NotifyReason.STUNNED:
-                    SPEED = 0;
-                    break;
                 case Subject.NotifyReason.WOKE_UP:
-                    SPEED = 4;
+                    stunned = false;
                     break; 
             }
         }

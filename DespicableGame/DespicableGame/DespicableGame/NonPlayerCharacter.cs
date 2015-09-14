@@ -19,7 +19,7 @@ namespace DespicableGame
 
         public override void Act()
         {
-            if (Destination != null)
+            if (Destination != null && Stunned == false)
             {
                 position.X += SpeedX;
                 position.Y += SpeedY;

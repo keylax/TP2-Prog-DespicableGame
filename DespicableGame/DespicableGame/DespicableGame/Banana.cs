@@ -10,6 +10,16 @@ namespace DespicableGame
 {
     class Banana : Collectible
     {
+        private Character affectedCharacter;
+
+        public Character AffectedCharacter
+        {
+            get
+            {
+                return affectedCharacter;
+            }
+        }
+
         public Banana(Texture2D drawing, Vector2 position, Tile CurrentTile)
             : base(drawing, position, CurrentTile)
         {
@@ -18,8 +28,10 @@ namespace DespicableGame
 
         public override void Effect(Character character)
         {
-            character.Notify(this, NotifyReason.STUNNED);
             Active = false;
+            character.Stunned = true;
+            affectedCharacter = character;
+            NotifyAllObservers(Subject.NotifyReason.STUNNED);
         }
 
     }

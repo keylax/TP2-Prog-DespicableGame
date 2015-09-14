@@ -5,7 +5,7 @@ using System.Text;
 using DespicableGame.Observer;
 using DespicableGame.Factory;
 using Microsoft.Xna.Framework;
-
+using DespicableGame.States;
 namespace DespicableGame
 {
     class GameManager : Observer.Observer
@@ -188,6 +188,7 @@ namespace DespicableGame
             gru.SpeedY = 0;
 
             SpawnGoal();
+            gru.ResetMinions();
         }
 
         //This is just to allow testing until next merge with the master
@@ -343,7 +344,29 @@ namespace DespicableGame
 
         public void SpawnBanana(Tile spawnTile)
         {
-            
+            Vector2 visualPosition = new Vector2(labyrinth.GetTile(spawnTile.PositionX, spawnTile.PositionY).GetPosition().X, labyrinth.GetTile(spawnTile.PositionX, spawnTile.PositionY).GetPosition().Y);
+            Collectible newBanana = CollectibleFactory.CreateCollectible(CollectibleFactory.CollectibleType.BANANA, visualPosition, spawnTile);
+            collectiblesToCreate.Add(newBanana);
+            newBanana.AddObserver(this);
+        }
+
+        public void SpawnBananaMinion()
+        {
+            Vector2 visualPosition = new Vector2(labyrinth.GetTile(gru.CurrentTile.PositionX, gru.CurrentTile.PositionY).GetPosition().X, labyrinth.GetTile(gru.CurrentTile.PositionX, gru.CurrentTile.PositionY).GetPosition().Y);
+            Character newBananaMinion = CharacterFactory.CreateCharacter(CharacterFactory.CharacterType.MINION_BANANA, visualPosition, labyrinth.GetTile(gru.CurrentTile.PositionX, gru.CurrentTile.PositionY));
+            charactersToCreate.Add(newBananaMinion);
+            newBananaMinion.AddObserver(this);
+        }
+
+        public void KillBananaMinion()
+        {
+            foreach (Character character in characters)
+            {
+                if (character is BananaMinion)
+                {
+                    charactersToDelete.Add(character);
+                }
+            }
         }
 
         public string GetGoalProgress()
@@ -427,6 +450,24 @@ namespace DespicableGame
                 case Subject.NotifyReason.BANANA:
                     SpawnBanana(((Character)subject).CurrentTile);
                     break;
+
+                case Subject.NotifyReason.STUNNED:
+                    Countdown bananaCountDown = new Countdown(0, 0, 1, Subject.NotifyReason.WOKE_UP);
+                    bananaCountDown.AddObserver(((Banana)subject).AffectedCharacter);
+                    countDowns.Add(bananaCountDown);
+                    break;
+
+                case Subject.NotifyReason.BANANA_MINION_SPAWN:
+                    SpawnBananaMinion();
+                    Countdown bananaMinionCountDown = new Countdown(0, 0, 7, Subject.NotifyReason.BANANA_MINION_KILL);
+                    bananaMinionCountDown.AddObserver(this);
+                    countDowns.Add(bananaMinionCountDown);
+                    break;
+
+                case Subject.NotifyReason.BANANA_MINION_KILL:
+                    KillBananaMinion();
+                    break;
+
             }
         }
 

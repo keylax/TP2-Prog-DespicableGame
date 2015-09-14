@@ -42,7 +42,7 @@ namespace DespicableGame.Factory
                     break;
 
                 case CollectibleType.BANANA:
-                    newCollectible = new Ship(DespicableGame.GetTexture(DespicableGame.GameTextures.LEVEL_EXIT), position, currentTile);
+                    newCollectible = new Banana(DespicableGame.GetTexture(DespicableGame.GameTextures.BANANA), position, currentTile);
                     break;
             }
 

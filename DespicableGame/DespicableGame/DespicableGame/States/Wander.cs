@@ -16,9 +16,10 @@ namespace DespicableGame.States
 
         public void OnUpdate()
         {
-            if (RandomManager.GetRandomTrueFalse(1) && RandomManager.GetRandomTrueFalse(1))
+            if (RandomManager.GetRandomTrueFalse(200))
             {
-                character.CurrentState = new SpawnBanana(character);
+                //character.CurrentState = new SpawnBanana(character);
+                GameManager.GetInstance().Notify(character, Observer.Subject.NotifyReason.BANANA);
                 character.CurrentState.OnUpdate();
             }
             else

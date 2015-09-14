@@ -19,7 +19,6 @@ namespace DespicableGame.States
             if (RandomManager.GetRandomTrueFalse(200))
             {
                 ((Minion)character).JustMinionThings();
-                character.CurrentState.OnUpdate();
             }
             else
             {

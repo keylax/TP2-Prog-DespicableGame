@@ -22,9 +22,9 @@ namespace DespicableGame
         public const int SCREENWIDTH = 1280;
         public const int SCREENHEIGHT = 796;
 
-        enum GameStates { PAUSED, PLAYING }
+        enum GameStates { START_MENU, PAUSED, PLAYING }
 
-        public enum GameTextures { HORIZONTAL_WALL, VERTICAL_WALL, WARP_ENTRANCE, WARP_EXIT, GOAL, GRU, POLICE_OFFICER, LEVEL_EXIT, TRAP, SPEEDBOOST, POWERUP_IN_STORE, PLAYERTRAP_COLLECTIBLE, BANANA, BANANA_MINION, ALERTED_POLICE, POWERUP_MINION, LURKING_POLICE, NUMBER_OF_TEXTURES }
+        public enum GameTextures { HORIZONTAL_WALL, VERTICAL_WALL, WARP_ENTRANCE, WARP_EXIT, GOAL, GRU, POLICE_OFFICER, LEVEL_EXIT, TRAP, SPEEDBOOST, POWERUP_IN_STORE, PLAYERTRAP_COLLECTIBLE, BANANA, BANANA_MINION, ALERTED_POLICE, POWERUP_MINION, LURKING_POLICE, START_MENU, NUMBER_OF_TEXTURES }
 
 
         static Texture2D[] gameTextures = new Texture2D[(int)GameTextures.NUMBER_OF_TEXTURES];
@@ -36,6 +36,7 @@ namespace DespicableGame
         GameStates currentState;
         TimeSpan lastPauseButtonPress = new TimeSpan(0, 0, 0);
         TimeSpan totalGameTime = new TimeSpan(0, 0, 0);
+        GamePadState padOneState;
 
         public DespicableGame()
         {
@@ -51,7 +52,7 @@ namespace DespicableGame
         /// </summary>
         protected override void Initialize()
         {
-            currentState = GameStates.PLAYING;
+            currentState = GameStates.START_MENU;
 
             InitGraphicsMode(SCREENWIDTH, SCREENHEIGHT, false);
             base.Initialize();
@@ -122,6 +123,7 @@ namespace DespicableGame
             gameTextures[(int)GameTextures.POWERUP_MINION] = Content.Load<Texture2D>("Sprites\\Minion1");
             gameTextures[(int)GameTextures.ALERTED_POLICE] = Content.Load<Texture2D>("Sprites\\AlertedPolice");
             gameTextures[(int)GameTextures.LURKING_POLICE] = Content.Load<Texture2D>("Sprites\\LurkingPolice");
+            gameTextures[(int)GameTextures.START_MENU] = Content.Load<Texture2D>("Sprites\\StartMenu");
             textFont = Content.Load<SpriteFont>("Fonts/gamefont");
 
             gamePad = new Gamepad(GameManager.GetInstance().Gru, this);
@@ -148,6 +150,14 @@ namespace DespicableGame
             totalGameTime = gameTime.TotalGameTime;
             switch (currentState)
             {
+                case GameStates.START_MENU:
+                    padOneState = GamePad.GetState(PlayerIndex.One);
+                    if (padOneState.IsButtonDown(Buttons.Start))
+                    {
+                        currentState = GameStates.PLAYING;
+                    }
+                    break;
+
                 case GameStates.PAUSED:
                     //Nothing for now
                     break;
@@ -178,7 +188,7 @@ namespace DespicableGame
 
         private void ProcessPlayerInputs(TimeSpan totalGameTime)
         {
-            GamePadState padOneState = GamePad.GetState(PlayerIndex.One);
+            padOneState = GamePad.GetState(PlayerIndex.One);
 
             if (GameManager.GetInstance().Gru.Destination == null || GameManager.GetInstance().Gru.CurrentTile == GameManager.GetInstance().Gru.Destination)
             {
@@ -245,6 +255,12 @@ namespace DespicableGame
                 0, Vector2.One, 0.8f, SpriteEffects.None, 0.5f);
             spriteBatch.DrawString(textFont, GameManager.GetInstance().GetLivesRemaining(), new Vector2(775, 1), Color.Yellow,
                 0, Vector2.One, 0.8f, SpriteEffects.None, 0.5f);
+
+            //Draw start menu
+            if (currentState == GameStates.START_MENU)
+            {
+                spriteBatch.Draw(GetTexture(GameTextures.START_MENU), Vector2.Zero, Color.White);
+            }
 
             spriteBatch.End();
             base.Draw(gameTime);

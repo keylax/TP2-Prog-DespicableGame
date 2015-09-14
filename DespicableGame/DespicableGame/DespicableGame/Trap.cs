@@ -27,7 +27,7 @@ namespace DespicableGame
         public override void Effect(Character character)
         {
             Active = false;
-            character.Speed = RandomManager.GetRandomInt(1,3-1);
+            character.Speed = 1;
             affectedCharacter = character;
             NotifyAllObservers(Subject.NotifyReason.TRAP_ACTIVATED);
         }

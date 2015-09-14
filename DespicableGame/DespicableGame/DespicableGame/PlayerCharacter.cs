@@ -48,14 +48,15 @@ namespace DespicableGame
         {
             unleashed = false;
             powerUpInStore = null;
-            SetPlayerToStartingValues();
+            ResetLives();
             baseSpeed = 4;
             Speed = baseSpeed;
+            goalCollected = 0;
         }
 
-        public void SetPlayerToStartingValues()
+        public void ResetLives()
         {
-            goalCollected = 0;
+            
             lives = STARTING_LIVES;
         }
 
@@ -179,9 +180,11 @@ namespace DespicableGame
             }
         }
 
-        public void ResetMinions()
+        public void ResetMinionsAndMoney()
         {
             unleashed = false;
+            goalCollected = 0;
         }
+
     }
 }

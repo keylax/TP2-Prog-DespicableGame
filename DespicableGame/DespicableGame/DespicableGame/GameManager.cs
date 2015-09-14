@@ -164,8 +164,8 @@ namespace DespicableGame
         private void StartGame()
         {
             StartLevel();
-            gru.ResetMinions();
-            gru.SetPlayerToStartingValues();
+            gru.ResetMinionsAndMoney();
+            gru.ResetLives();
         }
 
         private void StartLevel()
@@ -190,7 +190,7 @@ namespace DespicableGame
             gru.SpeedX = 0;
             gru.SpeedY = 0;
 
-            SpawnGoal();
+            RespawnGoalAfterPickup();
         }
 
         public PlayerCharacter Gru
@@ -423,8 +423,8 @@ namespace DespicableGame
 
                 case Subject.NotifyReason.EXIT_REACHED:
                     level++;
-                    gru.ResetMinions();
-                    shouldStartGame = true;
+                    gru.ResetMinionsAndMoney();
+                    shouldStartLevel = true;
                     break;
 
                 case Subject.NotifyReason.EXIT_DESTROYED:

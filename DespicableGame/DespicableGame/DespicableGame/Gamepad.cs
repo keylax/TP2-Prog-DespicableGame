@@ -19,12 +19,9 @@ namespace DespicableGame
         ICommand gamePadPause;
         ICommand gamePadPowerup;
         ICommand gamePadUnleashMinions;
-        ICommand gamePadY;
-        ICommand gamePadX;
-        ICommand gamePadRShoulder;
-        ICommand gamePadLShoulder;
 	    private Dictionary<Buttons, ICommand> inputMappings;
         private List<Buttons> pressedButtons = new List<Buttons>();
+
 	    public Gamepad(PlayerCharacter Gru, DespicableGame game)
 	    {
             gamePadDown = new DownCommand(Gru);
@@ -33,10 +30,6 @@ namespace DespicableGame
             gamePadLeft = new LeftCommand(Gru);
             gamePadPowerup = new PowerupCommand(Gru);
             gamePadUnleashMinions = new UnleashMinionsCommand(Gru);
-            gamePadY = new YCommand(Gru);
-            gamePadX = new XCommand(Gru);
-            gamePadLShoulder = new LeftShoulderCommand(Gru);
-            gamePadRShoulder = new RightShoulderCommand(Gru);
             gamePadExit = new ExitCommand(game);
             gamePadPause = new PauseCommand(game);
             inputMappings = new Dictionary<Buttons, ICommand>();
@@ -135,6 +128,12 @@ namespace DespicableGame
                     break;
                 case "X":
                     associatedButton = Buttons.X;
+                    break;
+                case "RightShoulder":
+                    associatedButton = Buttons.RightShoulder;
+                    break;
+                case "LeftShoulder":
+                    associatedButton = Buttons.LeftShoulder;
                     break;
             }
             return associatedButton;

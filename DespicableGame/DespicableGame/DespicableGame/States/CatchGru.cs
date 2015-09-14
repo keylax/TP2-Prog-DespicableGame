@@ -15,6 +15,7 @@ namespace DespicableGame.States
         {
             this.character = character;
             character.Speed = 4;
+            character.Alert();
         }
 
         public void OnUpdate()
@@ -22,7 +23,14 @@ namespace DespicableGame.States
             //Note that at this point the destination is the current and the current is the previous (check this shit up)
             character.Speed = 4;
 
-            Tile chosenTile;
+            if (!character.SeesGru())
+            {
+                character.CurrentState = new Lurking(character, GameManager.GetInstance().Gru.CurrentTile);
+                character.CurrentState.OnUpdate();
+                return; //This is not very clean
+            }
+
+            Tile chosenTile = null;
 
             if (GameManager.GetInstance().Gru.Destination.PositionX == character.Destination.PositionX || GameManager.GetInstance().Gru.CurrentTile.PositionX == character.Destination.PositionX)
             {
@@ -45,12 +53,6 @@ namespace DespicableGame.States
                 {
                     chosenTile = character.Destination.TileRight;
                 }
-            }
-            else
-            {
-                character.CurrentState = new Lurking(character, GameManager.GetInstance().Gru.CurrentTile);
-                character.CurrentState.OnUpdate();
-                return; //This is not very clean
             }
 
             character.CurrentTile = character.Destination; //the current tile is no longer where he was

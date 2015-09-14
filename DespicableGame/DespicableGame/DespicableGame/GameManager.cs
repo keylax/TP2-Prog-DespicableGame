@@ -14,7 +14,7 @@ namespace DespicableGame
         private int EXTRA_GOAL_TO_COLLECT_PER_LEVEL = 2;
         //Gru's starting position
         private const int DEPART_X = 6;
-        private const int DEPART_Y = 4;
+        private const int DEPART_Y = 3;
 
         private List<Vector2> policeHouseTiles;
 

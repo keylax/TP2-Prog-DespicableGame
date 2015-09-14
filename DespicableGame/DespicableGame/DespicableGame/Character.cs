@@ -95,5 +95,14 @@ namespace DespicableGame
                     break; 
             }
         }
+
+        public float DistanceToTile(Tile tile)
+        {
+            Vector2 currentPosition = new Vector2(Destination.GetPosition().X, Destination.GetPosition().Y);
+            Vector2 testDistance = new Vector2(tile.GetPosition().X, tile.GetPosition().Y);
+
+            return Vector2.Distance(testDistance, currentPosition);
+        }
+
     }
 }

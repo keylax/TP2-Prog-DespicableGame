@@ -94,7 +94,6 @@
     <Compile Include="States\Lurking.cs" />
     <Compile Include="States\Patrol.cs" />
     <Compile Include="States\RunAway.cs" />
-    <Compile Include="States\SpawnBanana.cs" />
     <Compile Include="States\Wander.cs" />
     <Compile Include="Tile.cs" />
     <Compile Include="Labyrinth.cs" />

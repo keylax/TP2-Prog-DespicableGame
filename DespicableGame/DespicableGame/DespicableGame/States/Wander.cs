@@ -12,6 +12,7 @@ namespace DespicableGame.States
         public Wander(NonPlayerCharacter character)
         {
             this.character = character;
+            character.Speed = 2;
         }
 
         public void OnUpdate()
@@ -21,7 +22,7 @@ namespace DespicableGame.States
                 GameManager.GetInstance().Notify(character, Observer.Subject.NotifyReason.BANANA);
             }
 
-            if (false && character.SeesGru())
+            if (character.SeesGru())
             {
                 character.CurrentState = new RunAway(character);
                 character.CurrentState.OnUpdate();

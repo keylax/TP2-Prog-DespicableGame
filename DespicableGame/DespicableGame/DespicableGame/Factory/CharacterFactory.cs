@@ -46,9 +46,9 @@ namespace DespicableGame.Factory
             return new PlayerCharacter(DespicableGame.GetTexture(DespicableGame.GameTextures.GRU), position, CurrentTile);
         }
 
-        private static NonPlayerCharacter CreatePoliceOfficer(Vector2 position, Tile CurrentTile)
+        private static PoliceOfficer CreatePoliceOfficer(Vector2 position, Tile CurrentTile)
         {
-            return new NonPlayerCharacter(DespicableGame.GetTexture(DespicableGame.GameTextures.POLICE_OFFICER), position, CurrentTile, false);
+            return new PoliceOfficer(DespicableGame.GetTexture(DespicableGame.GameTextures.POLICE_OFFICER), position, CurrentTile, false);
         }
 
         private static BananaMinion CreateBananaMinion(Vector2 position, Tile CurrentTile)

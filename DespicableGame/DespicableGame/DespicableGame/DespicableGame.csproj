@@ -84,15 +84,16 @@
     <Compile Include="Inputs.cs" />
     <Compile Include="Observer\Observer.cs" />
     <Compile Include="Observer\Subject.cs" />
+    <Compile Include="PoliceOfficer.cs" />
     <Compile Include="Powerup.cs" />
     <Compile Include="RandomManager.cs" />
     <Compile Include="Ship.cs" />
     <Compile Include="States\AIStates.cs" />
     <Compile Include="States\BananaMinion.cs" />
     <Compile Include="States\CatchGru.cs" />
-    <Compile Include="States\KnockedOut.cs" />
     <Compile Include="States\Lurking.cs" />
     <Compile Include="States\Patrol.cs" />
+    <Compile Include="States\RunAway.cs" />
     <Compile Include="States\SpawnBanana.cs" />
     <Compile Include="States\Wander.cs" />
     <Compile Include="Tile.cs" />

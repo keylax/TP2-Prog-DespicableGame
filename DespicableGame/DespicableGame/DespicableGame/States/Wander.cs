@@ -18,8 +18,12 @@ namespace DespicableGame.States
         {
             if (RandomManager.GetRandomTrueFalse(200))
             {
-                //character.CurrentState = new SpawnBanana(character);
                 GameManager.GetInstance().Notify(character, Observer.Subject.NotifyReason.BANANA);
+            }
+
+            if (false && character.SeesGru())
+            {
+                character.CurrentState = new RunAway(character);
                 character.CurrentState.OnUpdate();
             }
             else
@@ -64,7 +68,7 @@ namespace DespicableGame.States
 
                 character.SetSpeedToDestination();
             }
-   
+
         }
 
     }

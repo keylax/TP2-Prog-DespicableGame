@@ -14,19 +14,8 @@ namespace DespicableGame
         public NonPlayerCharacter(Texture2D drawing, Vector2 position, Tile currentTile, bool isFriendly)
             : base(drawing, position, currentTile, isFriendly)
         {
-            CurrentState = new Patrol(this);
             baseSpeed = 2;
             Speed = baseSpeed;
-        }
-
-        public void Alert()
-        {
-            drawing = DespicableGame.GetTexture(DespicableGame.GameTextures.ALERTED_POLICE);
-        }
-
-        public void Calm()
-        {
-            drawing = DespicableGame.GetTexture(DespicableGame.GameTextures.POLICE_OFFICER);
         }
 
         public override void Act()

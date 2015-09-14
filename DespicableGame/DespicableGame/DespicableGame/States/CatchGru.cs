@@ -9,9 +9,9 @@ namespace DespicableGame.States
 {
     public class CatchGru : AIStates
     {
-        private readonly NonPlayerCharacter character;
+        private readonly PoliceOfficer character;
 
-        public CatchGru(NonPlayerCharacter character)
+        public CatchGru(PoliceOfficer character)
         {
             this.character = character;
             character.Speed = 4;
